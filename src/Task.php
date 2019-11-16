@@ -5,22 +5,28 @@
 	*/
 	class Task
 	{
-		//константы стаутсов
-		const NEW_TASK = "Новое";
-		const EXECUTE_TASK = "Выполняется";
-		const CANCEL_TASK = "Отменено";
-		const FAIL_TASK = "Провалено";		
-		const END_TASK = "Завершено";		
+		//statuses
+		public const NEW_TASK = "New";
+		public const EXECUTE_TASK = "Execute";
+		public const CANCEL_TASK = "Canceled";
+		public const FAIL_TASK = "Failed";		
+		public const END_TASK = "Completed";		
 
-		//константы экшенов
-		const CANCEL_ACTION = "Отменить";
-		const COMPLETE_ACTION = "Одобрить";
-		const RESPONSE_ACTION = "Откликнуться";
-		const FAIL_ACTION = "Отказаться";
+		//actions
+		public const CANCEL_ACTION = "Cancel";
+		public const COMPLETE_ACTION = "Complete"; //Одобрить
+		public const RESPONSE_ACTION = "Response"; //Откликнуться
+		public const FAIL_ACTION = "Fail";
 
 
 		private $currentStatus;
-		private $currentAction;
+		private $actionStatusConformity = [
+			self::CANCEL_ACTION => [self::NEW_TASK => self::CANCEL_TASK],
+			self::RESPONSE_ACTION => [self::NEW_TASK => self::EXECUTE_TASK],
+			self::COMPLETE_ACTION => [self::EXECUTE_TASK => self::END_TASK],
+			self::FAIL_ACTION => [self::EXECUTE_TASK => self::FAIL_TASK]
+		];
+
 
 		function __construct()
 		{
@@ -36,32 +42,10 @@
 		}
 
 		public function getNextStatus($action){
-			switch ($action) {
-				case self::CANCEL_ACTION:
-					$this->currentStatus = self::CANCEL_TASK;
-					break;
-				case self::COMPLETE_ACTION:
-					$this->currentStatus = self::END_TASK;
-					break;
-				case self::RESPONSE_ACTION:
-					$this->currentStatus = self::EXECUTE_TASK;
-					break;
-				case self::FAIL_ACTION:
-					$this->currentStatus = self::FAIL_TASK;
-					break;	
-				default:
-					$this->currentStatus = null;
-					break;
-			}
-			$this->currentAction = $action;
-			return $this->currentStatus;
+			return $this->currentStatus = $this->actionStatusConformity[$action][$this->currentStatus];
 		}
 		
 		public function getStatus(){
 			return $this->currentStatus;
 		}
-
-		public function getAction(){
-			return $this->currentAction;
-		}
-	}
+}

@@ -18,7 +18,6 @@
 		public const RESPONSE_ACTION = "Response"; //Откликнуться
 		public const FAIL_ACTION = "Fail";
 
-
 		private $currentStatus;
 		private $actionStatusConformity = [
 			self::CANCEL_ACTION => [self::NEW_TASK => self::CANCEL_TASK],
@@ -26,7 +25,6 @@
 			self::COMPLETE_ACTION => [self::EXECUTE_TASK => self::END_TASK],
 			self::FAIL_ACTION => [self::EXECUTE_TASK => self::FAIL_TASK]
 		];
-
 
 		function __construct()
 		{
@@ -42,10 +40,13 @@
 		}
 
 		public function getNextStatus($action){
-			return $this->currentStatus = $this->actionStatusConformity[$action][$this->currentStatus];
+			return $this->actionStatusConformity[$action][$this->currentStatus] ?? null;
 		}
 		
 		public function getStatus(){
 			return $this->currentStatus;
+		}
+		public function setStatus($status){
+			$this->currentStatus = $status;
 		}
 }

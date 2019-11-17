@@ -1,7 +1,7 @@
 <?php
 	require_once 'vendor/autoload.php';
 
-	$task = new HtmlAcademy\Task();
+	$task = new \HtmlAcademy\Core\Task();
 	assert($task->getNextStatus($task::CANCEL_ACTION) === $task::CANCEL_TASK,'no cancel action');
 
 	assert($task->getStatus($task->setStatus($task::NEW_TASK)) === $task::NEW_TASK, 'status not new');

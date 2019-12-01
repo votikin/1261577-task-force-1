@@ -1,21 +1,23 @@
 <?php
-		namespace App\Actions;
-        use App\Task;
+	namespace App\Actions;
+
+	use App\Task;
+    use App\User;
 	/**
 	* Класс действия "Откликнуться"
 	*/
 	class ResponseAction extends AbstractAction
 	{
-		public const RESPONSE_ACTION = "Response";
-
-    static public function getPublicName(){
-			return self::RESPONSE_ACTION;
+        static public function getPublicName(){
+            return "Откликнуться";
 		}
-    static public function getInternalName(){
+         static public function getInternalName(){
 			return "RESPONSE_ACTION";
 		}
-    static public function isAvailable(Task $currentTask, $userId){
-             return is_null($currentTask->getExecutorId()
-                            && $currentTask->getStatus() === $currentTask::NEW_TASK);
-    }
+		static public function isAvailable(Task $currentTask, User $user){
+            return ($currentTask->getExecutorId() === null
+                  && $currentTask->getStatus() === $currentTask::NEW_TASK
+                  && $currentTask->getCustomerId() !== $user->getUserId()
+                  && $user->getUserRole() !== $user::CUSTOMER_ROLE);//            Только при условии, что юзер не может быть одновременно исполнителем и заказчиком
+         }
 	}

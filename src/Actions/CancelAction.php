@@ -1,22 +1,22 @@
 <?php
 	namespace App\Actions;
-    use App\Task;
+
+	use App\Task;
+    use App\User;
 	/**
 	* Класс действия "Отменить"
 	*/
 	class CancelAction extends AbstractAction
 	{
-		public const CANCEL_ACTION = "Cancel";
-
-		static public function getPublicName(){
-			return self::CANCEL_ACTION;
-		}
-    static public function getInternalName(){
-			return "CANCEL_ACTION";
-		}
-    static public function isAvailable(Task $currentTask, $userId){
-        return (is_null($currentTask->getExecutorId())
-                && $currentTask->getCustomerId() === $userId
+	    static public function getPublicName(){
+	        return "Отменить";
+	    }
+        static public function getInternalName(){
+            return "CANCEL_ACTION";
+        }
+        static public function isAvailable(Task $currentTask, User $user){
+            return ($currentTask->getExecutorId() === null
+                && $currentTask->getCustomerId() === $user->getUserId()
                 && $currentTask->getStatus() === $currentTask::NEW_TASK);
-    }
+        }
 	}

@@ -8,7 +8,7 @@
 	*/
 	abstract class AbstractAction
 	{
-		abstract static function getPublicName();
-		abstract static function getInternalName();
-		abstract static function isAvailable(Task $task, User $user);
+		abstract static function getPublicName():string ;
+		abstract static function getInternalName():string ;
+		abstract static function isAvailable(Task $task, User $user):bool;
 	}

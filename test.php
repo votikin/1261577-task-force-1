@@ -13,12 +13,7 @@
     $user = new \App\User(1);
     $userExecutor = new \App\User(2);
     $userExecutor->changeRoleToExecutor();
-    try{
-    	$task = new App\Task($user);
-    } catch (\App\Exceptions\UserException $e){
-	    error_log($e->getStructMessage());
-    }
-
+    $task = new App\Task($user);
 //Пишем тесты
  //роль = заказчик
     // Статус = new

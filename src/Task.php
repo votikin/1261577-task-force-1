@@ -35,9 +35,6 @@
         function __construct(User $user)
         {
             $this->currentStatus = self::NEW_TASK;
-            if(!is_int($user->getUserId())){
-                throw new UserException("Not valid userId");
-            }
             $this->customerId = $user->getUserId();
         }
 
@@ -47,7 +44,7 @@
             return [ExecuteAction::class,CancelAction::class,CompleteAction::class,FailAction::class,ResponseAction::class];
         }
         public function availableActions(User $user):array {
-
+            //Вот как здесь исползовать getAllActions? $this->getAllActions()[0]::isAvailable - вот такая идея
                 $availableActs = [];
                 if(ExecuteAction::isAvailable($this,$user)){
                     $availableActs[] = ExecuteAction::getPublicName();

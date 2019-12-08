@@ -1,46 +1,72 @@
 <?php
-	require_once 'vendor/autoload.php';
+// ini_set('assert.exception', '1');
+// ini_set('zend.assertions','0');
+ declare(strict_types=1);
+ use App\Actions\CancelAction;
+ use App\Actions\CompleteAction;
+ use App\Actions\ExecuteAction;
+ use App\Actions\FailAction;
+ use App\Actions\ResponseAction;
+
+ require_once 'vendor/autoload.php';
 
     $user = new \App\User(1);
     $userExecutor = new \App\User(2);
+    $userExecutor->changeRoleToExecutor();
     $task = new App\Task($user);
+//Пишем тесты
+ //роль = заказчик
+    // Статус = new
+    assert($task->availableActions($user) === [ExecuteAction::getPublicName(),CancelAction::getPublicName()],"\"not valid actions for new status and customer role\"");
 
-	// assert($task->getNextStatus(new HtmlAcademy\CancelAction()) === $task::CANCEL_TASK,'no cancel action');
-	// assert($task->getStatus($task->setStatus($task::NEW_TASK)) === $task::NEW_TASK, 'status not new');
-	// assert($task->getNextStatus(new HtmlAcademy\ExecuteAction()) === $task::EXECUTE_TASK,'no response action');
-	// assert($task->getStatus($task->setStatus($task::EXECUTE_TASK)) === $task::EXECUTE_TASK, 'status not ex');
-	// assert($task->getNextStatus(new HtmlAcademy\CompleteAction()) === $task::END_TASK,'no end action');
-	// assert($task->getStatus($task->setStatus($task::NEW_TASK)) === $task::NEW_TASK, 'status not new');
-	// assert($task->getNextStatus(new HtmlAcademy\ExecuteAction()) === $task::EXECUTE_TASK,'no response action');
-	// assert($task->getStatus($task->setStatus($task::EXECUTE_TASK)) === $task::EXECUTE_TASK, 'status not ex');
-	// assert($task->getNextStatus(new HtmlAcademy\FailAction()) === $task::FAIL_TASK,'no fail action');
-	// assert($task->getStatus($task->setStatus($task::NEW_TASK)) === $task::NEW_TASK, 'status not new');
-	// print_r(array_values($task->availableActions(2,"Customer")));
+    // Статус = Execute
+    $task->setExecutorId(2);
+    try{
+        $task->setStatus($task::EXECUTE_TASK);
+    } catch(\App\Exceptions\UserException $e){
+        echo ($e->getStructMessage()."<b>catch in:</b> ".__FILE__." on line <b>".__LINE__."</b><br>");
+    }
+    assert($task->availableActions($user) === [CompleteAction::getPublicName()],"\"not valid actions for Execute status and customer role\"");
 
+    // Статус = Canceled
+    $task->setStatus($task::CANCEL_TASK);
+    assert($task->availableActions($user) === [],"\"not valid actions for Canceled status and customer role\"");
 
-echo "<br>1Currrent status = ".$task->getStatus()." | role=".$user->getUserRole()."<br>Available actions:";
-print_r($task->availableActions($user));
+    // Статус = Failed
+    $task->setStatus($task::FAIL_TASK);
+    assert($task->availableActions($user) === [],"\"not valid actions for Failed status and customer role\"");
 
-echo "<hr><br>2Currrent status = ".$task->getStatus()." | role=".$userExecutor->getUserRole()."<br>Available actions:";
-print_r($task->availableActions($userExecutor));
+    // Статус = Completed
+    $task->setStatus($task::END_TASK);
+    assert($task->availableActions($user) === [],"\"not valid actions for Completed status and customer role\"");
 
-$userExecutor->changeRoleToExecutor();
-echo "<hr><br>3Currrent status = ".$task->getStatus()." | role=".$userExecutor->getUserRole()."<br>Available actions:";
-print_r($task->availableActions($userExecutor));
+ //роль = исполнитель
+    // Статус = New
+    $task->resetExecutorId();
+    try{
+        $task->setStatus($task::NEW_TASK);
+    } catch(\App\Exceptions\UserException $e){
+        echo ($e->getStructMessage()."<b>catch in:</b> ".__FILE__." on line <b>".__LINE__."</b><br>");
+    }
+    assert($task->availableActions($userExecutor) === [ResponseAction::getPublicName()],"\"not valid actions for new status and executor role\"");
 
-assert($task->getStatus($task->setStatus($task::EXECUTE_TASK)) === $task::EXECUTE_TASK, 'status not ex');
+    // Статус = Execute
+    $task->setExecutorId(2);
+    try{
+        $task->setStatus($task::EXECUTE_TASK);
+    } catch(\App\Exceptions\UserException $e){
+        echo ($e->getStructMessage()."<b>catch in:</b> ".__FILE__." on line <b>".__LINE__."</b><br>");
+    }
+    assert($task->availableActions($userExecutor) === [FailAction::getPublicName()],"\"not valid actions for Execute status and customer role\"");
 
-echo "<hr><br>4Currrent status = ".$task->getStatus()." | role=".$user->getUserRole()."<br>Available actions:";
-print_r($task->availableActions($user));
+    // Статус = Canceled
+    $task->setStatus($task::CANCEL_TASK);
+    assert($task->availableActions($userExecutor) === [],"\"not valid actions for Canceled status and customer role\"");
 
-echo "<hr><br>5Currrent status = ".$task->getStatus()." | role=".$user->getUserRole()."<br>Available actions:";
-$task->setExecutorId(2);
-print_r($task->availableActions($user));
+    // Статус = Failed
+    $task->setStatus($task::FAIL_TASK);
+    assert($task->availableActions($userExecutor) === [],"\"not valid actions for Failed status and customer role\"");
 
-echo "<hr><br>7Currrent status = ".$task->getStatus()." | role=".$userExecutor->getUserRole()."<br>Available actions:";
-print_r($task->availableActions($userExecutor));
-
-assert($task->getStatus($task->setStatus($task::FAIL_TASK)) === $task::FAIL_TASK, 'status not ex');
-echo "<hr><br>Currrent status = ".$task->getStatus()." | role=".$user->getUserRole()."<br>Available actions:";
-print_r($task->availableActions($user));
-
+    // Статус = Completed
+    $task->setStatus($task::END_TASK);
+    assert($task->availableActions($userExecutor) === [],"\"not valid actions for Completed status and customer role\"");

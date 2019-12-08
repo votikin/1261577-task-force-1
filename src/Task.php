@@ -1,13 +1,13 @@
 <?php
 	namespace App;
 
-	use App\User;
 	use App\Actions\AbstractAction;
 	use App\Actions\ExecuteAction;
     use App\Actions\CancelAction;
     use App\Actions\CompleteAction;
     use App\Actions\FailAction;
     use App\Actions\ResponseAction;
+    use App\Exceptions\UserException;
 	/**
 	* Класс задания
 	*/
@@ -20,7 +20,7 @@
 		public const FAIL_TASK = "Failed";
 		public const END_TASK = "Completed";
 
-        private $executorId; // исполнитель
+        public $executorId; // исполнитель
         private $customerId; // заказчик
 	    private $currentStatus;
 
@@ -38,53 +38,50 @@
             $this->customerId = $user->getUserId();
         }
 
-        //Пока не понимаю, как пользоваться тем, что возвращает этот  метод. Не понимаю синтаксически.
         private function getAllActions(){
             return [ExecuteAction::class,CancelAction::class,CompleteAction::class,FailAction::class,ResponseAction::class];
         }
-        public function availableActions(User $user){
-
+        public function availableActions(User $user):array {
                 $availableActs = [];
-                if(ExecuteAction::isAvailable($this,$user)){
-                    $availableActs[] = ExecuteAction::getPublicName();
-                }
-                if(CancelAction::isAvailable($this,$user)){
-                    $availableActs[] = CancelAction::getPublicName();
-                }
-                if(CompleteAction::isAvailable($this,$user)){
-                    $availableActs[] = CompleteAction::getPublicName();
-                }
-                if(FailAction::isAvailable($this,$user)){
-                    $availableActs[] = FailAction::getPublicName();
-                }
-                if(ResponseAction::isAvailable($this,$user)){
-                    $availableActs[] = ResponseAction::getPublicName();
+                foreach ($this->getAllActions() as $class) {
+                    if($class::isAvailable($this,$user)){
+                        $availableActs[] = $class::getPublicName();
+                    }
                 }
                 return $availableActs;
         }
 
-        public function getAllStatuses(){
+        public function getAllStatuses():array {
 			return [self::NEW_TASK,self::EXECUTE_TASK,self::CANCEL_TASK,self::FAIL_TASK,self::END_TASK];
 		}
 
-        public function getNextStatus(AbstractAction $currentAction){
+        public function getNextStatus(AbstractAction $currentAction):?string {
 				return $this->actionStatusConformity[get_class($currentAction)][$this->currentStatus] ?? null;
 		}
 
-		public function getStatus(){
+		public function getStatus():string {
 			return $this->currentStatus;
 		}
-		public function setStatus($status){
+		public function setStatus(string $status){
+            if($status === self::EXECUTE_TASK && $this->executorId === null){
+                throw new UserException("Need choose executor for this task");
+            }
+            if($status === self::NEW_TASK && $this->executorId !== null){
+                throw new UserException("This task just has executor");
+            }
 			$this->currentStatus = $status;
 		}
-		public function getExecutorId(){
+		public function getExecutorId():?int{
 		    return $this->executorId;
         }
-        public function setExecutorId($id){
+        public function setExecutorId(int $id):void{
 		    $this->executorId = $id;
         }
-        public function getCustomerId(){
+        public function getCustomerId():int {
 		    return $this->customerId;
+        }
+        public function resetExecutorId():void{
+            $this->executorId = NULL;
         }
 
 

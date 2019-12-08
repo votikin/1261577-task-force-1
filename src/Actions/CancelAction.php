@@ -8,13 +8,13 @@
 	*/
 	class CancelAction extends AbstractAction
 	{
-	    static public function getPublicName(){
+	    static public function getPublicName():string {
 	        return "Отменить";
 	    }
-        static public function getInternalName(){
+        static public function getInternalName():string {
             return "CANCEL_ACTION";
         }
-        static public function isAvailable(Task $currentTask, User $user){
+        static public function isAvailable(Task $currentTask, User $user):bool {
             return ($currentTask->getExecutorId() === null
                 && $currentTask->getCustomerId() === $user->getUserId()
                 && $currentTask->getStatus() === $currentTask::NEW_TASK);

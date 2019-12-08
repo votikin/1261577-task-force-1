@@ -1,557 +1,497 @@
--- phpMyAdmin SQL Dump
--- version 4.7.5
--- https://www.phpmyadmin.net/
+-- MySQL dump 10.13  Distrib 5.5.62, for debian-linux-gnu (x86_64)
 --
--- Хост: localhost
--- Время создания: Ноя 25 2019 г., 11:57
--- Версия сервера: 5.5.60
--- Версия PHP: 5.6.32
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
-SET time_zone = "+00:00";
-
+-- Host: 127.0.0.1    Database: taskforce
+-- ------------------------------------------------------
+-- Server version	5.5.62-0+deb8u1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- База данных: `taskforce`
---
-CREATE DATABASE `taskforce`;
-USE taskforce;
--- --------------------------------------------------------
-
---
--- Структура таблицы `category`
+-- Table structure for table `category`
 --
 
+DROP TABLE IF EXISTS `category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `category` (
-  `id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Структура таблицы `city`
+-- Dumping data for table `category`
 --
 
+LOCK TABLES `category` WRITE;
+/*!40000 ALTER TABLE `category` DISABLE KEYS */;
+/*!40000 ALTER TABLE `category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `city`
+--
+
+DROP TABLE IF EXISTS `city`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `city` (
-  `id` int(11) NOT NULL,
-  `name` varchar(150) NOT NULL
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(150) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Структура таблицы `correspondence`
+-- Dumping data for table `city`
 --
 
+LOCK TABLES `city` WRITE;
+/*!40000 ALTER TABLE `city` DISABLE KEYS */;
+/*!40000 ALTER TABLE `city` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `correspondence`
+--
+
+DROP TABLE IF EXISTS `correspondence`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `correspondence` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `text` text NOT NULL,
-  `datetime` datetime NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `sender_id` int(11) NOT NULL,
   `recipient_id` int(11) NOT NULL,
-  `task_id` int(11) NOT NULL
+  `task_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `recipient_id` (`recipient_id`),
+  KEY `sender_id` (`sender_id`),
+  KEY `task_id` (`task_id`),
+  CONSTRAINT `correspondence_ibfk_1` FOREIGN KEY (`recipient_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `correspondence_ibfk_2` FOREIGN KEY (`sender_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `correspondence_ibfk_3` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Структура таблицы `eventsfeed`
+-- Dumping data for table `correspondence`
 --
 
+LOCK TABLES `correspondence` WRITE;
+/*!40000 ALTER TABLE `correspondence` DISABLE KEYS */;
+/*!40000 ALTER TABLE `correspondence` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `eventsfeed`
+--
+
+DROP TABLE IF EXISTS `eventsfeed`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `eventsfeed` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `description` text NOT NULL,
   `datetime` datetime NOT NULL,
-  `user_id` int(11) NOT NULL
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `eventsfeed_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Структура таблицы `favorites`
+-- Dumping data for table `eventsfeed`
 --
 
+LOCK TABLES `eventsfeed` WRITE;
+/*!40000 ALTER TABLE `eventsfeed` DISABLE KEYS */;
+/*!40000 ALTER TABLE `eventsfeed` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `favorites`
+--
+
+DROP TABLE IF EXISTS `favorites`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `favorites` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `choosing_id` int(11) NOT NULL,
-  `selected_id` int(11) NOT NULL
+  `selected_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `choosing_id` (`choosing_id`),
+  KEY `selected_id` (`selected_id`),
+  CONSTRAINT `favorites_ibfk_1` FOREIGN KEY (`choosing_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `favorites_ibfk_2` FOREIGN KEY (`selected_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Структура таблицы `response`
+-- Dumping data for table `favorites`
 --
 
+LOCK TABLES `favorites` WRITE;
+/*!40000 ALTER TABLE `favorites` DISABLE KEYS */;
+/*!40000 ALTER TABLE `favorites` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `response`
+--
+
+DROP TABLE IF EXISTS `response`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `response` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `description` text NOT NULL,
   `price` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `task_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `task_id` (`task_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `response_ibfk_1` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`),
+  CONSTRAINT `response_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Структура таблицы `rewiew`
+-- Dumping data for table `response`
 --
 
+LOCK TABLES `response` WRITE;
+/*!40000 ALTER TABLE `response` DISABLE KEYS */;
+/*!40000 ALTER TABLE `response` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `rewiew`
+--
+
+DROP TABLE IF EXISTS `rewiew`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `rewiew` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `descriptiom` text NOT NULL,
   `estimate` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `user_id` int(11) NOT NULL,
-  `task_id` int(11) NOT NULL
+  `task_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `task_id` (`task_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `rewiew_ibfk_1` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`),
+  CONSTRAINT `rewiew_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Структура таблицы `role`
+-- Dumping data for table `rewiew`
 --
 
+LOCK TABLES `rewiew` WRITE;
+/*!40000 ALTER TABLE `rewiew` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rewiew` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `role`
+--
+
+DROP TABLE IF EXISTS `role`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `role` (
-  `id` int(11) NOT NULL,
-  `name` int(11) NOT NULL
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Структура таблицы `subscription`
+-- Dumping data for table `role`
 --
 
+LOCK TABLES `role` WRITE;
+/*!40000 ALTER TABLE `role` DISABLE KEYS */;
+/*!40000 ALTER TABLE `role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `subscription`
+--
+
+DROP TABLE IF EXISTS `subscription`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `subscription` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(100) NOT NULL,
-  `user_id` int(11) NOT NULL
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `subscription_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Структура таблицы `task`
+-- Dumping data for table `subscription`
 --
 
+LOCK TABLES `subscription` WRITE;
+/*!40000 ALTER TABLE `subscription` DISABLE KEYS */;
+/*!40000 ALTER TABLE `subscription` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `task`
+--
+
+DROP TABLE IF EXISTS `task`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `task` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `short` text NOT NULL,
   `description` text NOT NULL,
   `location` text NOT NULL,
   `budget` int(11) NOT NULL,
   `deadline` date NOT NULL,
   `status` int(11) NOT NULL,
-  `latitude` decimal(8,6) NOT NULL,
-  `longitude` decimal(8,6) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
+  `latitude` decimal(8,6) DEFAULT NULL,
+  `longitude` decimal(8,6) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT NULL,
   `category_id` int(11) NOT NULL,
   `owner_id` int(11) NOT NULL,
-  `executor_id` int(11) NOT NULL,
-  `city_id` int(11) NOT NULL
+  `executor_id` int(11) DEFAULT NULL,
+  `city_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `category_id` (`category_id`),
+  KEY `owner_id` (`owner_id`),
+  KEY `executor_id` (`executor_id`),
+  KEY `city_id` (`city_id`),
+  CONSTRAINT `task_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
+  CONSTRAINT `task_ibfk_2` FOREIGN KEY (`owner_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `task_ibfk_3` FOREIGN KEY (`executor_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `task_ibfk_4` FOREIGN KEY (`city_id`) REFERENCES `city` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Структура таблицы `taskimages`
+-- Dumping data for table `task`
 --
 
+LOCK TABLES `task` WRITE;
+/*!40000 ALTER TABLE `task` DISABLE KEYS */;
+/*!40000 ALTER TABLE `task` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `taskimages`
+--
+
+DROP TABLE IF EXISTS `taskimages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `taskimages` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `image_path` varchar(150) NOT NULL,
-  `task_id` int(11) NOT NULL
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `task_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `task_id` (`task_id`),
+  CONSTRAINT `taskimages_ibfk_1` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Структура таблицы `tuning`
+-- Dumping data for table `taskimages`
 --
 
+LOCK TABLES `taskimages` WRITE;
+/*!40000 ALTER TABLE `taskimages` DISABLE KEYS */;
+/*!40000 ALTER TABLE `taskimages` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tuning`
+--
+
+DROP TABLE IF EXISTS `tuning`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tuning` (
-  `id` int(11) NOT NULL,
-  `name` varchar(150) NOT NULL
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(150) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Структура таблицы `user`
+-- Dumping data for table `tuning`
 --
 
+LOCK TABLES `tuning` WRITE;
+/*!40000 ALTER TABLE `tuning` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tuning` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `birthday` date NOT NULL,
-  `phone` varchar(20) NOT NULL,
-  `skype` varchar(50) NOT NULL,
-  `messenger` varchar(50) NOT NULL,
-  `about` text NOT NULL,
+  `birthday` date DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `skype` varchar(50) DEFAULT NULL,
+  `messenger` varchar(50) DEFAULT NULL,
+  `about` text,
   `password` varchar(150) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `city_id` int(11) NOT NULL,
-  `role_id` int(11) NOT NULL
+  `role_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
+  KEY `city_id` (`city_id`),
+  KEY `role_id` (`role_id`),
+  CONSTRAINT `user_ibfk_1` FOREIGN KEY (`city_id`) REFERENCES `city` (`id`),
+  CONSTRAINT `user_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Структура таблицы `usercategory`
+-- Dumping data for table `user`
 --
 
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `usercategory`
+--
+
+DROP TABLE IF EXISTS `usercategory`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `usercategory` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `user_id` int(11) NOT NULL,
-  `category_id` int(11) NOT NULL
+  `category_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `category_id` (`category_id`),
+  CONSTRAINT `usercategory_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `usercategory_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Структура таблицы `userimages`
+-- Dumping data for table `usercategory`
 --
 
+LOCK TABLES `usercategory` WRITE;
+/*!40000 ALTER TABLE `usercategory` DISABLE KEYS */;
+/*!40000 ALTER TABLE `usercategory` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `userimages`
+--
+
+DROP TABLE IF EXISTS `userimages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `userimages` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `image_path` varchar(150) NOT NULL,
-  `user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `usertuning`
---
-
-CREATE TABLE `usertuning` (
-  `id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `user_id` int(11) NOT NULL,
-  `tuning_id` int(11) NOT NULL
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `userimages_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Индексы сохранённых таблиц
+-- Dumping data for table `userimages`
 --
 
---
--- Индексы таблицы `category`
---
-ALTER TABLE `category`
-  ADD PRIMARY KEY (`id`);
+LOCK TABLES `userimages` WRITE;
+/*!40000 ALTER TABLE `userimages` DISABLE KEYS */;
+/*!40000 ALTER TABLE `userimages` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
--- Индексы таблицы `city`
---
-ALTER TABLE `city`
-  ADD PRIMARY KEY (`id`);
-
---
--- Индексы таблицы `correspondence`
---
-ALTER TABLE `correspondence`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `recipient_id` (`recipient_id`),
-  ADD KEY `sender_id` (`sender_id`),
-  ADD KEY `task_id` (`task_id`);
-
---
--- Индексы таблицы `eventsfeed`
---
-ALTER TABLE `eventsfeed`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Индексы таблицы `favorites`
---
-ALTER TABLE `favorites`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `choosing_id` (`choosing_id`),
-  ADD KEY `selected_id` (`selected_id`);
-
---
--- Индексы таблицы `response`
---
-ALTER TABLE `response`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `task_id` (`task_id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Индексы таблицы `rewiew`
---
-ALTER TABLE `rewiew`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `task_id` (`task_id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Индексы таблицы `role`
---
-ALTER TABLE `role`
-  ADD PRIMARY KEY (`id`);
-
---
--- Индексы таблицы `subscription`
---
-ALTER TABLE `subscription`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Индексы таблицы `task`
---
-ALTER TABLE `task`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `category_id` (`category_id`),
-  ADD KEY `owner_id` (`owner_id`),
-  ADD KEY `executor_id` (`executor_id`),
-  ADD KEY `city_id` (`city_id`);
-
---
--- Индексы таблицы `taskimages`
---
-ALTER TABLE `taskimages`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `task_id` (`task_id`);
-
---
--- Индексы таблицы `tuning`
---
-ALTER TABLE `tuning`
-  ADD PRIMARY KEY (`id`);
-
---
--- Индексы таблицы `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`),
-  ADD KEY `city_id` (`city_id`),
-  ADD KEY `role_id` (`role_id`);
-
---
--- Индексы таблицы `usercategory`
---
-ALTER TABLE `usercategory`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `category_id` (`category_id`);
-
---
--- Индексы таблицы `userimages`
---
-ALTER TABLE `userimages`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Индексы таблицы `usertuning`
---
-ALTER TABLE `usertuning`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `tuning_id` (`tuning_id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- AUTO_INCREMENT для сохранённых таблиц
+-- Table structure for table `usertuning`
 --
 
---
--- AUTO_INCREMENT для таблицы `category`
---
-ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+DROP TABLE IF EXISTS `usertuning`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `usertuning` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `user_id` int(11) NOT NULL,
+  `tuning_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `tuning_id` (`tuning_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `usertuning_ibfk_1` FOREIGN KEY (`tuning_id`) REFERENCES `tuning` (`id`),
+  CONSTRAINT `usertuning_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- AUTO_INCREMENT для таблицы `city`
---
-ALTER TABLE `city`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT для таблицы `correspondence`
---
-ALTER TABLE `correspondence`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT для таблицы `eventsfeed`
---
-ALTER TABLE `eventsfeed`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT для таблицы `favorites`
---
-ALTER TABLE `favorites`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT для таблицы `response`
---
-ALTER TABLE `response`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT для таблицы `rewiew`
---
-ALTER TABLE `rewiew`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT для таблицы `role`
---
-ALTER TABLE `role`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT для таблицы `subscription`
---
-ALTER TABLE `subscription`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT для таблицы `task`
---
-ALTER TABLE `task`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT для таблицы `taskimages`
---
-ALTER TABLE `taskimages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT для таблицы `tuning`
---
-ALTER TABLE `tuning`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT для таблицы `user`
---
-ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT для таблицы `usercategory`
---
-ALTER TABLE `usercategory`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT для таблицы `userimages`
---
-ALTER TABLE `userimages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT для таблицы `usertuning`
---
-ALTER TABLE `usertuning`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- Ограничения внешнего ключа сохраненных таблиц
+-- Dumping data for table `usertuning`
 --
 
---
--- Ограничения внешнего ключа таблицы `correspondence`
---
-ALTER TABLE `correspondence`
-  ADD CONSTRAINT `correspondence_ibfk_3` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`),
-  ADD CONSTRAINT `correspondence_ibfk_1` FOREIGN KEY (`recipient_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `correspondence_ibfk_2` FOREIGN KEY (`sender_id`) REFERENCES `user` (`id`);
+LOCK TABLES `usertuning` WRITE;
+/*!40000 ALTER TABLE `usertuning` DISABLE KEYS */;
+/*!40000 ALTER TABLE `usertuning` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
---
--- Ограничения внешнего ключа таблицы `eventsfeed`
---
-ALTER TABLE `eventsfeed`
-  ADD CONSTRAINT `eventsfeed_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-
---
--- Ограничения внешнего ключа таблицы `favorites`
---
-ALTER TABLE `favorites`
-  ADD CONSTRAINT `favorites_ibfk_2` FOREIGN KEY (`selected_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `favorites_ibfk_1` FOREIGN KEY (`choosing_id`) REFERENCES `user` (`id`);
-
---
--- Ограничения внешнего ключа таблицы `response`
---
-ALTER TABLE `response`
-  ADD CONSTRAINT `response_ibfk_1` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`),
-  ADD CONSTRAINT `response_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-
---
--- Ограничения внешнего ключа таблицы `rewiew`
---
-ALTER TABLE `rewiew`
-  ADD CONSTRAINT `rewiew_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `rewiew_ibfk_1` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`);
-
---
--- Ограничения внешнего ключа таблицы `subscription`
---
-ALTER TABLE `subscription`
-  ADD CONSTRAINT `subscription_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-
---
--- Ограничения внешнего ключа таблицы `task`
---
-ALTER TABLE `task`
-  ADD CONSTRAINT `task_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
-  ADD CONSTRAINT `task_ibfk_2` FOREIGN KEY (`owner_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `task_ibfk_3` FOREIGN KEY (`executor_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `task_ibfk_4` FOREIGN KEY (`city_id`) REFERENCES `city` (`id`);
-
---
--- Ограничения внешнего ключа таблицы `taskimages`
---
-ALTER TABLE `taskimages`
-  ADD CONSTRAINT `taskimages_ibfk_1` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`);
-
---
--- Ограничения внешнего ключа таблицы `user`
---
-ALTER TABLE `user`
-  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`city_id`) REFERENCES `city` (`id`),
-  ADD CONSTRAINT `user_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`);
-
---
--- Ограничения внешнего ключа таблицы `usercategory`
---
-ALTER TABLE `usercategory`
-  ADD CONSTRAINT `usercategory_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
-  ADD CONSTRAINT `usercategory_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-
---
--- Ограничения внешнего ключа таблицы `userimages`
---
-ALTER TABLE `userimages`
-  ADD CONSTRAINT `userimages_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-
---
--- Ограничения внешнего ключа таблицы `usertuning`
---
-ALTER TABLE `usertuning`
-  ADD CONSTRAINT `usertuning_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `usertuning_ibfk_1` FOREIGN KEY (`tuning_id`) REFERENCES `tuning` (`id`);
-COMMIT;
-
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2019-12-03  0:53:58

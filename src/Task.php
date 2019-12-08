@@ -38,28 +38,15 @@
             $this->customerId = $user->getUserId();
         }
 
-        //Пока не понимаю, как пользоваться тем, что возвращает этот  метод. Не понимаю синтаксически. Т.е. он возвращает массив строк, а как в методе
-//      availableActions это исползовать.
         private function getAllActions(){
             return [ExecuteAction::class,CancelAction::class,CompleteAction::class,FailAction::class,ResponseAction::class];
         }
         public function availableActions(User $user):array {
-            //Вот как здесь исползовать getAllActions? $this->getAllActions()[0]::isAvailable - вот такая идея
                 $availableActs = [];
-                if(ExecuteAction::isAvailable($this,$user)){
-                    $availableActs[] = ExecuteAction::getPublicName();
-                }
-                if(CancelAction::isAvailable($this,$user)){
-                    $availableActs[] = CancelAction::getPublicName();
-                }
-                if(CompleteAction::isAvailable($this,$user)){
-                    $availableActs[] = CompleteAction::getPublicName();
-                }
-                if(FailAction::isAvailable($this,$user)){
-                    $availableActs[] = FailAction::getPublicName();
-                }
-                if(ResponseAction::isAvailable($this,$user)){
-                    $availableActs[] = ResponseAction::getPublicName();
+                foreach ($this->getAllActions() as $class) {
+                    if($class::isAvailable($this,$user)){
+                        $availableActs[] = $class::getPublicName();
+                    }
                 }
                 return $availableActs;
         }

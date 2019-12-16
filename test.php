@@ -7,6 +7,7 @@
  use App\Actions\ExecuteAction;
  use App\Actions\FailAction;
  use App\Actions\ResponseAction;
+ // use App\CSVConverter;
 
  require_once 'vendor/autoload.php';
 
@@ -70,3 +71,23 @@
     // Статус = Completed
     $task->setStatus($task::END_TASK);
     assert($task->availableActions($userExecutor) === [],"\"not valid actions for Completed status and customer role\"");
+
+try {
+    $mysqli = @new mysqli('127.0.0.1', 'root', '12345678', 'taskforce');
+
+    $category = new \App\CSVConverter($mysqli,__DIR__."/data/categories.csv",'category');
+    $category->createInsertFile($category->getInsertString(),__DIR__."/sql/query/".$category->getTableNamePublic().".sql");
+
+    $city = new \App\CSVConverter($mysqli,__DIR__."/data/cities.csv",'city',['name','latitude','longitude']);
+    $city->createInsertFile($city->getInsertString(),__DIR__."/sql/query/".$city->getTableNamePublic().".sql");
+
+    $user = new \App\CSVConverter($mysqli,__DIR__."/data/users.csv",'user',['email','name','password','created_at']);
+    $user->createInsertFile($user->getInsertString(),__DIR__."/sql/query/".$user->getTableNamePublic().".sql");
+
+//    $dumpTask = new \App\CSVConverter($mysqli,__DIR__."/data/tasks.csv",'task',['created_at','category_id','description','deadline','short','address','budget','latitude','longitude']);
+//    $dumpTask->createInsertFile($dumpTask->getInsertString(),__DIR__."/sql/query/".$dumpTask->getTableNamePublic().".sql");
+} catch (\App\Exceptions\UserException $e) {
+    echo ($e->getStructMessage()."<b>catch in:</b> ".__FILE__." on line <b>".__LINE__."</b><br>");
+} catch (\mysqli_sql_exception $e){
+    echo $e->getMessage();
+}

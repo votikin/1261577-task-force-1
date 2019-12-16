@@ -1,13 +1,13 @@
--- MySQL dump 10.13  Distrib 5.5.62, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.17  Distrib 10.3.18-MariaDB, for debian-linux-gnu (x86_64)
 --
--- Host: 127.0.0.1    Database: taskforce
+-- Host: localhost    Database: taskforce
 -- ------------------------------------------------------
--- Server version	5.5.62-0+deb8u1
+-- Server version	10.3.18-MariaDB-0+deb10u1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -24,10 +24,11 @@ DROP TABLE IF EXISTS `category`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `category` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `name` varchar(100) DEFAULT NULL,
+  `icon` varchar(100) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,6 +37,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
+INSERT INTO `category` VALUES (1,'Курьерские услуги','translation','2019-12-16 08:06:02'),(2,'Уборка','clean','2019-12-16 08:06:02'),(3,'Переезды','cargo','2019-12-16 08:06:02'),(4,'Компьютерная помощь','neo','2019-12-16 08:06:02'),(5,'Ремонт квартирный','flat','2019-12-16 08:06:02'),(6,'Ремонт техники','repair','2019-12-16 08:06:02'),(7,'Красота','beauty','2019-12-16 08:06:02'),(18,'Фото','photo','2019-12-16 08:06:02');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -49,7 +51,9 @@ DROP TABLE IF EXISTS `city`;
 CREATE TABLE `city` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(150) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `latitude` decimal(8,6) DEFAULT NULL,
+  `longitude` decimal(8,6) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -73,7 +77,7 @@ DROP TABLE IF EXISTS `correspondence`;
 CREATE TABLE `correspondence` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `text` text NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `sender_id` int(11) NOT NULL,
   `recipient_id` int(11) NOT NULL,
   `task_id` int(11) NOT NULL,
@@ -106,8 +110,8 @@ DROP TABLE IF EXISTS `eventsfeed`;
 CREATE TABLE `eventsfeed` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `description` text NOT NULL,
-  `datetime` datetime NOT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` datetime NOT NULL,
+  `date_create` timestamp NOT NULL DEFAULT current_timestamp(),
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
@@ -133,7 +137,7 @@ DROP TABLE IF EXISTS `favorites`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `favorites` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `choosing_id` int(11) NOT NULL,
   `selected_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
@@ -164,7 +168,7 @@ CREATE TABLE `response` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `description` text NOT NULL,
   `price` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `task_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
@@ -195,7 +199,7 @@ CREATE TABLE `rewiew` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `descriptiom` text NOT NULL,
   `estimate` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `user_id` int(11) NOT NULL,
   `task_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
@@ -224,10 +228,10 @@ DROP TABLE IF EXISTS `role`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `name` varchar(50) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -236,6 +240,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
+INSERT INTO `role` VALUES (1,'customer','2019-12-16 21:13:30'),(2,'executor','2019-12-16 21:13:30');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -249,7 +254,7 @@ DROP TABLE IF EXISTS `subscription`;
 CREATE TABLE `subscription` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(100) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
@@ -277,16 +282,16 @@ CREATE TABLE `task` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `short` text NOT NULL,
   `description` text NOT NULL,
-  `location` text NOT NULL,
+  `address` text DEFAULT NULL,
   `budget` int(11) NOT NULL,
-  `deadline` date NOT NULL,
-  `status` int(11) NOT NULL,
+  `deadline` datetime NOT NULL,
+  `status` int(11) DEFAULT NULL,
   `latitude` decimal(8,6) DEFAULT NULL,
   `longitude` decimal(8,6) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT NULL,
   `category_id` int(11) NOT NULL,
-  `owner_id` int(11) NOT NULL,
+  `owner_id` int(11) DEFAULT NULL,
   `executor_id` int(11) DEFAULT NULL,
   `city_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -321,7 +326,7 @@ CREATE TABLE `taskimages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `image_path` varchar(150) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `task_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `task_id` (`task_id`),
@@ -348,7 +353,7 @@ DROP TABLE IF EXISTS `tuning`;
 CREATE TABLE `tuning` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(150) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -377,18 +382,19 @@ CREATE TABLE `user` (
   `phone` varchar(20) DEFAULT NULL,
   `skype` varchar(50) DEFAULT NULL,
   `messenger` varchar(50) DEFAULT NULL,
-  `about` text,
+  `about` text DEFAULT NULL,
   `password` varchar(150) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `city_id` int(11) NOT NULL,
-  `role_id` int(11) NOT NULL,
+  `address` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `city_id` int(11) DEFAULT NULL,
+  `role_id` int(11) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   KEY `city_id` (`city_id`),
   KEY `role_id` (`role_id`),
   CONSTRAINT `user_ibfk_1` FOREIGN KEY (`city_id`) REFERENCES `city` (`id`),
   CONSTRAINT `user_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -397,6 +403,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,'Karrie Buttress','kbuttress0@1und1.de',NULL,NULL,NULL,NULL,NULL,'JcfoKBYAB4k',NULL,'2019-08-09 21:00:00',NULL,1),(2,'Bob Aymer','baymer1@hp.com',NULL,NULL,NULL,NULL,NULL,'ZEE54kg',NULL,'2018-12-20 21:00:00',NULL,1),(3,'Zilvia Boulding','zboulding2@macromedia.com',NULL,NULL,NULL,NULL,NULL,'VJyMV1Zat',NULL,'2019-07-24 21:00:00',NULL,1),(4,'Emalee Mollon','emollon3@bloglovin.com',NULL,NULL,NULL,NULL,NULL,'XUIeJ693h',NULL,'2018-11-12 21:00:00',NULL,1),(5,'Maria Mulberry','mmulberry4@cmu.edu',NULL,NULL,NULL,NULL,NULL,'oWspnl',NULL,'2019-07-19 21:00:00',NULL,1),(6,'Levey By','lby5@mozilla.com',NULL,NULL,NULL,NULL,NULL,'GdtcUU',NULL,'2019-02-11 21:00:00',NULL,1),(7,'Baron Eates','beates6@last.fm',NULL,NULL,NULL,NULL,NULL,'UQw6VeA',NULL,'2019-05-02 21:00:00',NULL,1),(8,'Trip Vink','tvink7@fotki.com',NULL,NULL,NULL,NULL,NULL,'49znXd7haFGz',NULL,'2019-01-12 21:00:00',NULL,1),(9,'Boonie Terbeck','bterbeck8@about.me',NULL,NULL,NULL,NULL,NULL,'unCjJTF7sjs',NULL,'2019-09-14 21:00:00',NULL,1),(10,'Alonzo Traviss','atraviss9@auda.org.au',NULL,NULL,NULL,NULL,NULL,'dLuVMAg',NULL,'2018-12-18 21:00:00',NULL,1),(11,'Natassia Wittering','nwitteringa@google.com.br',NULL,NULL,NULL,NULL,NULL,'tQlUG4n',NULL,'2019-03-23 21:00:00',NULL,1),(12,'Felice Brooke','fbrookeb@nba.com',NULL,NULL,NULL,NULL,NULL,'s9y9Mcfgy1g',NULL,'2019-09-26 21:00:00',NULL,1),(13,'Carlen Viccary','cviccaryc@amazon.co.uk',NULL,NULL,NULL,NULL,NULL,'9qd747vh',NULL,'2018-12-05 21:00:00',NULL,1),(14,'Hendrik Gethings','hgethingsd@sogou.com',NULL,NULL,NULL,NULL,NULL,'zzN5c4',NULL,'2018-11-17 21:00:00',NULL,1),(15,'Dunc Girodias','dgirodiase@stanford.edu',NULL,NULL,NULL,NULL,NULL,'j9QW6GQI',NULL,'2018-10-13 21:00:00',NULL,1),(16,'Bibbie Tanman','btanmanf@smh.com.au',NULL,NULL,NULL,NULL,NULL,'1aukKNEIneq',NULL,'2019-05-02 21:00:00',NULL,1),(17,'Barnabas Bartoletti','bbartolettig@simplemachines.org',NULL,NULL,NULL,NULL,NULL,'3chTNtqhoo',NULL,'2018-12-24 21:00:00',NULL,1),(18,'Nixie Cullip','nculliph@fc2.com',NULL,NULL,NULL,NULL,NULL,'2UdKIR2f',NULL,'2019-04-06 21:00:00',NULL,1),(19,'Matilde Pimblott','mpimblotti@xing.com',NULL,NULL,NULL,NULL,NULL,'nGZ8disdg',NULL,'2019-07-17 21:00:00',NULL,1),(20,'Al Skurray','askurrayj@un.org',NULL,NULL,NULL,NULL,NULL,'bL9tAf',NULL,'2018-11-24 21:00:00',NULL,1);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -409,7 +416,7 @@ DROP TABLE IF EXISTS `usercategory`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `usercategory` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `user_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
@@ -439,7 +446,7 @@ DROP TABLE IF EXISTS `userimages`;
 CREATE TABLE `userimages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `image_path` varchar(150) NOT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
@@ -465,7 +472,7 @@ DROP TABLE IF EXISTS `usertuning`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `usertuning` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `user_id` int(11) NOT NULL,
   `tuning_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
@@ -494,4 +501,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-12-03  0:53:58
+-- Dump completed on 2019-12-17  0:34:47

@@ -13,6 +13,7 @@
 		private $queryString;
 		private $fields;
 		private $outFile;
+
 		function __construct(object $mysqli, string $filePath, string $tableName = null, array $fields = null)
 		{
             if($mysqli->connect_error){

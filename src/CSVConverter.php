@@ -9,20 +9,16 @@
 	{
 		private $file;
 		private $tableName;
-		private $mysqli;
 		private $queryString;
 		private $fields;
 		private $outFile;
 
-		function __construct(object $mysqli, string $filePath, string $tableName = null, array $fields = null)
+		function __construct(string $filePath, string $tableName = null, array $fields = null)
 		{
-            if($mysqli->connect_error){
-                throw new \mysqli_sql_exception("Connection error");
-            }
-            $this->mysqli = $mysqli;
-            if(!file_exists($filePath)){
+            if(!file_exists($filePath) || is_dir($filePath)){
 				throw new UserException("Given file does not exists - $filePath");
 			}
+
 			$this->file = new \SplFileObject($filePath);
 
 			if($tableName === null){
@@ -32,13 +28,7 @@
 			if($fields === null){
 			    $fields = $this->getHeaders();
             }
-			$this->fields = $fields;
-            if(!$this->isValidTable()){
-                throw new UserException("Not valid table name");
-            }
-            if(!$this->isValidFields()){
-                throw new UserException("Not valid fields name");
-            }
+            $this->fields = $fields;
             if(!$this->isValidCountFields()){
                 throw new UserException("Not valid count fields");
             }
@@ -47,7 +37,6 @@
 		private function getTableName(string $path):?string{
 		    $tempArr = explode('/',$path);
 		    $tempStr =  array_pop($tempArr);
-		    //Если написать return array_pop(explode('/',$path)); - выдаёт Notice. Почему?
             $tempArr = explode('.',$tempStr);
             return $tempArr[0];
         }
@@ -58,7 +47,7 @@
         }
         private function getData():?array {
 		    $result = null;
-            $this->file->setFlags(\SplFileObject::READ_CSV | \SplFileObject::READ_AHEAD | \SplFileObject::SKIP_EMPTY | \SplFileObject::DROP_NEW_LINE);
+            $this->file->setFlags(\SplFileObject::READ_CSV | \SplFileObject::SKIP_EMPTY | \SplFileObject::READ_AHEAD);
             foreach ($this->file as $row){
                 $result[] = $row;
             }
@@ -100,34 +89,10 @@
                     break;
                 }
             }
+            $queryString .=";".PHP_EOL;
             return $queryString;
 		}
-        private function isValidTable():bool{
-		    $isValid = false;
-            $res = $this->mysqli->query("SHOW TABLES");
-            while($row = $res->fetch_array( MYSQLI_NUM)) {
-                if($row[0] === $this->tableName){
-                    $isValid = true;
-                    break;
-                }
-            }
-            return $isValid;
-        }
-        private function isValidFields():bool{
-            $isValid = true;
-            $tempQuery = "DESCRIBE ".$this->tableName;
-            $res = $this->mysqli->query($tempQuery);
-            $tempArr = [];
-            while($row = $res->fetch_array( MYSQLI_NUM)) {
-                $tempArr[] = $row[0];
-            }
-            foreach ($this->fields as $headVal){
-                if(!in_array($headVal,$tempArr)){
-                    $isValid = false;
-                }
-            }
-            return $isValid;
-        }
+
         private function isValidCountFields():bool{
 		    return count($this->fields) === count($this->getHeaders());
         }
@@ -135,10 +100,6 @@
             return $this->queryString;
         }
         public function createInsertFile(string $queryString, string $path){
-            if(!file_exists($path)){
-                $fp = fopen($path,'w');
-                fclose($fp);
-            }
             $this->outFile = new \SplFileObject($path,'w');
             $this->outFile->fwrite($queryString);
         }

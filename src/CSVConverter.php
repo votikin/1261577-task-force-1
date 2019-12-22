@@ -13,7 +13,7 @@
 		private $fields;
 		private $outFile;
 
-		function __construct(string $filePath, string $tableName = null, array $fields = null)
+		public function __construct(string $filePath, string $tableName = null, array $fields = null)
 		{
             if(!file_exists($filePath) || is_dir($filePath)){
 				throw new UserException("Given file does not exists - $filePath");
@@ -60,14 +60,10 @@
             }
 		    $queryString = "INSERT INTO `".$this->tableName."` (";
             foreach ($this->fields as $value){
-                $queryString .= "`$value`";
-                $count--;
-                if($count === 0) {
-                    $queryString .= ")";
-                    break;
-                }
-                $queryString .=", ";
+                $queryString .= "`$value`,";
             }
+            $queryString = mb_substr($queryString,0,-1);
+            $queryString .= "),";
             $countData = count($this->getData());
             $flag = false;
             $queryString .= " VALUES ";
@@ -81,15 +77,16 @@
                 foreach ($oneArr as $value) {
                     $queryString .= "'$value',";
                 }
-                $queryString = substr($queryString,0,-1);
+                $queryString = mb_substr($queryString,0,-1);
                 $queryString .= "),";
                 $countData--;
                 if($countData === 0){
-                    $queryString = substr($queryString,0,-1);
+                    $queryString = mb_substr($queryString,0,-1);
                     break;
                 }
             }
             $queryString .=";".PHP_EOL;
+            echo $queryString;
             return $queryString;
 		}
 

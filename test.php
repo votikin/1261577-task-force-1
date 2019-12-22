@@ -73,6 +73,7 @@
     assert($task->availableActions($userExecutor) === [],"\"not valid actions for Completed status and customer role\"");
 
 try {
+
     $outFilePath = __DIR__."/sql/query/general.sql";
     $outFile = new \SplFileObject($outFilePath,'w+');
 
@@ -105,6 +106,4 @@ try {
 
 } catch (\App\Exceptions\UserException $e) {
     echo ($e->getStructMessage()."<b>catch in:</b> ".__FILE__." on line <b>".__LINE__."</b><br>");
-} catch (\mysqli_sql_exception $e){
-    echo $e->getMessage();
 }

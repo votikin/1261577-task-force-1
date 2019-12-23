@@ -63,7 +63,7 @@
                 $queryString .= "`$value`,";
             }
             $queryString = mb_substr($queryString,0,-1);
-            $queryString .= "),";
+            $queryString .= ")";
             $countData = count($this->getData());
             $flag = false;
             $queryString .= " VALUES ";
@@ -86,7 +86,6 @@
                 }
             }
             $queryString .=";".PHP_EOL;
-            echo $queryString;
             return $queryString;
 		}
 

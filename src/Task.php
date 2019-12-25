@@ -20,7 +20,7 @@
 		public const FAIL_TASK = "Failed";
 		public const END_TASK = "Completed";
 
-        public $executorId; // исполнитель
+        private $executorId; // исполнитель
         private $customerId; // заказчик
 	    private $currentStatus;
 

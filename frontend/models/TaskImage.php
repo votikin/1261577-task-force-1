@@ -5,26 +5,24 @@ namespace frontend\models;
 use Yii;
 
 /**
- * This is the model class for table "response".
+ * This is the model class for table "task_image".
  *
  * @property int $id
- * @property string $description
- * @property int $price
+ * @property string $name
+ * @property string $image_path
  * @property string $created_at
  * @property int $task_id
- * @property int $user_id
  *
  * @property Task $task
- * @property User $user
  */
-class Response extends \yii\db\ActiveRecord
+class TaskImage extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'response';
+        return 'task_image';
     }
 
     /**
@@ -33,12 +31,12 @@ class Response extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['description', 'price', 'task_id', 'user_id'], 'required'],
-            [['description'], 'string'],
-            [['price', 'task_id', 'user_id'], 'integer'],
+            [['name', 'image_path', 'task_id'], 'required'],
             [['created_at'], 'safe'],
+            [['task_id'], 'integer'],
+            [['name'], 'string', 'max' => 100],
+            [['image_path'], 'string', 'max' => 150],
             [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -49,11 +47,10 @@ class Response extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'description' => 'Description',
-            'price' => 'Price',
+            'name' => 'Name',
+            'image_path' => 'Image Path',
             'created_at' => 'Created At',
             'task_id' => 'Task ID',
-            'user_id' => 'User ID',
         ];
     }
 
@@ -63,13 +60,5 @@ class Response extends \yii\db\ActiveRecord
     public function getTask()
     {
         return $this->hasOne(Task::class, ['id' => 'task_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUser()
-    {
-        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }

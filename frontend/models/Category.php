@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace frontend\models;
 
 use Yii;
 
@@ -13,7 +13,7 @@ use Yii;
  * @property string $created_at
  *
  * @property Task[] $tasks
- * @property Usercategory[] $usercategories
+ * @property UserCategory[] $userCategories
  */
 class Category extends \yii\db\ActiveRecord
 {
@@ -55,14 +55,14 @@ class Category extends \yii\db\ActiveRecord
      */
     public function getTasks()
     {
-        return $this->hasMany(Task::className(), ['category_id' => 'id']);
+        return $this->hasMany(Task::class, ['category_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUsercategories()
+    public function getUserCategories()
     {
-        return $this->hasMany(Usercategory::className(), ['category_id' => 'id']);
+        return $this->hasMany(UserCategory::class, ['category_id' => 'id']);
     }
 }

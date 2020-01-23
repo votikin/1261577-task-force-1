@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace frontend\models;
 
 use Yii;
 
@@ -30,7 +30,7 @@ use Yii;
  * @property User $owner
  * @property User $executor
  * @property City $city
- * @property Taskimages[] $taskimages
+ * @property TaskImage[] $taskImages
  */
 class Task extends \yii\db\ActiveRecord
 {
@@ -53,10 +53,10 @@ class Task extends \yii\db\ActiveRecord
             [['budget', 'status', 'category_id', 'owner_id', 'executor_id', 'city_id'], 'integer'],
             [['deadline', 'created_at', 'updated_at'], 'safe'],
             [['latitude', 'longitude'], 'number'],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
-            [['owner_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['owner_id' => 'id']],
-            [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['executor_id' => 'id']],
-            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['city_id' => 'id']],
+            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
+            [['owner_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['owner_id' => 'id']],
+            [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['executor_id' => 'id']],
+            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'id']],
         ];
     }
 
@@ -89,7 +89,7 @@ class Task extends \yii\db\ActiveRecord
      */
     public function getCorrespondences()
     {
-        return $this->hasMany(Correspondence::className(), ['task_id' => 'id']);
+        return $this->hasMany(Correspondence::class, ['task_id' => 'id']);
     }
 
     /**
@@ -97,7 +97,7 @@ class Task extends \yii\db\ActiveRecord
      */
     public function getResponses()
     {
-        return $this->hasMany(Response::className(), ['task_id' => 'id']);
+        return $this->hasMany(Response::class, ['task_id' => 'id']);
     }
 
     /**
@@ -105,7 +105,7 @@ class Task extends \yii\db\ActiveRecord
      */
     public function getRewiews()
     {
-        return $this->hasMany(Rewiew::className(), ['task_id' => 'id']);
+        return $this->hasMany(Rewiew::class, ['task_id' => 'id']);
     }
 
     /**
@@ -113,7 +113,7 @@ class Task extends \yii\db\ActiveRecord
      */
     public function getCategory()
     {
-        return $this->hasOne(Category::className(), ['id' => 'category_id']);
+        return $this->hasOne(Category::class, ['id' => 'category_id']);
     }
 
     /**
@@ -121,7 +121,7 @@ class Task extends \yii\db\ActiveRecord
      */
     public function getOwner()
     {
-        return $this->hasOne(User::className(), ['id' => 'owner_id']);
+        return $this->hasOne(User::class, ['id' => 'owner_id']);
     }
 
     /**
@@ -129,7 +129,7 @@ class Task extends \yii\db\ActiveRecord
      */
     public function getExecutor()
     {
-        return $this->hasOne(User::className(), ['id' => 'executor_id']);
+        return $this->hasOne(User::class, ['id' => 'executor_id']);
     }
 
     /**
@@ -137,14 +137,14 @@ class Task extends \yii\db\ActiveRecord
      */
     public function getCity()
     {
-        return $this->hasOne(City::className(), ['id' => 'city_id']);
+        return $this->hasOne(City::class, ['id' => 'city_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTaskimages()
+    public function getTaskImages()
     {
-        return $this->hasMany(Taskimages::className(), ['task_id' => 'id']);
+        return $this->hasMany(TaskImage::class, ['task_id' => 'id']);
     }
 }

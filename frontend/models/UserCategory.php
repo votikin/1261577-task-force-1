@@ -5,23 +5,24 @@ namespace frontend\models;
 use Yii;
 
 /**
- * This is the model class for table "subscription".
+ * This is the model class for table "user_category".
  *
  * @property int $id
- * @property string $type
  * @property string $created_at
  * @property int $user_id
+ * @property int $category_id
  *
  * @property User $user
+ * @property Category $category
  */
-class Subscription extends \yii\db\ActiveRecord
+class UserCategory extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'subscription';
+        return 'user_category';
     }
 
     /**
@@ -30,11 +31,11 @@ class Subscription extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type', 'user_id'], 'required'],
             [['created_at'], 'safe'],
-            [['user_id'], 'integer'],
-            [['type'], 'string', 'max' => 100],
+            [['user_id', 'category_id'], 'required'],
+            [['user_id', 'category_id'], 'integer'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
         ];
     }
 
@@ -45,9 +46,9 @@ class Subscription extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'type' => 'Type',
             'created_at' => 'Created At',
             'user_id' => 'User ID',
+            'category_id' => 'Category ID',
         ];
     }
 
@@ -57,5 +58,13 @@ class Subscription extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategory()
+    {
+        return $this->hasOne(Category::class, ['id' => 'category_id']);
     }
 }

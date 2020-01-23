@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace frontend\models;
 
 use Yii;
 
@@ -34,8 +34,8 @@ class Favorites extends \yii\db\ActiveRecord
             [['created_at'], 'safe'],
             [['choosing_id', 'selected_id'], 'required'],
             [['choosing_id', 'selected_id'], 'integer'],
-            [['choosing_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['choosing_id' => 'id']],
-            [['selected_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['selected_id' => 'id']],
+            [['choosing_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['choosing_id' => 'id']],
+            [['selected_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['selected_id' => 'id']],
         ];
     }
 
@@ -57,7 +57,7 @@ class Favorites extends \yii\db\ActiveRecord
      */
     public function getChoosing()
     {
-        return $this->hasOne(User::className(), ['id' => 'choosing_id']);
+        return $this->hasOne(User::class, ['id' => 'choosing_id']);
     }
 
     /**
@@ -65,6 +65,6 @@ class Favorites extends \yii\db\ActiveRecord
      */
     public function getSelected()
     {
-        return $this->hasOne(User::className(), ['id' => 'selected_id']);
+        return $this->hasOne(User::class, ['id' => 'selected_id']);
     }
 }

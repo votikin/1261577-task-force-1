@@ -5,23 +5,24 @@ namespace frontend\models;
 use Yii;
 
 /**
- * This is the model class for table "subscription".
+ * This is the model class for table "events_feed".
  *
  * @property int $id
- * @property string $type
+ * @property string $description
  * @property string $created_at
+ * @property string $date_create
  * @property int $user_id
  *
  * @property User $user
  */
-class Subscription extends \yii\db\ActiveRecord
+class EventsFeed extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'subscription';
+        return 'events_feed';
     }
 
     /**
@@ -30,10 +31,10 @@ class Subscription extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type', 'user_id'], 'required'],
-            [['created_at'], 'safe'],
+            [['description', 'created_at', 'user_id'], 'required'],
+            [['description'], 'string'],
+            [['created_at', 'date_create'], 'safe'],
             [['user_id'], 'integer'],
-            [['type'], 'string', 'max' => 100],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -45,8 +46,9 @@ class Subscription extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'type' => 'Type',
+            'description' => 'Description',
             'created_at' => 'Created At',
+            'date_create' => 'Date Create',
             'user_id' => 'User ID',
         ];
     }

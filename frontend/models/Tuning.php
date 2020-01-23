@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace frontend\models;
 
 use Yii;
 
@@ -11,7 +11,7 @@ use Yii;
  * @property string $name
  * @property string $created_at
  *
- * @property Usertuning[] $usertunings
+ * @property UserTuning[] $userTunings
  */
 class Tuning extends \yii\db\ActiveRecord
 {
@@ -50,8 +50,8 @@ class Tuning extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUsertunings()
+    public function getUserTunings()
     {
-        return $this->hasMany(Usertuning::className(), ['tuning_id' => 'id']);
+        return $this->hasMany(UserTuning::class, ['tuning_id' => 'id']);
     }
 }

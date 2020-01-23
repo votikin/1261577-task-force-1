@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace frontend\models;
 
 use Yii;
 
@@ -23,7 +23,7 @@ use Yii;
  *
  * @property Correspondence[] $correspondences
  * @property Correspondence[] $correspondences0
- * @property Eventsfeed[] $eventsfeeds
+ * @property EventsFeed[] $eventsFeeds
  * @property Favorites[] $favorites
  * @property Favorites[] $favorites0
  * @property Response[] $responses
@@ -33,9 +33,9 @@ use Yii;
  * @property Task[] $tasks0
  * @property City $city
  * @property Role $role
- * @property Usercategory[] $usercategories
- * @property Userimages[] $userimages
- * @property Usertuning[] $usertunings
+ * @property UserCategory[] $userCategories
+ * @property UserImage[] $userImages
+ * @property UserTuning[] $userTunings
  */
 class User extends \yii\db\ActiveRecord
 {
@@ -62,8 +62,8 @@ class User extends \yii\db\ActiveRecord
             [['skype', 'messenger'], 'string', 'max' => 50],
             [['password'], 'string', 'max' => 150],
             [['email'], 'unique'],
-            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['city_id' => 'id']],
-            [['role_id'], 'exist', 'skipOnError' => true, 'targetClass' => Role::className(), 'targetAttribute' => ['role_id' => 'id']],
+            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'id']],
+            [['role_id'], 'exist', 'skipOnError' => true, 'targetClass' => Role::class, 'targetAttribute' => ['role_id' => 'id']],
         ];
     }
 
@@ -94,7 +94,7 @@ class User extends \yii\db\ActiveRecord
      */
     public function getCorrespondences()
     {
-        return $this->hasMany(Correspondence::className(), ['recipient_id' => 'id']);
+        return $this->hasMany(Correspondence::class, ['recipient_id' => 'id']);
     }
 
     /**
@@ -102,15 +102,15 @@ class User extends \yii\db\ActiveRecord
      */
     public function getCorrespondences0()
     {
-        return $this->hasMany(Correspondence::className(), ['sender_id' => 'id']);
+        return $this->hasMany(Correspondence::class, ['sender_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEventsfeeds()
+    public function getEventsFeeds()
     {
-        return $this->hasMany(Eventsfeed::className(), ['user_id' => 'id']);
+        return $this->hasMany(EventsFeed::class, ['user_id' => 'id']);
     }
 
     /**
@@ -118,7 +118,7 @@ class User extends \yii\db\ActiveRecord
      */
     public function getFavorites()
     {
-        return $this->hasMany(Favorites::className(), ['choosing_id' => 'id']);
+        return $this->hasMany(Favorites::class, ['choosing_id' => 'id']);
     }
 
     /**
@@ -126,7 +126,7 @@ class User extends \yii\db\ActiveRecord
      */
     public function getFavorites0()
     {
-        return $this->hasMany(Favorites::className(), ['selected_id' => 'id']);
+        return $this->hasMany(Favorites::class, ['selected_id' => 'id']);
     }
 
     /**
@@ -134,7 +134,7 @@ class User extends \yii\db\ActiveRecord
      */
     public function getResponses()
     {
-        return $this->hasMany(Response::className(), ['user_id' => 'id']);
+        return $this->hasMany(Response::class, ['user_id' => 'id']);
     }
 
     /**
@@ -142,7 +142,7 @@ class User extends \yii\db\ActiveRecord
      */
     public function getRewiews()
     {
-        return $this->hasMany(Rewiew::className(), ['user_id' => 'id']);
+        return $this->hasMany(Rewiew::class, ['user_id' => 'id']);
     }
 
     /**
@@ -150,7 +150,7 @@ class User extends \yii\db\ActiveRecord
      */
     public function getSubscriptions()
     {
-        return $this->hasMany(Subscription::className(), ['user_id' => 'id']);
+        return $this->hasMany(Subscription::class, ['user_id' => 'id']);
     }
 
     /**
@@ -158,7 +158,7 @@ class User extends \yii\db\ActiveRecord
      */
     public function getTasks()
     {
-        return $this->hasMany(Task::className(), ['owner_id' => 'id']);
+        return $this->hasMany(Task::class, ['owner_id' => 'id']);
     }
 
     /**
@@ -166,7 +166,7 @@ class User extends \yii\db\ActiveRecord
      */
     public function getTasks0()
     {
-        return $this->hasMany(Task::className(), ['executor_id' => 'id']);
+        return $this->hasMany(Task::class, ['executor_id' => 'id']);
     }
 
     /**
@@ -174,7 +174,7 @@ class User extends \yii\db\ActiveRecord
      */
     public function getCity()
     {
-        return $this->hasOne(City::className(), ['id' => 'city_id']);
+        return $this->hasOne(City::class, ['id' => 'city_id']);
     }
 
     /**
@@ -182,30 +182,30 @@ class User extends \yii\db\ActiveRecord
      */
     public function getRole()
     {
-        return $this->hasOne(Role::className(), ['id' => 'role_id']);
+        return $this->hasOne(Role::class, ['id' => 'role_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUsercategories()
+    public function getUserCategories()
     {
-        return $this->hasMany(Usercategory::className(), ['user_id' => 'id']);
+        return $this->hasMany(UserCategory::class, ['user_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserimages()
+    public function getUserImages()
     {
-        return $this->hasMany(Userimages::className(), ['user_id' => 'id']);
+        return $this->hasMany(UserImage::class, ['user_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUsertunings()
+    public function getUserTunings()
     {
-        return $this->hasMany(Usertuning::className(), ['user_id' => 'id']);
+        return $this->hasMany(UserTuning::class, ['user_id' => 'id']);
     }
 }

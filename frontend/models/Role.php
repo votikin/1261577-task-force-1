@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace frontend\models;
 
 use Yii;
 
@@ -52,6 +52,6 @@ class Role extends \yii\db\ActiveRecord
      */
     public function getUsers()
     {
-        return $this->hasMany(User::className(), ['role_id' => 'id']);
+        return $this->hasMany(User::class, ['role_id' => 'id']);
     }
 }

@@ -15,12 +15,6 @@ return [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
-    'controllerMap' => [
-        'fixture' => [
-            'class' => 'yii\console\controllers\FixtureController',
-            'namespace' => 'common\fixtures',
-          ],
-    ],
     'components' => [
         'log' => [
             'targets' => [
@@ -32,4 +26,12 @@ return [
         ],
     ],
     'params' => $params,
+    'controllerMap' => [
+        'fixture' => [
+            'class' => 'yii\faker\FixtureController',
+            'templatePath' => '@common/fixtures/templates',
+            'fixtureDataPath' => '@common/fixtures/data',
+            'namespace' => 'common\fixtures',
+        ],
+    ],
 ];

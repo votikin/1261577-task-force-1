@@ -190,7 +190,7 @@ class User extends \yii\db\ActiveRecord
      */
     public function getUserCategories()
     {
-        return $this->hasMany(UserCategory::class, ['user_id' => 'id']);
+        return $this->hasmany(UserCategory::class, ['user_id' => 'id']);
     }
 
     /**

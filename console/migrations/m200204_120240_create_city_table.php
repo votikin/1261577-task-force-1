@@ -1,0 +1,30 @@
+<?php
+
+use yii\db\Migration;
+
+/**
+ * Handles the creation of table `{{%city}}`.
+ */
+class m200204_120240_create_city_table extends Migration
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function safeUp()
+    {
+        $this->createTable('{{%city}}', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string(),
+            'latitude' => $this->decimal(9,6),
+            'longitude' => $this->decimal(9,6),
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function safeDown()
+    {
+        $this->dropTable('{{%city}}');
+    }
+}

@@ -13,23 +13,24 @@ use Yii;
  * @property string|null $address
  * @property int $budget
  * @property string $deadline
- * @property int|null $status
  * @property float|null $latitude
  * @property float|null $longitude
  * @property string $created_at
  * @property string|null $updated_at
  * @property int $category_id
- * @property int|null $owner_id
+ * @property int $user_id
  * @property int|null $executor_id
  * @property int|null $city_id
+ * @property int $status_id
  *
- * @property Correspondence[] $correspondences
+ * @property Discussion[] $discussions
  * @property Response[] $responses
- * @property Rewiew[] $rewiews
+ * @property Review[] $reviews
  * @property Category $category
- * @property User $owner
- * @property User $executor
  * @property City $city
+ * @property User $executor
+ * @property TaskStatus $status
+ * @property User $user
  * @property TaskImage[] $taskImages
  */
 class Task extends \yii\db\ActiveRecord
@@ -48,15 +49,16 @@ class Task extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['short', 'description', 'budget', 'deadline', 'category_id'], 'required'],
+            [['short', 'description', 'budget', 'deadline', 'category_id', 'user_id', 'status_id'], 'required'],
             [['short', 'description', 'address'], 'string'],
-            [['budget', 'status', 'category_id', 'owner_id', 'executor_id', 'city_id'], 'integer'],
+            [['budget', 'category_id', 'user_id', 'executor_id', 'city_id', 'status_id'], 'integer'],
             [['deadline', 'created_at', 'updated_at'], 'safe'],
             [['latitude', 'longitude'], 'number'],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
-            [['owner_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['owner_id' => 'id']],
-            [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['executor_id' => 'id']],
             [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'id']],
+            [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['executor_id' => 'id']],
+            [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => TaskStatus::class, 'targetAttribute' => ['status_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -72,24 +74,24 @@ class Task extends \yii\db\ActiveRecord
             'address' => 'Address',
             'budget' => 'Budget',
             'deadline' => 'Deadline',
-            'status' => 'Status',
             'latitude' => 'Latitude',
             'longitude' => 'Longitude',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'category_id' => 'Category ID',
-            'owner_id' => 'Owner ID',
+            'user_id' => 'User ID',
             'executor_id' => 'Executor ID',
             'city_id' => 'City ID',
+            'status_id' => 'Status ID',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCorrespondences()
+    public function getDiscussions()
     {
-        return $this->hasMany(Correspondence::class, ['task_id' => 'id']);
+        return $this->hasMany(Discussion::class, ['task_id' => 'id']);
     }
 
     /**
@@ -103,9 +105,9 @@ class Task extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getRewiews()
+    public function getReviews()
     {
-        return $this->hasMany(Rewiew::class, ['task_id' => 'id']);
+        return $this->hasMany(Review::class, ['task_id' => 'id']);
     }
 
     /**
@@ -119,9 +121,9 @@ class Task extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOwner()
+    public function getCity()
     {
-        return $this->hasOne(User::class, ['id' => 'owner_id']);
+        return $this->hasOne(City::class, ['id' => 'city_id']);
     }
 
     /**
@@ -135,9 +137,17 @@ class Task extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCity()
+    public function getStatus()
     {
-        return $this->hasOne(City::class, ['id' => 'city_id']);
+        return $this->hasOne(TaskStatus::class, ['id' => 'status_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
     /**
@@ -146,5 +156,54 @@ class Task extends \yii\db\ActiveRecord
     public function getTaskImages()
     {
         return $this->hasMany(TaskImage::class, ['task_id' => 'id']);
+    }
+
+    public function getPastTime()
+    {
+        $time = new \DateTime($this->getAttribute('created_at'));
+        $currentTime = new \DateTime();
+        $interval = $time->diff($currentTime);
+        if ($interval->days > 0) {
+            switch ($interval->days) {
+                case "1":
+                case "21":
+                case "31":
+                    $days = "день";
+                    break;
+                case "2":
+                case "3":
+                case "4":
+                case "22":
+                case "23":
+                case "24":
+                    $days = "дня";
+                    break;
+                default:
+                    $days = "дней";
+            }
+            return $interval->format("%d $days назад");
+        }
+        if ($interval->days === 0 && $interval->h !== 0) {
+            switch ($interval->h) {
+                case "1":
+                case "21":
+                    $hours = "час";
+                    break;
+                case "2":
+                case "3":
+                case "4":
+                case "22":
+                case "23":
+                case "24":
+                    $hours = "часа";
+                    break;
+                default:
+                    $hours = "часов";
+            }
+            return $interval->format("%h $hours назад");
+        }
+        if ($interval->days === 0 && $interval->h === 0) {
+            return "только что";
+        }
     }
 }

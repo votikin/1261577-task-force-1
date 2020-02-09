@@ -9,19 +9,19 @@ $this->title = 'Tasks';
 <section class="new-task">
     <div class="new-task__wrapper">
         <h1>Новые задания</h1>
-<?php foreach ($model as $item): ?>
-        <div class="new-task__card">
-            <div class="new-task__title">
-                <a href="#" class="link-regular"><h2><?=$item['short'];?></h2></a>
-                <a  class="new-task__type link-regular" href="#"><p><?=$item['category_name'];?></p></a>
+        <?php foreach ($tasksData as $item): ?>
+            <div class="new-task__card">
+                <div class="new-task__title">
+                    <a href="#" class="link-regular"><h2><?= $item['short']; ?></h2></a>
+                    <a  class="new-task__type link-regular" href="#"><p><?= $item['category_name']; ?></p></a>
+                </div>
+                <div class="new-task__icon new-task__icon--<?= $item['category_icon']; ?>"></div>
+                <p class="new-task_description"><?= $item['description']; ?></p>
+                <b class="new-task__price new-task__price--<?= $item['category_icon']; ?>"><?= $item['budget']; ?><b> ₽</b></b>
+                <p class="new-task__place"><?= $item['address']; ?></p>
+                <span class="new-task__time"><?= $item['pastTime']; ?></span>
             </div>
-            <div class="new-task__icon new-task__icon--<?=$item['category_icon'];?>"></div>
-            <p class="new-task_description"><?=$item['description'];?></p>
-            <b class="new-task__price new-task__price--<?=$item['category_icon'];?>"><?=$item['budget'];?><b> ₽</b></b>
-            <p class="new-task__place"><?=$item['address'];?></p>
-            <span class="new-task__time"><?=$item['pastTime'];?></span>
-        </div>
-<?php endforeach; ?>
+        <?php endforeach; ?>
     </div>
     <div class="new-task__pagination">
         <ul class="new-task__pagination-list">

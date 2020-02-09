@@ -22,29 +22,29 @@ $this->title = 'Users';
             </li>
         </ul>
     </div>
-<?php foreach ($model as $item): ?>
-    <div class="content-view__feedback-card user__search-wrapper">
-        <div class="feedback-card__top">
-            <div class="user__search-icon">
-                <a href="#"><img src="<?$item->avatar;?>" width="65" height="65"></a>
-                <span><?=$item['countTask'];?> заданий</span>
-                <span><?=$item['countReview'];?> отзывов</span>
+    <?php foreach ($usersData as $item): ?>
+        <div class="content-view__feedback-card user__search-wrapper">
+            <div class="feedback-card__top">
+                <div class="user__search-icon">
+                    <a href="#"><img src="<?= $item['avatar']; ?>" width="65" height="65"></a>
+                    <span><?= $item['countTask']; ?> заданий</span>
+                    <span><?= $item['countReview']; ?> отзывов</span>
+                </div>
+                <div class="feedback-card__top--name user__search-card">
+                    <p class="link-name"><a href="#" class="link-regular"><?= $item['name']; ?></a></p>
+                    <span></span><span></span><span></span><span></span><span class="star-disabled"></span>
+                    <b><?= $item['rating']; ?></b>
+                    <p class="user__search-content"><?= $item['about']; ?></p>
+                </div>
+                <span class="new-task__time"><?= $item['past_time']; ?></span>
             </div>
-            <div class="feedback-card__top--name user__search-card">
-                <p class="link-name"><a hr/img/user-man2.jpgef="#" class="link-regular"><?=$item['name'];?></a></p>
-                <span></span><span></span><span></span><span></span><span class="star-disabled"></span>
-                <b><?=$item['rating'];?></b>
-                <p class="user__search-content"><?=$item['about'];?></p>
+            <div class="link-specialization user__search-link--bottom">
+                <?php foreach ($item['categories'] as $category): ?>
+                    <a href="#" class="link-regular"><?= $category; ?></a>
+                <?php endforeach; ?>
             </div>
-            <span class="new-task__time"><?=$item['past_time'];?></span>
         </div>
-        <div class="link-specialization user__search-link--bottom">
-<?php foreach ($item['categories'] as $category): ?>
-            <a href="#" class="link-regular"><?=$category;?></a>
-<?php endforeach; ?>
-        </div>
-    </div>
-<?php endforeach; ?>
+    <?php endforeach; ?>
 </section>
 <section  class="search-task">
     <div class="search-task__wrapper">

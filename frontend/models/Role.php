@@ -17,6 +17,11 @@ class Role extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    const EXECUTOR_ROLE = 'executor';
+
+    /**
+     * {@inheritdoc}
+     */
     public static function tableName()
     {
         return 'role';

@@ -218,6 +218,7 @@ class User extends \yii\db\ActiveRecord
                 default:
                     $days = "дней";
             }
+            
             return $interval->format("Был на сайте %d $days назад");
         }
         if ($interval->days === 0 && $interval->h !== 0) {
@@ -237,6 +238,7 @@ class User extends \yii\db\ActiveRecord
                 default:
                     $hours = "часов";
             }
+
             return $interval->format("Был на сайте %h $hours назад");
         }
         if ($interval->days === 0 && $interval->h === 0) {
@@ -269,6 +271,7 @@ class User extends \yii\db\ActiveRecord
                     $minutes = "минут";
                     break;
             }
+
             return $interval->format("Был на сайте %i $minutes назад");
         }
     }

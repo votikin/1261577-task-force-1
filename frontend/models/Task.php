@@ -181,6 +181,7 @@ class Task extends \yii\db\ActiveRecord
                 default:
                     $days = "дней";
             }
+
             return $interval->format("%d $days назад");
         }
         if ($interval->days === 0 && $interval->h !== 0) {
@@ -200,10 +201,11 @@ class Task extends \yii\db\ActiveRecord
                 default:
                     $hours = "часов";
             }
+
             return $interval->format("%h $hours назад");
         }
         if ($interval->days === 0 && $interval->h === 0) {
-            return "только что";
+            return Yii::$app->i18n->format("только что",'','ru-RU');
         }
     }
 }

@@ -17,6 +17,11 @@ class TaskStatus extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    const NAME_STATUS_NEW = 'Новое';
+
+    /**
+     * {@inheritdoc}
+     */
     public static function tableName()
     {
         return 'task_status';

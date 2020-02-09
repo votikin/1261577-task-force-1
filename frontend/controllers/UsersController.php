@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use yii\web\Controller;
 use frontend\models\User;
+use frontend\models\Role;
 
 class UsersController extends Controller
 {
@@ -14,17 +15,17 @@ class UsersController extends Controller
             ->joinWith('userCategories')
             ->joinWith('tasks')
             ->joinWith('reviews')
-            ->where(['role.name' => "executor"])
+            ->where([Role::tableName().".name" => Role::EXECUTOR_ROLE])
             ->where(['is_hidden' => '0'])
             ->orderBy('created_at DESC')
             ->all();
-        $userData = [];
+        $usersData = [];
         foreach ($users as $user) {
             $categoriesArray = [];
             foreach ($user->categories as $item) {
                 $categoriesArray[] = $item->name;
             }
-            $userData[] = [
+            $usersData[] = [
                 'name' => $user->name,
                 'about' => $user->about,
                 'address' => $user->address,
@@ -39,8 +40,9 @@ class UsersController extends Controller
             ];
 
         }
+
         return $this->render('index', [
-            'model' => $userData,
+            'usersData' => $usersData,
         ]);
     }
 }

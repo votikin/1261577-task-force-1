@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use Share\StringHellper;
 
 /**
  * This is the model class for table "task".
@@ -163,49 +164,23 @@ class Task extends \yii\db\ActiveRecord
         $time = new \DateTime($this->getAttribute('created_at'));
         $currentTime = new \DateTime();
         $interval = $time->diff($currentTime);
-        if ($interval->days > 0) {
-            switch ($interval->days) {
-                case "1":
-                case "21":
-                case "31":
-                    $days = "день";
-                    break;
-                case "2":
-                case "3":
-                case "4":
-                case "22":
-                case "23":
-                case "24":
-                    $days = "дня";
-                    break;
-                default:
-                    $days = "дней";
-            }
-
-            return $interval->format("%d $days назад");
+        if($interval->days > 0) {
+            return StringHellper::declinsionNum(
+                $interval->days,
+                ['%d день назад', '%d дня назад', '%d дней назад']
+            );
         }
-        if ($interval->days === 0 && $interval->h !== 0) {
-            switch ($interval->h) {
-                case "1":
-                case "21":
-                    $hours = "час";
-                    break;
-                case "2":
-                case "3":
-                case "4":
-                case "22":
-                case "23":
-                case "24":
-                    $hours = "часа";
-                    break;
-                default:
-                    $hours = "часов";
-            }
-
-            return $interval->format("%h $hours назад");
+        if($interval->days === 0 && $interval->h !== 0) {
+            return StringHellper::declinsionNum(
+                $interval->h,
+                ['%d час назад', '%d часа назад', '%d часов назад']
+            );
         }
-        if ($interval->days === 0 && $interval->h === 0) {
-            return Yii::$app->i18n->format("только что",'','ru-RU');
+        if($interval->days === 0 && $interval->h === 0) {
+            return StringHellper::declinsionNum(
+                $interval->i,
+                ['%d минуту назад', '%d минуты назад', '%d минут назад']
+            );
         }
     }
 }

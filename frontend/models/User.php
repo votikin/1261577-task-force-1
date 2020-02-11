@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use Share\StringHellper;
 
 /**
  * This is the model class for table "user".
@@ -200,79 +201,23 @@ class User extends \yii\db\ActiveRecord
         $time = new \DateTime($this->getAttribute('last_activity'));
         $currentTime = new \DateTime();
         $interval = $time->diff($currentTime);
-        if ($interval->days > 0) {
-            switch ($interval->days) {
-                case "1":
-                case "21":
-                case "31":
-                    $days = "день";
-                    break;
-                case "2":
-                case "3":
-                case "4":
-                case "22":
-                case "23":
-                case "24":
-                    $days = "дня";
-                    break;
-                default:
-                    $days = "дней";
-            }
-            
-            return $interval->format("Был на сайте %d $days назад");
+        if($interval->days > 0) {
+            return StringHellper::declinsionNum(
+                $interval->days,
+                ['Был на сайте %d день назад', 'Был на сайте %d дня назад', 'Был на сайте %d дней назад']
+            );
         }
-        if ($interval->days === 0 && $interval->h !== 0) {
-            switch ($interval->h) {
-                case "1":
-                case "21":
-                    $hours = "час";
-                    break;
-                case "2":
-                case "3":
-                case "4":
-                case "22":
-                case "23":
-                case "24":
-                    $hours = "часа";
-                    break;
-                default:
-                    $hours = "часов";
-            }
-
-            return $interval->format("Был на сайте %h $hours назад");
+        if($interval->days === 0 && $interval->h !== 0) {
+            return StringHellper::declinsionNum(
+                $interval->h,
+                ['Был на сайте %d час назад', 'Был на сайте %d часа назад', 'Был на сайте %d часов назад']
+            );
         }
-        if ($interval->days === 0 && $interval->h === 0) {
-            switch ($interval->i) {
-                case "2":
-                case "3":
-                case "4":
-                case "22":
-                case "23":
-                case "24":
-                case "32":
-                case "33":
-                case "34":
-                case "42":
-                case "43":
-                case "44":
-                case "52":
-                case "53":
-                case "54":
-                    $minutes = "минуты";
-                    break;
-                case "1":
-                case "21":
-                case "31":
-                case "41":
-                case "51":
-                    $minutes = "минуту";
-                    break;
-                default:
-                    $minutes = "минут";
-                    break;
-            }
-
-            return $interval->format("Был на сайте %i $minutes назад");
+        if($interval->days === 0 && $interval->h === 0) {
+            return StringHellper::declinsionNum(
+                $interval->i,
+                ['Был на сайте %d минуту назад', 'Был на сайте %d минуты назад', 'Был на сайте %d минут назад']
+            );
         }
     }
 }

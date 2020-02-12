@@ -5,26 +5,21 @@ namespace frontend\models;
 use Yii;
 
 /**
- * This is the model class for table "role".
+ * This is the model class for table "subscription_type".
  *
  * @property int $id
- * @property string|null $name
+ * @property string|null $type
  *
- * @property User[] $users
+ * @property UserSubscription[] $userSubscriptions
  */
-class Role extends \yii\db\ActiveRecord
+class SubscriptionType extends \yii\db\ActiveRecord
 {
-    /**
-     * {@inheritdoc}
-     */
-    const EXECUTOR_ROLE = 'executor';
-
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'role';
+        return 'subscription_type';
     }
 
     /**
@@ -33,8 +28,7 @@ class Role extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'string', 'max' => 255],
-            [['name'], 'unique'],
+            [['type'], 'string', 'max' => 255],
         ];
     }
 
@@ -45,15 +39,15 @@ class Role extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
+            'type' => 'Type',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUsers()
+    public function getUserSubscriptions()
     {
-        return $this->hasMany(User::class, ['role_id' => 'id']);
+        return $this->hasMany(UserSubscription::class, ['subscription_id' => 'id']);
     }
 }

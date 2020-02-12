@@ -5,23 +5,23 @@ namespace frontend\models;
 use Yii;
 
 /**
- * This is the model class for table "user_image".
+ * This is the model class for table "user_subscription".
  *
  * @property int $id
- * @property string $image_path
- * @property string $created_at
  * @property int $user_id
+ * @property int $subscription_id
  *
+ * @property SubscriptionType $subscription
  * @property User $user
  */
-class UserImage extends \yii\db\ActiveRecord
+class UserSubscription extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'user_image';
+        return 'user_subscription';
     }
 
     /**
@@ -30,10 +30,9 @@ class UserImage extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['image_path', 'user_id'], 'required'],
-            [['created_at'], 'safe'],
-            [['user_id'], 'integer'],
-            [['image_path'], 'string', 'max' => 150],
+            [['user_id', 'subscription_id'], 'required'],
+            [['user_id', 'subscription_id'], 'integer'],
+            [['subscription_id'], 'exist', 'skipOnError' => true, 'targetClass' => SubscriptionType::class, 'targetAttribute' => ['subscription_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -45,10 +44,17 @@ class UserImage extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'image_path' => 'Image Path',
-            'created_at' => 'Created At',
             'user_id' => 'User ID',
+            'subscription_id' => 'Subscription ID',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSubscription()
+    {
+        return $this->hasOne(SubscriptionType::class, ['id' => 'subscription_id']);
     }
 
     /**

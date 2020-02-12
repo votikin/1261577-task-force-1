@@ -5,26 +5,27 @@ namespace frontend\models;
 use Yii;
 
 /**
- * This is the model class for table "rewiew".
+ * This is the model class for table "discussion".
  *
  * @property int $id
- * @property string $description
- * @property int $estimate
+ * @property string $message
  * @property string $created_at
  * @property int $user_id
+ * @property int $executor_id
  * @property int $task_id
  *
+ * @property User $executor
  * @property Task $task
  * @property User $user
  */
-class Rewiew extends \yii\db\ActiveRecord
+class Discussion extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'rewiew';
+        return 'discussion';
     }
 
     /**
@@ -33,10 +34,11 @@ class Rewiew extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['description', 'estimate', 'user_id', 'task_id'], 'required'],
-            [['description'], 'string'],
-            [['estimate', 'user_id', 'task_id'], 'integer'],
+            [['message', 'user_id', 'executor_id', 'task_id'], 'required'],
+            [['message'], 'string'],
             [['created_at'], 'safe'],
+            [['user_id', 'executor_id', 'task_id'], 'integer'],
+            [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['executor_id' => 'id']],
             [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -49,12 +51,20 @@ class Rewiew extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'description' => 'Description',
-            'estimate' => 'Estimate',
+            'message' => 'Message',
             'created_at' => 'Created At',
             'user_id' => 'User ID',
+            'executor_id' => 'Executor ID',
             'task_id' => 'Task ID',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getExecutor()
+    {
+        return $this->hasOne(User::class, ['id' => 'executor_id']);
     }
 
     /**

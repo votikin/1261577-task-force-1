@@ -8,9 +8,7 @@ use Yii;
  * This is the model class for table "task_image".
  *
  * @property int $id
- * @property string $name
- * @property string $image_path
- * @property string $created_at
+ * @property string $path
  * @property int $task_id
  *
  * @property Task $task
@@ -31,11 +29,9 @@ class TaskImage extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'image_path', 'task_id'], 'required'],
-            [['created_at'], 'safe'],
+            [['path', 'task_id'], 'required'],
             [['task_id'], 'integer'],
-            [['name'], 'string', 'max' => 100],
-            [['image_path'], 'string', 'max' => 150],
+            [['path'], 'string', 'max' => 255],
             [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task_id' => 'id']],
         ];
     }
@@ -47,9 +43,7 @@ class TaskImage extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'image_path' => 'Image Path',
-            'created_at' => 'Created At',
+            'path' => 'Path',
             'task_id' => 'Task ID',
         ];
     }

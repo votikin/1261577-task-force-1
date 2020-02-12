@@ -5,22 +5,26 @@ namespace frontend\models;
 use Yii;
 
 /**
- * This is the model class for table "tuning".
+ * This is the model class for table "task_status".
  *
  * @property int $id
  * @property string $name
- * @property string $created_at
  *
- * @property UserTuning[] $userTunings
+ * @property Task[] $tasks
  */
-class Tuning extends \yii\db\ActiveRecord
+class TaskStatus extends \yii\db\ActiveRecord
 {
+    /**
+     * {@inheritdoc}
+     */
+    const NAME_STATUS_NEW = 'Новое';
+
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'tuning';
+        return 'task_status';
     }
 
     /**
@@ -30,8 +34,7 @@ class Tuning extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['created_at'], 'safe'],
-            [['name'], 'string', 'max' => 150],
+            [['name'], 'string', 'max' => 255],
         ];
     }
 
@@ -43,15 +46,14 @@ class Tuning extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'created_at' => 'Created At',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserTunings()
+    public function getTasks()
     {
-        return $this->hasMany(UserTuning::class, ['tuning_id' => 'id']);
+        return $this->hasMany(Task::class, ['status_id' => 'id']);
     }
 }

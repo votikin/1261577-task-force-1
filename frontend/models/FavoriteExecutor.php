@@ -5,24 +5,23 @@ namespace frontend\models;
 use Yii;
 
 /**
- * This is the model class for table "user_tuning".
+ * This is the model class for table "favorite_executor".
  *
  * @property int $id
- * @property string $created_at
- * @property int $user_id
- * @property int $tuning_id
+ * @property int|null $user_id
+ * @property int|null $executor_id
  *
- * @property Tuning $tuning
+ * @property User $executor
  * @property User $user
  */
-class UserTuning extends \yii\db\ActiveRecord
+class FavoriteExecutor extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'user_tuning';
+        return 'favorite_executor';
     }
 
     /**
@@ -31,10 +30,8 @@ class UserTuning extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['created_at'], 'safe'],
-            [['user_id', 'tuning_id'], 'required'],
-            [['user_id', 'tuning_id'], 'integer'],
-            [['tuning_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tuning::class, 'targetAttribute' => ['tuning_id' => 'id']],
+            [['user_id', 'executor_id'], 'integer'],
+            [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['executor_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -46,18 +43,17 @@ class UserTuning extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'created_at' => 'Created At',
             'user_id' => 'User ID',
-            'tuning_id' => 'Tuning ID',
+            'executor_id' => 'Executor ID',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTuning()
+    public function getExecutor()
     {
-        return $this->hasOne(Tuning::class, ['id' => 'tuning_id']);
+        return $this->hasOne(User::class, ['id' => 'executor_id']);
     }
 
     /**

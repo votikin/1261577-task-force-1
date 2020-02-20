@@ -3,7 +3,7 @@
 namespace frontend\models;
 
 use Yii;
-use Share\StringHellper;
+use taskForce\share\StringHelper;
 
 /**
  * This is the model class for table "user".
@@ -25,13 +25,13 @@ use Share\StringHellper;
  * @property string|null $avatar
  * @property string|null $last_activity
  * @property float|null $rating
+ * @property int|null $has_review
  *
  * @property Discussion[] $discussions
  * @property Discussion[] $discussions0
  * @property FavoriteExecutor[] $favoriteExecutors
  * @property FavoriteExecutor[] $favoriteExecutors0
  * @property Response[] $responses
- * @property Review[] $reviews
  * @property Task[] $tasks
  * @property Task[] $tasks0
  * @property City $city
@@ -41,6 +41,8 @@ use Share\StringHellper;
  */
 class User extends \yii\db\ActiveRecord
 {
+    private $_tasksCount;
+
     /**
      * {@inheritdoc}
      */
@@ -58,12 +60,12 @@ class User extends \yii\db\ActiveRecord
             [['name', 'email', 'password'], 'required'],
             [['birthday', 'created_at', 'last_activity'], 'safe'],
             [['about', 'address'], 'string'],
-            [['view_count', 'is_hidden', 'city_id', 'role_id'], 'integer'],
+            [['view_count', 'is_hidden', 'city_id', 'role_id', 'has_review'], 'integer'],
             [['rating'], 'number'],
             [['name', 'email', 'phone', 'skype', 'password', 'avatar'], 'string', 'max' => 255],
             [['email'], 'unique'],
-            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'id']],
-            [['role_id'], 'exist', 'skipOnError' => true, 'targetClass' => Role::class, 'targetAttribute' => ['role_id' => 'id']],
+            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['city_id' => 'id']],
+            [['role_id'], 'exist', 'skipOnError' => true, 'targetClass' => Role::className(), 'targetAttribute' => ['role_id' => 'id']],
         ];
     }
 
@@ -90,7 +92,16 @@ class User extends \yii\db\ActiveRecord
             'avatar' => 'Avatar',
             'last_activity' => 'Last Activity',
             'rating' => 'Rating',
+            'has_review' => 'Has Review',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function setTasksCount($count)
+    {
+        $this->_tasksCount = (int) $count;
     }
 
     /**
@@ -131,14 +142,6 @@ class User extends \yii\db\ActiveRecord
     public function getResponses()
     {
         return $this->hasMany(Response::class, ['user_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getReviews()
-    {
-        return $this->hasMany(Review::class, ['user_id' => 'id']);
     }
 
     /**
@@ -202,22 +205,37 @@ class User extends \yii\db\ActiveRecord
         $currentTime = new \DateTime();
         $interval = $time->diff($currentTime);
         if($interval->days > 0) {
-            return StringHellper::declinsionNum(
+            return StringHelper::declensionNum(
                 $interval->days,
                 ['Был на сайте %d день назад', 'Был на сайте %d дня назад', 'Был на сайте %d дней назад']
             );
         }
         if($interval->days === 0 && $interval->h !== 0) {
-            return StringHellper::declinsionNum(
+            return StringHelper::declensionNum(
                 $interval->h,
                 ['Был на сайте %d час назад', 'Был на сайте %d часа назад', 'Был на сайте %d часов назад']
             );
         }
         if($interval->days === 0 && $interval->h === 0) {
-            return StringHellper::declinsionNum(
+            return StringHelper::declensionNum(
                 $interval->i,
                 ['Был на сайте %d минуту назад', 'Был на сайте %d минуты назад', 'Был на сайте %d минут назад']
             );
         }
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTasksCount()
+    {
+        if($this->isNewRecord) {
+            return null;
+        }
+        if($this->_tasksCount === null) {
+            $this->setTasksCount($this->getTasks()->count());
+        }
+
+        return $this->_tasksCount;
     }
 }

@@ -40,7 +40,7 @@
     "autoload": {
         "psr-4": {
             "App\\": "src/",
-            "Share\\" : "share/"
+            "taskForce\\share\\" : "taskForce/share/"
         }
     },
     "repositories": [

@@ -3,7 +3,7 @@
 namespace frontend\models;
 
 use Yii;
-use Share\StringHellper;
+use taskForce\share\StringHelper;
 
 /**
  * This is the model class for table "task".
@@ -36,6 +36,9 @@ use Share\StringHellper;
  */
 class Task extends \yii\db\ActiveRecord
 {
+    private $_reviewsCount;
+    private $_responsesCount;
+
     /**
      * {@inheritdoc}
      */
@@ -85,6 +88,22 @@ class Task extends \yii\db\ActiveRecord
             'city_id' => 'City ID',
             'status_id' => 'Status ID',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function setReviewsCount($count)
+    {
+        $this->_reviewsCount = (int) $count;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function setResponsesCount($count)
+    {
+        $this->_responsesCount = (int) $count;
     }
 
     /**
@@ -165,22 +184,52 @@ class Task extends \yii\db\ActiveRecord
         $currentTime = new \DateTime();
         $interval = $time->diff($currentTime);
         if($interval->days > 0) {
-            return StringHellper::declinsionNum(
+            return StringHelper::declensionNum(
                 $interval->days,
                 ['%d день назад', '%d дня назад', '%d дней назад']
             );
         }
         if($interval->days === 0 && $interval->h !== 0) {
-            return StringHellper::declinsionNum(
+            return StringHelper::declensionNum(
                 $interval->h,
                 ['%d час назад', '%d часа назад', '%d часов назад']
             );
         }
         if($interval->days === 0 && $interval->h === 0) {
-            return StringHellper::declinsionNum(
+            return StringHelper::declensionNum(
                 $interval->i,
                 ['%d минуту назад', '%d минуты назад', '%d минут назад']
             );
         }
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReviewsCount()
+    {
+        if($this->isNewRecord) {
+            return null;
+        }
+        if($this->_reviewsCount === null) {
+            $this->setReviewsCount($this->getReviews()->count());
+        }
+
+        return $this->_reviewsCount;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getResponsesCount()
+    {
+        if($this->isNewRecord) {
+            return null;
+        }
+        if($this->_responsesCount === null) {
+            $this->setReviewsCount($this->getResponses()->count());
+        }
+
+        return $this->_responsesCount;
     }
 }

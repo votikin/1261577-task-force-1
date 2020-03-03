@@ -4,3 +4,6 @@ Yii::setAlias('@frontend', dirname(dirname(__DIR__)) . '/frontend');
 Yii::setAlias('@backend', dirname(dirname(__DIR__)) . '/backend');
 Yii::setAlias('@console', dirname(dirname(__DIR__)) . '/console');
 Yii::setAlias('@taskForce', dirname(dirname(__DIR__)) . '/taskForce');
+
+
+Yii::$container->setSingleton('taskForce\user\domain\UsersRepository', 'taskForce\user\infrastructure\ArUsersRepository');

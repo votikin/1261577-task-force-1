@@ -594,7 +594,8 @@ footer {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-  padding-left: 26px; }
+  padding-left: 26px;
+  px; }
 
 .input {
   color: #8F9BB2;

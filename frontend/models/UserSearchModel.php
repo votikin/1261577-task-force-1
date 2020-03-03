@@ -11,19 +11,6 @@ class UserSearchModel extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
-        return 'user_search_form';
-    }
-
-    public function attributeLabels()
-    {
-        return [
-            'categories' => 'Categories',
-            'reviews' => 'Reviews',
-            'name' => 'Name',
-        ];
-    }
 
     public function rules()
     {

@@ -36,7 +36,6 @@ $this->title = 'Tasks';
 </section>
 <section  class="search-task">
     <div class="search-task__wrapper">
-<!--        <form class="search-task__form" name="test" method="post" action="#">-->
         <?php $form = ActiveForm::begin([
             'id' => 'right_block_user_form',
             'class' => 'search-task__form',
@@ -53,10 +52,6 @@ $this->title = 'Tasks';
                 ->checkbox(['label' => 'Без откликов',
                     'class' => 'checkbox__input'
                 ]) ?>
-<!--                <input class="visually-hidden checkbox__input" id="6" type="checkbox" name="" value="">-->
-<!--                <label for="6">Без откликов</label>-->
-<!--                <input class="visually-hidden checkbox__input" id="7" type="checkbox" name="" value="" checked>-->
-<!--                <label for="7">Удаленная работа </label>-->
             </fieldset>
             <?= $form->field($taskSearchModel, 'period')->dropDownList([
                     '0' => 'За всё время',
@@ -64,12 +59,6 @@ $this->title = 'Tasks';
                     '2' => 'За месяц',
                     '3' => 'За день',
                 ])->label('Период'); ?>
-<!--            <label class="search-task__name" for="8">Период</label>-->
-<!--            <select class="multiple-select input" id="8" size="1" name="time[]">-->
-<!--                <option value="day">За день</option>-->
-<!--                <option selected value="week">За неделю</option>-->
-<!--                <option value="month">За месяц</option>-->
-<!--            </select>-->
         <?= $form->field($taskSearchModel,'name')
             ->textInput(['class' => 'input-middle input'])
             ->label('Поиск по названию',['class' => 'search-task__name']); ?>

@@ -31,9 +31,10 @@ class TasksController extends Controller
                 $tasks = $tasks->andWhere([Response::tableName().'.id' => null]);
             }
             if(!empty($taskSearchModel->name)) {
-                $tasks = $tasks->andWhere(['like',Task::tableName().'.short', $taskSearchModel->name]);
-                //надо ли искать по полю description? И если да, то как составить запрос, чтобы
-                //искало совпадение либо в поле short, либо в description. При этом другие условия остались.
+                $tasks = $tasks->andWhere(['or',
+                    ['like',Task::tableName().'.description', $taskSearchModel->name],
+                    ['like',Task::tableName().'.short', $taskSearchModel->name],
+                ]);
             }
             if($taskSearchModel->period !== "0"){
                 $currentTime = new \DateTime();

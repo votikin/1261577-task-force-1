@@ -14,20 +14,6 @@ class TaskSearchModel extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
-        return 'task_search_model';
-    }
-
-    public function attributeLabels()
-    {
-        return [
-            'categories' => 'Categories',
-            'responses' => 'Responses',
-            'name' => 'Name',
-            'period' => 'Period'
-        ];
-    }
 
     public function rules()
     {

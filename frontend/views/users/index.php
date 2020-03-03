@@ -60,16 +60,10 @@ $this->title = 'Users';
             </fieldset>
             <fieldset class="search-task__categories">
                 <legend>Дополнительно</legend>
-<!--                <input class="visually-hidden checkbox__input" id="106" type="checkbox" name="" value="" disabled>-->
-<!--                <label for="106">Сейчас свободен</label>-->
-<!--                <input class="visually-hidden checkbox__input" id="107" type="checkbox" name="" value="" checked>-->
-<!--                <label for="107">Сейчас онлайн</label>-->
                 <?= $form->field($userSearchModel,'reviews')
                     ->checkbox(['label' => 'Есть отзывы',
                         'class' => 'checkbox__input'
                         ]); ?>
-<!--                <input class="visually-hidden checkbox__input" id="109" type="checkbox" name="" value="" checked>-->
-<!--                <label for="109">В избранном</label>-->
             </fieldset>
                 <?= $form->field($userSearchModel,'name')
                 ->textInput(['class' => 'input-middle input'])

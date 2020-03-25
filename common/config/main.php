@@ -10,7 +10,10 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'enableStrictParsing' => false,
-            'rules' => [],
+            'rules' => [
+                'tasks/view/<id:\d+>' => 'tasks/view',
+                'users/view/<id:\d+>' => 'users/view',
+            ],
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',

@@ -1,6 +1,7 @@
 <?php
 
-use yii\widgets\ActiveForm;
+use yii\bootstrap\ActiveForm;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 
@@ -23,15 +24,16 @@ $this->title = 'Users';
         </ul>
     </div>
     <?php foreach ($usersData as $item): ?>
+        <?php $userUrl = Url::home(true)."users/view/".$item['id'] ?>
         <div class="content-view__feedback-card user__search-wrapper">
             <div class="feedback-card__top">
                 <div class="user__search-icon">
-                    <a href="#"><img src="<?= $item['avatar']; ?>" width="65" height="65"></a>
+                    <a href="<?=$userUrl; ?>"><img src="<?= $item['avatar']; ?>" width="65" height="65"></a>
                     <span><?= $item['countTask']; ?></span>
                     <span><?= $item['countReview']; ?></span>
                 </div>
                 <div class="feedback-card__top--name user__search-card">
-                    <p class="link-name"><a href="#" class="link-regular"><?= $item['name']; ?></a></p>
+                    <p class="link-name"><a href="<?=$userUrl; ?>" class="link-regular"><?= $item['name']; ?></a></p>
                     <span></span><span></span><span></span><span></span><span class="star-disabled"></span>
                     <b><?= $item['rating']; ?></b>
                     <p class="user__search-content"><?= $item['about']; ?></p>
@@ -50,7 +52,7 @@ $this->title = 'Users';
     <div class="search-task__wrapper">
         <?php $form = ActiveForm::begin([
             'id' => 'right_block_task_form',
-            'options' => ['class' => 'search-task__form']
+            'class' => 'search-task__form',
         ]); ?>
             <fieldset class="search-task__categories">
                 <legend>Категории</legend>

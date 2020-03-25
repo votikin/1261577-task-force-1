@@ -178,31 +178,6 @@ class Task extends \yii\db\ActiveRecord
         return $this->hasMany(TaskImage::class, ['task_id' => 'id']);
     }
 
-    public function getPastTime()
-    {
-        $time = new \DateTime($this->getAttribute('created_at'));
-        $currentTime = new \DateTime();
-        $interval = $time->diff($currentTime);
-        if($interval->days > 0) {
-            return StringHelper::declensionNum(
-                $interval->days,
-                ['%d день назад', '%d дня назад', '%d дней назад']
-            );
-        }
-        if($interval->days === 0 && $interval->h !== 0) {
-            return StringHelper::declensionNum(
-                $interval->h,
-                ['%d час назад', '%d часа назад', '%d часов назад']
-            );
-        }
-        if($interval->days === 0 && $interval->h === 0) {
-            return StringHelper::declensionNum(
-                $interval->i,
-                ['%d минуту назад', '%d минуты назад', '%d минут назад']
-            );
-        }
-    }
-
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -227,7 +202,7 @@ class Task extends \yii\db\ActiveRecord
             return null;
         }
         if($this->_responsesCount === null) {
-            $this->setReviewsCount($this->getResponses()->count());
+            $this->setResponsesCount($this->getResponses()->count());
         }
 
         return $this->_responsesCount;

@@ -2,8 +2,12 @@
 
 namespace frontend\controllers;
 
+use taskForce\category\domain\CategoriesRepository;
+use taskForce\response\domain\ResponsesRepository;
+use taskForce\share\StringHelper;
+use taskForce\task\domain\TasksRepository;
+use taskForce\user\domain\UsersRepository;
 use Yii;
-use frontend\models\Category;
 use yii\web\Controller;
 use frontend\models\Task;
 use frontend\models\TaskStatus;
@@ -12,53 +16,50 @@ use frontend\models\Response;
 
 class TasksController extends Controller
 {
+    /**
+     * @var CategoriesRepository
+     */
+    private $categories;
+
+    /**
+     * @var TasksRepository
+     */
+    private $tasks;
+
+    /**
+     * @var UsersRepository
+     */
+    private $users;
+
+    /**
+     * @var ResponsesRepository
+     */
+    private $responses;
+
+    public function init()
+    {
+        $this->categories = \Yii::$container->get(CategoriesRepository::class);
+        $this->tasks = \Yii::$container->get(TasksRepository::class);
+        $this->users = \Yii::$container->get(UsersRepository::class);
+        $this->responses = \Yii::$container->get(ResponsesRepository::class);
+        parent::init();
+    }
+
     public function actionIndex()
     {
         $taskSearchModel = new TaskSearchModel();
-        $tasks = Task::find()
-            ->joinWith('status')
-            ->joinWith('category')
-            ->joinWith('responses')
-            ->where([TaskStatus::tableName().".name" => TaskStatus::NAME_STATUS_NEW])
-            ->orderBy('created_at DESC');
-
+        $categoriesName = $this->categories->getAllArray();
+        $taskSearchModel->load(Yii::$app->request->post());
         if(Yii::$app->request->getIsPost()) {
-            $taskSearchModel->load(Yii::$app->request->post());
-            if(!empty($taskSearchModel->categories)) {
-                $tasks = $tasks->andWhere(['category_id' => $taskSearchModel->categories]);
-            }
-            if($taskSearchModel->responses === "1") {
-                $tasks = $tasks->andWhere([Response::tableName().'.id' => null]);
-            }
-            if(!empty($taskSearchModel->name)) {
-                $tasks = $tasks->andWhere(['or',
-                    ['like',Task::tableName().'.description', $taskSearchModel->name],
-                    ['like',Task::tableName().'.short', $taskSearchModel->name],
-                ]);
-            }
-            if($taskSearchModel->period !== "0"){
-                $currentTime = new \DateTime();
-                $needTime = new \DateTime();
-                switch ($taskSearchModel->period){
-                    case "1":
-                        $needTime->modify('-1 year');
-                        break;
-                    case "2":
-                        $needTime->modify('-1 month');
-                        break;
-                    case "3":
-                        $needTime->modify('-1 day');
-                        break;
-                }
-                $tasks = $tasks->andWhere(['between',Task::tableName().'.created_at',
-                    $needTime->format('c'),$currentTime->format('c')
-                ]);
-            }
+            $request = Yii::$app->request->post();
+            $tasks = $this->tasks->getByFilter($request['TaskSearchModel']);
+        } else {
+            $tasks = $this->tasks->getAll();
         }
-        $tasks = $tasks->all();
         $tasksData = [];
         foreach ($tasks as $task) {
             $tasksData[] = [
+                'id' => $task->id,
                 'short' => $task->short,
                 'description' => $task->description,
                 'address' => $task->address,
@@ -67,22 +68,63 @@ class TasksController extends Controller
                 'latitude' => $task->latitude,
                 'longitude' => $task->longitude,
                 'updated_at' => $task->updated_at,
-                'pastTime' => $task->getPastTime(),
+                'pastTime' => StringHelper::getPastTime($task->created_at),
                 'status_name' => $task->status->name,
                 'category_name' => $task->category->name,
                 'category_icon' => $task->category->icon,
             ];
-        }
-        $categoriesName = [];
-        $categories = Category::find()->all();
-        foreach ($categories as $item) {
-            $categoriesName[$item['id']] =  $item['name'];
         }
 
         return $this->render('index', [
             'tasksData' => $tasksData,
             'categories' => $categoriesName,
             'taskSearchModel' => $taskSearchModel,
+        ]);
+    }
+
+    public function actionView(int $id)
+    {
+        $task = $this->tasks->getById($id);
+        $customer = $this->users->getById($task->user_id);
+        $responses = $this->responses->getByTaskId($task->id);
+        $responsesData = [];
+        foreach ($responses as $response) {
+            $responseUser = $this->users->getById($response->user_id);
+            $responsesData[] = [
+                'price' => $response->price,
+                'comment' => $response->comment,
+                'pastTime' => StringHelper::getPastTime($response->created_at),
+                'name' => $responseUser->name,
+                'rating' => $responseUser->rating,
+                'avatar' => $responseUser->avatar,
+            ];
+        }
+        $customerData = [
+            'avatar' => $customer->avatar,
+            'name' => $customer->name,
+            'countTasks' => $customer->customerTasksCount,
+            'registrationPast' => StringHelper::getRegistrationPastTime($customer->created_at),
+        ];
+        $taskData = [
+            'short' => $task->short,
+            'description' => $task->description,
+            'address' => $task->address,
+            'budget' => $task->budget,
+            'deadline' => $task->deadline,
+            'latitude' => $task->latitude,
+            'longitude' => $task->longitude,
+            'updated_at' => $task->updated_at,
+            'pastTime' => StringHelper::getPastTime($task->created_at),
+            'status_name' => $task->status->name,
+            'category_name' => $task->category->name,
+            'category_icon' => $task->category->icon,
+            'responsesCount' => $task->responsesCount,
+        ];
+
+        return $this->render('view',[
+            'taskData' => $taskData,
+            'customerData' => $customerData,
+            'responsesData' => $responsesData,
         ]);
     }
 }

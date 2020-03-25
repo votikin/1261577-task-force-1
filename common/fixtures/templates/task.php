@@ -25,4 +25,5 @@ return [
     'user_id' => $faker->numberBetween(1,$userCount),
     'status_id' => $status->id,
     'created_at' => $faker->dateTimeBetween('-1 years','now')->format("Y-m-d H:i:s"),
+    'executor_id' => $faker->numberBetween(1,10),
 ];

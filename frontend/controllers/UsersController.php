@@ -2,58 +2,52 @@
 
 namespace frontend\controllers;
 
+use taskForce\category\domain\CategoriesRepository;
+use taskForce\review\domain\ReviewsRepository;
+use taskForce\user\domain\UsersRepository;
 use Yii;
 use yii\web\Controller;
-use frontend\models\User;
-use frontend\models\Role;
-use frontend\models\Category;
-use frontend\models\UserCategory;
 use frontend\models\UserSearchModel;
 use taskForce\share\StringHelper;
 
 class UsersController extends Controller
 {
+    /**
+     * @var UsersRepository
+     */
+    private $users;
+
+    /**
+     * @var CategoriesRepository
+     */
+    private $categories;
+
+    /**
+     * @var ReviewsRepository
+     */
+    private $reviews;
+
+    public function init()
+    {
+        $this->users = \Yii::$container->get(UsersRepository::class);
+        $this->reviews = \Yii::$container->get(ReviewsRepository::class);
+        $this->categories = \Yii::$container->get(CategoriesRepository::class);
+        parent::init();
+    }
+
     public function actionIndex()
     {
         $userSearchModel = new UserSearchModel();
-        $users = User::find()
-            ->joinWith('role')
-            ->joinWith('userCategories')
-            ->joinWith('tasks')
-            ->where([Role::tableName().".name" => Role::EXECUTOR_ROLE])
-            ->andWhere(['is_hidden' => '0'])
-            ->orderBy('created_at DESC');
-
+        $categoriesData = $this->categories->getAllArray();
+        $userSearchModel->load(Yii::$app->request->post());
         if(Yii::$app->request->getIsPost()) {
-            $userSearchModel->load(Yii::$app->request->post());
-            if (!empty($userSearchModel->categories)) {
-                $users = $users->andWhere([UserCategory::tableName().".category_id" => $userSearchModel->categories]);
-            }
-            if($userSearchModel->reviews === "1") {
-                $users = $users->andWhere(['has_review' => 1]);
-            }
-            if(!empty($userSearchModel->name)) {
-                $users = $users->andWhere(['like',User::tableName().'.name', $userSearchModel->name]);
-            }
+            $request = Yii::$app->request->post();
+            $users = $this->users->getByFilter($request['UserSearchModel']);
+        } else {
+            $users = $this->users->getAll();
         }
-        $users = $users->all();
         $usersData = [];
         foreach ($users as $user) {
-
-//  НЕ УДАЛИЛ, ПОТОМУ ЧТО НЕ ЗНАЮ, КАК ЛУЧШЕ, ТАК ИЛИ КАК ДАЛЬШЕ
-//            $reviews = Review::find()
-//                ->joinWith('task')
-//                ->where([Task::tableName().".executor_id" => $user->id])
-//                ->count();
-
-            $reviews = 0;
-            foreach ($user->tasks as $task) {
-                $reviews += $task->ReviewsCount;
-            }
-            $categoriesArray = [];
-            foreach ($user->categories as $item) {
-                $categoriesArray[] = $item->name;
-            }
             $usersData[] = [
                 'id' => $user->id,
                 'name' => $user->name,
@@ -61,24 +55,58 @@ class UsersController extends Controller
                 'address' => $user->address,
                 'created_at' => $user->created_at,
                 'last_activity' => $user->last_activity,
-                "past_time" => $user->getPastActivityTime(),
+                "past_time" => StringHelper::getPastActivityTime($user->last_activity),
                 'avatar' => $user->avatar,
                 'rating' => $user->rating,
-                'categories' => $categoriesArray,
+                'categories' => $this->users->getUserCategories($user),
                 'countTask' => StringHelper::declensionNum($user->tasksCount,['%d задание', '%d задания', '%d заданий']),
-                'countReview' => StringHelper::declensionNum($reviews,['%d отзыв', '%d отзыва', '%d отзывов']),
+                'countReview' => StringHelper::declensionNum($this->users->getCountUserReviews($user->id),
+                    ['%d отзыв', '%d отзыва', '%d отзывов']),
             ];
         }
-        $categoriesName = [];
-        $categories = Category::find()->all();
-        foreach ($categories as $item) {
-            $categoriesName[$item['id']] =  $item['name'];
-        }
 
-        return $this->render('index', [
+        return $this->render('index',[
             'usersData' => $usersData,
-            'categories' => $categoriesName,
+            'categories' => $categoriesData,
             'userSearchModel' => $userSearchModel,
         ]);
     }
+
+    public function actionView(int $id)
+    {
+        $user = $this->users->getById($id);
+        $reviews = $this->reviews->getReviewsByExecutorId($id);
+        $reviewsData = [];
+        foreach ($reviews as $review){
+            $reviewCreator = $this->users->getById($review->task->user_id);
+            $reviewsData[] = [
+                'description' => $review->description,
+                'estimate' => $review->estimate,
+                'name' => $reviewCreator->name,
+                'avatar' => $reviewCreator->avatar,
+                'task' => $review->task->short
+            ];
+        }
+        $userData = [
+            'avatar' => $user->avatar,
+            'name' => $user->name,
+            'rating' => $user->rating,
+            'past_time' => StringHelper::getPastActivityTime($user->last_activity),
+            'countTask' => StringHelper::declensionNum($user->tasksCount,['%d заказ', '%d заказа', '%d заказов']),
+            'countReview' => StringHelper::declensionNum($this->users->getCountUserReviews($user->id),
+                ['%d отзыв', '%d отзыва', '%d отзывов']),
+            'about' => $user->about,
+            'categories' => $this->users->getUserCategories($user),
+            'phone' => $user->phone,
+            'email' => $user->email,
+            'skype' => $user->skype,
+            'reviewsCount' => count($reviewsData),
+        ];
+
+        return $this->render('view', [
+            'userData' => $userData,
+            'reviewsData' => $reviewsData,
+        ]);
+    }
 }
+

@@ -1,4 +1,18 @@
 <?php
+<<<<<<< HEAD
+//
+//namespace common\tests\unit\models;
+//
+//use Yii;
+//use common\models\LoginForm;
+//use common\fixtures\UserFixture;
+//
+///**
+// * Login form test
+// */
+//class LoginFormTest extends \Codeception\Test\Unit
+//{
+=======
 
 namespace common\tests\unit\models;
 
@@ -11,6 +25,7 @@ use common\fixtures\UserFixture;
  */
 class LoginFormTest extends \Codeception\Test\Unit
 {
+>>>>>>> b65ce07df64321bec9cfc7162e598ae9b70d5fc4
 //    /**
 //     * @var \common\tests\UnitTester
 //     */
@@ -64,4 +79,8 @@ class LoginFormTest extends \Codeception\Test\Unit
 //        expect('error message should not be set', $model->errors)->hasntKey('password');
 //        expect('user should be logged in', Yii::$app->user->isGuest)->false();
 //    }
+<<<<<<< HEAD
+//}
+=======
 }
+>>>>>>> b65ce07df64321bec9cfc7162e598ae9b70d5fc4

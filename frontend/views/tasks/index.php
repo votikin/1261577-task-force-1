@@ -1,6 +1,7 @@
 <?php
 
-use yii\widgets\ActiveForm;
+use yii\bootstrap\ActiveForm;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 
@@ -10,9 +11,10 @@ $this->title = 'Tasks';
     <div class="new-task__wrapper">
         <h1>Новые задания</h1>
         <?php foreach ($tasksData as $item): ?>
+        <?php $taskUrl = Url::home(true)."tasks/view/".$item['id'] ?>
             <div class="new-task__card">
                 <div class="new-task__title">
-                    <a href="#" class="link-regular"><h2><?= $item['short']; ?></h2></a>
+                    <a href="<?=$taskUrl; ?>" class="link-regular"><h2><?= $item['short']; ?></h2></a>
                     <a  class="new-task__type link-regular" href="#"><p><?= $item['category_name']; ?></p></a>
                 </div>
                 <div class="new-task__icon new-task__icon--<?= $item['category_icon']; ?>"></div>

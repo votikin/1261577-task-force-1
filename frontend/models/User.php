@@ -3,7 +3,8 @@
 namespace frontend\models;
 
 use Yii;
-use taskForce\share\StringHelper;
+use \yii\db\ActiveRecord;
+use \yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "user".
@@ -39,9 +40,10 @@ use taskForce\share\StringHelper;
  * @property UserCategory[] $userCategories
  * @property UserSubscription[] $userSubscriptions
  */
-class User extends \yii\db\ActiveRecord
+class User extends ActiveRecord
 {
     private $_tasksCount;
+    private $_customerTasksCount;
 
     /**
      * {@inheritdoc}
@@ -97,15 +99,24 @@ class User extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @param $count
      */
     public function setTasksCount($count)
     {
         $this->_tasksCount = (int) $count;
     }
 
+
     /**
-     * @return \yii\db\ActiveQuery
+     * @param $count
+     */
+    public function setCustomerTasksCount($count)
+    {
+        $this->_customerTasksCount = (int) $count;
+    }
+
+    /**
+     * @return ActiveQuery
      */
     public function getDiscussions()
     {
@@ -113,7 +124,7 @@ class User extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getDiscussions0()
     {
@@ -121,7 +132,7 @@ class User extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getFavoriteExecutors()
     {
@@ -129,7 +140,7 @@ class User extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getFavoriteExecutors0()
     {
@@ -137,7 +148,7 @@ class User extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getResponses()
     {
@@ -145,7 +156,7 @@ class User extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getTasks()
     {
@@ -153,7 +164,7 @@ class User extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getTasks0()
     {
@@ -161,7 +172,7 @@ class User extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getCity()
     {
@@ -169,7 +180,7 @@ class User extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getRole()
     {
@@ -177,7 +188,7 @@ class User extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getUserCategories()
     {
@@ -185,7 +196,7 @@ class User extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getCategories()
     {
@@ -193,39 +204,15 @@ class User extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getUserSubscriptions()
     {
         return $this->hasMany(UserSubscription::class, ['user_id' => 'id']);
     }
-    public function getPastActivityTime()
-    {
-        $time = new \DateTime($this->getAttribute('last_activity'));
-        $currentTime = new \DateTime();
-        $interval = $time->diff($currentTime);
-        if($interval->days > 0) {
-            return StringHelper::declensionNum(
-                $interval->days,
-                ['Был на сайте %d день назад', 'Был на сайте %d дня назад', 'Был на сайте %d дней назад']
-            );
-        }
-        if($interval->days === 0 && $interval->h !== 0) {
-            return StringHelper::declensionNum(
-                $interval->h,
-                ['Был на сайте %d час назад', 'Был на сайте %d часа назад', 'Был на сайте %d часов назад']
-            );
-        }
-        if($interval->days === 0 && $interval->h === 0) {
-            return StringHelper::declensionNum(
-                $interval->i,
-                ['Был на сайте %d минуту назад', 'Был на сайте %d минуты назад', 'Был на сайте %d минут назад']
-            );
-        }
-    }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getTasksCount()
     {
@@ -234,6 +221,21 @@ class User extends \yii\db\ActiveRecord
         }
         if($this->_tasksCount === null) {
             $this->setTasksCount($this->getTasks()->count());
+        }
+
+        return $this->_tasksCount;
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getCustomerTasksCount()
+    {
+        if($this->isNewRecord) {
+            return null;
+        }
+        if($this->_tasksCount === null) {
+            $this->setCustomerTasksCount($this->getTasks0()->count());
         }
 
         return $this->_tasksCount;

@@ -1,6 +1,7 @@
 <?php
 
 namespace taskForce\share;
+use DateTime;
 
 class StringHelper
 {
@@ -83,6 +84,17 @@ class StringHelper
             return StringHelper::declensionNum(
                 $interval->h,
                 ['%d час', '%d часа', '%d часов']
+            );
+        }
+    }
+
+    static function getAge(DateTime $dateTime)
+    {
+        $interval = $dateTime->diff(new DateTime());
+        if($interval->y > 0) {
+            return StringHelper::declensionNum(
+                $interval->y,
+                ['%d год', '%d года', '%d лет']
             );
         }
     }

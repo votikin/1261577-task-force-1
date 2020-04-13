@@ -3,9 +3,12 @@
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
 
-/* @var $this yii\web\View */
+/* @var $this yii\web\View
+ * @var $usersData
+ */
 
 $this->title = 'Users';
+//TODO Сортировка пользователей по рейтингу, числу заказов, популярности
 ?>
 
 <section class="user__search">
@@ -24,25 +27,25 @@ $this->title = 'Users';
         </ul>
     </div>
     <?php foreach ($usersData as $item): ?>
-        <?php $userUrl = Url::home(true)."users/view/".$item['id'] ?>
+        <?php $userUrl = Url::home(true)."users/view/".$item['user']['id'] ?>
         <div class="content-view__feedback-card user__search-wrapper">
             <div class="feedback-card__top">
                 <div class="user__search-icon">
-                    <a href="<?=$userUrl; ?>"><img src="<?= $item['avatar']; ?>" width="65" height="65"></a>
-                    <span><?= $item['countTask']; ?></span>
-                    <span><?= $item['countReview']; ?></span>
+                    <a href="<?=$userUrl; ?>"><img src="<?= $item['user']['avatar']; ?>" width="65" height="65"></a>
+                    <span><?= $item['countTasks']; ?></span>
+                    <span><?= $item['countReviews']; ?></span>
                 </div>
                 <div class="feedback-card__top--name user__search-card">
-                    <p class="link-name"><a href="<?=$userUrl; ?>" class="link-regular"><?= $item['name']; ?></a></p>
+                    <p class="link-name"><a href="<?=$userUrl; ?>" class="link-regular"><?= $item['user']['name']; ?></a></p>
                     <span></span><span></span><span></span><span></span><span class="star-disabled"></span>
-                    <b><?= $item['rating']; ?></b>
-                    <p class="user__search-content"><?= $item['about']; ?></p>
+                    <b><?= $item['user']['rating']; ?></b>
+                    <p class="user__search-content"><?= $item['user']['detail']->about; ?></p>
                 </div>
-                <span class="new-task__time"><?= $item['past_time']; ?></span>
+                <span class="new-task__time"><?= $item['user']['pastTime']; ?></span>
             </div>
             <div class="link-specialization user__search-link--bottom">
-                <?php foreach ($item['categories'] as $category): ?>
-                    <a href="#" class="link-regular"><?= $category; ?></a>
+                <?php foreach ($item['user']['categories'] as $category): ?>
+                    <a href="#" class="link-regular"><?= $category->name; ?></a>
                 <?php endforeach; ?>
             </div>
         </div>

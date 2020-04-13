@@ -234,10 +234,10 @@ class User extends ActiveRecord
         if($this->isNewRecord) {
             return null;
         }
-        if($this->_tasksCount === null) {
+        if($this->_customerTasksCount === null) {
             $this->setCustomerTasksCount($this->getTasks0()->count());
         }
 
-        return $this->_tasksCount;
+        return $this->_customerTasksCount;
     }
 }

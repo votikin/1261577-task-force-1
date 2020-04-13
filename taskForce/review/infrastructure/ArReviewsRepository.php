@@ -2,23 +2,47 @@
 
 namespace taskForce\review\infrastructure;
 
-use frontend\models\Review;
+use frontend\models\Review as modelReview;
 use frontend\models\Task;
 use taskForce\review\domain\ReviewsRepository;
+use taskForce\review\infrastructure\builder\ArReviewBuilder;
 
 class ArReviewsRepository implements ReviewsRepository
 {
+    /**
+     * @var ArReviewBuilder
+     */
+    private $builder;
 
-    public function getAll()
+    /**
+     * ArReviewsRepository constructor.
+     * @param ArReviewBuilder $builder
+     */
+    public function __construct(ArReviewBuilder $builder)
     {
-        // TODO: Implement getAll() method.
+        $this->builder = $builder;
     }
 
-    public function getReviewsByExecutorId(int $id)
+
+    public function getCountReviewsByExecutorId(int $id): int
     {
-        return Review::find()
+        return modelReview::find()
         ->joinWith('task')
         ->where([Task::tableName().".executor_id" => $id])
-        ->all();
+        ->count();
+    }
+
+    public function getReviewsByExecutorId(int $id): array
+    {
+        $reviews = modelReview::find()
+                    ->joinWith('task')
+                    ->where([Task::tableName().".executor_id" => $id])
+                    ->all();
+        $reviewsList = [];
+        foreach ($reviews as $review) {
+            $reviewsList[] = $this->builder->build($review);
+        }
+
+        return $reviewsList;
     }
 }

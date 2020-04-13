@@ -17,4 +17,6 @@ return [
     'price' => $faker->numberBetween(1,5000),
     'user_id' => $faker->numberBetween(1,$countUser),
     'task_id' => $faker->numberBetween(1,$countTask),
+    'created_at' => $faker->dateTimeBetween('-1 years','now')->format("Y-m-d H:i:s"),
+    'is_deleted' => $faker->numberBetween(0,1),
 ];

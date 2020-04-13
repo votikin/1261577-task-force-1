@@ -4,11 +4,14 @@ namespace common\tests\Users;
 
 use Codeception\Test\Unit;
 use common\fixtures\CityFixture;
+use common\fixtures\ReviewFixture;
 use common\fixtures\RoleFixture;
+use common\fixtures\TaskFixture;
+use common\fixtures\UserCategoryFixture;
 use common\fixtures\UserFixture;
 use frontend\models\User;
 use taskForce\user\domain\UsersRepository;
-
+//TODO как написать тест, который проверит, что возвращается именно доменная сущность
 class UsersListTest extends Unit
 {
     /**
@@ -19,30 +22,16 @@ class UsersListTest extends Unit
     public function __construct()
     {
         $this->users = \Yii::$container->get(UsersRepository::class);
-<<<<<<< HEAD
-=======
-
->>>>>>> b65ce07df64321bec9cfc7162e598ae9b70d5fc4
         parent::__construct();
     }
 
 
-<<<<<<< HEAD
     /**
      * @return array
      */
     public function _fixtures()
     {
         return [
-            'user' => [
-                'class' => UserFixture::class,
-                'dataFile' => \Yii::$app->getBasePath() . '/fixtures/data/user.php'
-            ],
-=======
-    public function _fixtures()
-    {
-        return [
->>>>>>> b65ce07df64321bec9cfc7162e598ae9b70d5fc4
             'city' => [
                 'class' => CityFixture::class,
                 'dataFile' => \Yii::$app->getBasePath() . '/fixtures/data/city.php'
@@ -51,67 +40,87 @@ class UsersListTest extends Unit
                 'class' => RoleFixture::class,
                 'dataFile' => \Yii::$app->getBasePath() . '/fixtures/data/role.php'
             ],
-<<<<<<< HEAD
-=======
             'user' => [
                 'class' => UserFixture::class,
                 'dataFile' => \Yii::$app->getBasePath() . '/fixtures/data/user.php'
-            ]
->>>>>>> b65ce07df64321bec9cfc7162e598ae9b70d5fc4
+            ],
+            'user_category' => [
+                'class' => UserCategoryFixture::class,
+                'dataFile' => \Yii::$app->getBasePath() . '/fixtures/data/user_category.php'
+            ],
+            'task' => [
+                'class' => TaskFixture::class,
+                'dataFile' => \Yii::$app->getBasePath() . '/fixtures/data/task.php'
+            ],
+            'review' => [
+                'class' => ReviewFixture::class,
+                'dataFile' => \Yii::$app->getBasePath() . '/fixtures/data/review.php'
+            ],
         ];
     }
 
-    public function testGetListAllUsers()
+    public function testGetListAllExecutors()
     {
-        $users = $this->users->getAll();
-<<<<<<< HEAD
-        $this->assertCount(10,$users);
+        $users = $this->users->getAllExecutors();
+        $this->assertCount(12,$users);
     }
 
-    public function testUsersByFilter()
+    public function testGetExecutorById()
     {
-        $request = ['name'=> 'Мальвина', 'city' => '47'];
-        $usersData = $this->users->getByFilter($request);
+        $user = $this->users->getExecutorById(19);
+        $this->assertEquals('Шубинa Алексей Андреевич',$user->name);
+    }
 
+    public function testGetExecutorsByFilters()
+    {
+        $request = ['name'=> 'Александрович', 'categories' => ['3','5']];
+        $usersData = $this->users->getExecutorsByFilter($request);
         $this->assertCount(1,$usersData);
     }
 
-    public function testUsersWithReview()
+    public function testGetExecutorsByNameFilter()
     {
-        $reviews = $this->users->getCountUserReviews(2);
-        $this->assertEquals(2,2);
-    }
-=======
-
-        $this->assertCount(10, $users);
+        $request = ['name'=> 'Александрович'];
+        $usersData = $this->users->getExecutorsByFilter($request);
+        $this->assertCount(2,$usersData);
     }
 
-    public function testGetUsersByNameFilter()
+    public function testGetExecutorsByCategoriesFilter()
     {
-        $request = ['name' => 'Розалина'];
-
-        $usersData = $this->users->getByFilter($request);
-
-        $this->assertCount(1, $usersData);
+        $request = ['categories' => ['3','5']];
+        $usersData = $this->users->getExecutorsByFilter($request);
+        $this->assertCount(4,$usersData);
     }
 
-    public function testGetUsersByCityFilter()
+    public function testGetExecutorsByHasReviewsFilter()
     {
-        $request = [ 'city' => 48];
-
-        $usersData = $this->users->getByFilter($request);
-
-        $this->assertCount(1, $usersData);
+        $request = ['reviews' => '1'];
+        $usersData = $this->users->getExecutorsByFilter($request);
+        $this->assertCount(5,$usersData);
     }
 
-    public function testGetUsersByFilterDifirent()
+    public function testCheckExecutorByIdIsUserObject()
     {
-        $request = ['name' => 'Розалина', 'city' => 48];
-
-        $usersData = $this->users->getByFilter($request);
-
-        $this->assertCount(1, $usersData);
+        $user = $this->users->getExecutorById(19);
+        $this->assertIsObject($user);
     }
 
->>>>>>> b65ce07df64321bec9cfc7162e598ae9b70d5fc4
+    public function testCheckGetCustomerIsObject()
+    {
+        $user = $this->users->getCustomerByTaskId(4);
+        $this->assertIsObject($user);
+    }
+
+    public function testGetCustomerByTaskId()
+    {
+        $user = $this->users->getCustomerByTaskId(4);
+        $this->assertEquals('6',$user->id);
+    }
+
+    public function testGetReviewAuthor()
+    {
+        $user = $this->users->getAuthorByReviewId(3);
+        $this->assertEquals(9, $user->id);
+    }
+
 }

@@ -57,7 +57,7 @@ class ArTaskFilter
 
     private function period($value)
     {
-        if($value !== "0") {
+        if($value === '1' || $value === '2' || $value === '3') {
             $currentTime = new \DateTime();
             $needTime = new \DateTime();
             switch ($value) {

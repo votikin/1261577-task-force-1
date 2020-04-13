@@ -4,8 +4,11 @@ namespace common\tests\Categories;
 
 use Codeception\Test\Unit;
 use common\fixtures\CategoryFixture;
+use common\fixtures\TaskFixture;
 use common\fixtures\UserCategoryFixture;
+use common\fixtures\UserFixture;
 use taskForce\category\domain\CategoriesRepository;
+use taskForce\category\domain\Category;
 
 class CategoriesListTest extends Unit
 {
@@ -14,12 +17,16 @@ class CategoriesListTest extends Unit
      */
     private $categories;
 
+    /**
+     * CategoriesListTest constructor.
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\di\NotInstantiableException
+     */
     public function __construct()
     {
         $this->categories = \Yii::$container->get(CategoriesRepository::class);
         parent::__construct();
     }
-
 
     public function _fixtures()
     {
@@ -27,6 +34,18 @@ class CategoriesListTest extends Unit
             'category' => [
                 'class' => CategoryFixture::class,
                 'dataFile' => \Yii::$app->getBasePath() . '/fixtures/data/category.php'
+            ],
+            'task' => [
+                'class' => TaskFixture::class,
+                'dataFile' => \Yii::$app->getBasePath() . '/fixtures/data/task.php'
+            ],
+            'user' => [
+                'class' => UserFixture::class,
+                'dataFile' => \Yii::$app->getBasePath() . '/fixtures/data/user.php'
+            ],
+            'user_category' => [
+                'class' => UserCategoryFixture::class,
+                'dataFile' => \Yii::$app->getBasePath() . '/fixtures/data/user_category.php'
             ],
         ];
     }
@@ -37,9 +56,28 @@ class CategoriesListTest extends Unit
         $this->assertCount(8, $categories);
     }
 
-    public function testCategoriesIsArray()
+    public function testCheckCategoryByTaskIdIsObject()
     {
-        $categories = $this->categories->getAllArray();
-        $this->assertArrayNotHasKey(9,$categories);
+        $category = $this->categories->getCategoryByTaskId(5);
+        $this->assertIsObject($category);
+    }
+
+
+    public function testGetCategoryByTaskId()
+    {
+        $category = $this->categories->getCategoryByTaskId(2);
+        $this->assertEquals("Переезды",$category->name);
+    }
+
+    public function testCheckCategoriesByUserIdIsArray()
+    {
+        $category = $this->categories->getCategoriesByUserId(5);
+        $this->assertIsArray($category);
+    }
+
+    public function testGetCategoriesByUserId()
+    {
+        $categories = $this->categories->getCategoriesByUserId(1);
+        $this->assertCount(4, $categories);
     }
 }

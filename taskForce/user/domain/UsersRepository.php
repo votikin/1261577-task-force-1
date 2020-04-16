@@ -14,6 +14,10 @@ interface UsersRepository
 
     public function getAuthorByReviewId(int $id): User;
 
+    public function createNewUser(User $user): bool;
+
+    public function getAllUsers(): array;
+
 //    public function getUserCategories(object $user);
 
 //    public function getCountUserReviews(int $id);

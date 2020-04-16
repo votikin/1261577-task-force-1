@@ -66,4 +66,13 @@ class ManagerUser
         return $this->user->getAuthorByReviewId($id);
     }
 
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function createNewUser(User $user): bool
+    {
+        return $this->user->createNewUser($user);
+    }
+
 }

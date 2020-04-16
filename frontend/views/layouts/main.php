@@ -10,6 +10,8 @@ use yii\helpers\Url;
 
 $usersUrl = $userUrl = Url::home(true)."users";
 $tasksUrl = $userUrl = Url::home(true)."tasks";
+$signUpName = 'signup';
+$signUpUrl = Url::home(true)."signup";
 
 AppAsset::register($this);
 ?>
@@ -75,6 +77,7 @@ AppAsset::register($this);
                     </li>
                 </ul>
             </div>
+            <?php if(Yii::$app->request->pathInfo !== $signUpName) { ?>
             <div class="header__town">
                 <select class="multiple-select input town-select" size="1" name="town[]">
                     <option value="Moscow">Москва</option>
@@ -123,6 +126,7 @@ AppAsset::register($this);
                     </li>
                 </ul>
             </div>
+            <?php } ?>
         </div>
     </header>
     <main class="page-main">
@@ -178,7 +182,20 @@ AppAsset::register($this);
                      alt="Логотип HTML Academy">
             </a>
         </div>
-
+        <?php if(Yii::$app->request->pathInfo === $signUpName) {?>
+            <div class="clipart-woman">
+                <img src="./img/clipart-woman.png" width="238" height="450">
+            </div>
+            <div class="clipart-message">
+                <div class="clipart-message-text">
+                    <h2>Знаете ли вы, что?</h2>
+                    <p>После регистрации вам будет доступно более
+                        двух тысяч заданий из двадцати разных категорий.</p>
+                    <p>В среднем, наши исполнители зарабатывают
+                        от 500 рублей в час.</p>
+                </div>
+            </div>
+        <?php } ?>
 
     </div>
 

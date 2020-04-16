@@ -3,7 +3,6 @@
 namespace frontend\controllers;
 
 use taskForce\category\application\ManagerCategory;
-use taskForce\category\domain\CategoriesRepository;
 use taskForce\category\domain\Category;
 use taskForce\review\application\ManagerReview;
 use taskForce\review\domain\Review;
@@ -11,7 +10,6 @@ use taskForce\task\application\ManagerTask;
 use taskForce\task\domain\Task;
 use taskForce\user\application\ManagerUser;
 use taskForce\user\domain\User;
-use taskForce\user\domain\UsersRepository;
 use Yii;
 use yii\web\Controller;
 use frontend\models\UserSearchModel;

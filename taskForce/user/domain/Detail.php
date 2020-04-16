@@ -32,6 +32,10 @@ class Detail
     {
         $this->about = $about;
         $this->address = $address;
+        if($birthday === null)
+        {
+            $birthday = date('Y-m-d');
+        }
         $this->age = StringHelper::getAge(DateTime::createFromFormat('Y-m-d', $birthday));
     }
 

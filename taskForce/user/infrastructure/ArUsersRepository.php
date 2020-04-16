@@ -6,6 +6,7 @@ use frontend\models\Review;
 use frontend\models\Role;
 use frontend\models\Task;
 use frontend\models\User as modelUser;
+use taskForce\user\domain\Contact;
 use taskForce\user\domain\NotFoundUserException;
 use taskForce\user\domain\User;
 use taskForce\user\domain\UsersRepository;
@@ -84,5 +85,28 @@ class ArUsersRepository implements UsersRepository
         $user = modelUser::findOne($task->user_id);
 
         return $this->builder->build($user);
+    }
+
+    public function createNewUser(User $user): bool
+    {
+        $newUser = new modelUser();
+        $contact = new Contact($user->contacts->email);
+        $newUser->email = $contact->email;
+        $newUser->name = $user->name;
+        $newUser->password = $user->getPassword();
+        $newUser->city_id = $user->cityId;
+
+        return $newUser->save();
+    }
+
+    public function getAllUsers(): array
+    {
+        $users = modelUser::find()->all();
+        $usersList = [];
+        foreach ($users as $user) {
+            $usersList[] = $this->builder->build($user);
+        }
+
+        return $usersList;
     }
 }

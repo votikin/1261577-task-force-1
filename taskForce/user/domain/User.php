@@ -53,6 +53,16 @@ class User
      */
     public $detail;
 
+    /**
+     * @var string
+     */
+    private $password;
+
+    /**
+     * @var int
+     */
+    public $cityId;
+
     public function toArray()
     {
         return [
@@ -65,6 +75,23 @@ class User
             'rating' => $this->rating,
             'categories' => $this->category,
             'detail' => $this->detail,
+            'city_id' => $this->cityId,
         ];
+    }
+
+    /**
+     * @param string $pass
+     */
+    public function setPassword(string $pass)
+    {
+        $this->password = $pass;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
     }
 }

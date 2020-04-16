@@ -25,7 +25,7 @@ class Contact
      * @param string|null $skype
      * @param string|null $email
      */
-    public function __construct(string $phone = null, string $skype = null, string $email = null)
+    public function __construct(string $email = null, string $phone = null, string $skype = null)
     {
         $this->phone = $phone;
         $this->skype = $skype;

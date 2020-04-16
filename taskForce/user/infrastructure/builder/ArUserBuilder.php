@@ -32,6 +32,7 @@ class ArUserBuilder
         $user->rating = $model->rating;
         $detail = new Detail($model->about,$model->address,$model->birthday);
         $user->detail = $detail;
+        $user->cityId = $model->city_id;
         if($detailView === true) {
             $contacts = new Contact($model->phone, $model->skype, $model->email);
             $user->contacts = $contacts;

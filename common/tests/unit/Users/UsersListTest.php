@@ -10,6 +10,7 @@ use common\fixtures\TaskFixture;
 use common\fixtures\UserCategoryFixture;
 use common\fixtures\UserFixture;
 use frontend\models\User;
+use taskForce\user\domain\Contact;
 use taskForce\user\domain\UsersRepository;
 //TODO как написать тест, который проверит, что возвращается именно доменная сущность
 class UsersListTest extends Unit
@@ -19,6 +20,11 @@ class UsersListTest extends Unit
      */
     private $users;
 
+    /**
+     * UsersListTest constructor.
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\di\NotInstantiableException
+     */
     public function __construct()
     {
         $this->users = \Yii::$container->get(UsersRepository::class);
@@ -122,5 +128,26 @@ class UsersListTest extends Unit
         $user = $this->users->getAuthorByReviewId(3);
         $this->assertEquals(9, $user->id);
     }
+
+    public function testGetAllUsers()
+    {
+        $users = $this->users->getAllUsers();
+        $this->assertCount(20,$users);
+    }
+
+    public function testCreateUser()
+    {
+        $newUser = new \taskForce\user\domain\User();
+        $newUser->name = 'Вася';
+        $newUser->cityId = 12;
+        $contact = new Contact('qwe@qwe.ru');
+        $newUser->contacts = $contact;
+        $newUser->setPassword('qwerty');
+        $this->users->createNewUser($newUser);
+        $users = $this->users->getAllUsers();
+        $this->assertCount(21,$users);
+    }
+
+
 
 }

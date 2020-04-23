@@ -3,8 +3,10 @@
 namespace common\tests\Reviews;
 
 use Codeception\Test\Unit;
+use common\fixtures\CategoryFixture;
 use common\fixtures\ReviewFixture;
 use common\fixtures\TaskFixture;
+use common\fixtures\UserFixture;
 use taskForce\review\domain\ReviewsRepository;
 
 class ReviewsListTest extends Unit
@@ -35,6 +37,14 @@ class ReviewsListTest extends Unit
             'task' => [
                 'class' => TaskFixture::class,
                 'dataFile' => \Yii::$app->getBasePath() . '/fixtures/data/task.php'
+            ],
+            'user' => [
+                'class' => UserFixture::class,
+                'dataFile' => \Yii::$app->getBasePath() . '/fixtures/data/user.php'
+            ],
+            'category' => [
+                'class' => CategoryFixture::class,
+                'dataFile' => \Yii::$app->getBasePath() . '/fixtures/data/category.php'
             ],
         ];
     }

@@ -4,11 +4,11 @@ namespace taskForce\user\domain;
 
 interface UsersRepository
 {
-    public function getAllExecutors(): array;
+    public function getAllExecutors(): UsersList;
 
     public function getExecutorById(int $id): User;
 
-    public function getExecutorsByFilter(?array $filters): array;
+    public function getExecutorsByFilter(array $filters = null): UsersList;
 
     public function getCustomerByTaskId(int $id): User;
 
@@ -17,11 +17,5 @@ interface UsersRepository
     public function createNewUser(User $user): bool;
 
     public function getAllUsers(): array;
-
-//    public function getUserCategories(object $user);
-
-//    public function getCountUserReviews(int $id);
-
-//    public function getUserReviews(int $id);
 
 }

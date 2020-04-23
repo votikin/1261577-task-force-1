@@ -4,6 +4,7 @@ namespace taskForce\user\application;
 
 use taskForce\task\domain\Task;
 use taskForce\user\domain\User;
+use taskForce\user\domain\UsersList;
 use taskForce\user\domain\UsersRepository;
 
 class ManagerUser
@@ -32,18 +33,18 @@ class ManagerUser
     }
 
     /**
-     * @return array
+     * @return UsersList
      */
-    public function getAllExecutors(): array
+    public function getAllExecutors(): UsersList
     {
         return $this->user->getAllExecutors();
     }
 
     /**
      * @param array|null $filter
-     * @return array
+     * @return UsersList
      */
-    public function getExecutorsByFilter(array $filter = null): array
+    public function getExecutorsByFilter(array $filter = null): UsersList
     {
         return $this->user->getExecutorsByFilter($filter);
     }

@@ -5,6 +5,7 @@ namespace taskForce\category\infrastructure;
 use frontend\models\Category as modelCategory;
 use frontend\models\Task;
 use frontend\models\User as modelUser;
+use taskForce\category\domain\CategoriesList;
 use taskForce\category\domain\CategoriesRepository;
 use taskForce\category\domain\Category;
 use taskForce\category\infrastructure\builder\ArCategoryBuilder;
@@ -38,12 +39,12 @@ class ArCategoriesRepository implements CategoriesRepository
     }
 
     /**
-     * @return array
+     * @return CategoriesList
      */
-    public function getAll(): array
+    public function getAll(): CategoriesList
     {
         $categories = modelCategory::find()->all();
-        $categoriesList = [];
+        $categoriesList = new CategoriesList();
         foreach ($categories as $category) {
             $categoriesList[] = $this->builder->build($category);
         }
@@ -51,14 +52,14 @@ class ArCategoriesRepository implements CategoriesRepository
         return $categoriesList;
     }
 
-     /**
+    /**
      * @param int $id
-     * @return array
+     * @return CategoriesList
      */
-    public function getCategoriesByUserId(int $id): array
+    public function getCategoriesByUserId(int $id): CategoriesList
     {
         $userModel = modelUser::findOne($id);
-        $userCategories = [];
+        $userCategories = new CategoriesList();
         foreach ($userModel->categories as $item) {
             $userCategories[] = $this->builder->build($item);
         }

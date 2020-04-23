@@ -6,5 +6,5 @@ interface ReviewsRepository
 {
     public function getCountReviewsByExecutorId(int $id): int;
 
-    public function getReviewsByExecutorId(int $id): array;
+    public function getReviewsByExecutorId(int $id): ReviewsList;
 }

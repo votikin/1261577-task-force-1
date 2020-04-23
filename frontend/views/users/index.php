@@ -27,7 +27,7 @@ $this->title = 'Users';
         </ul>
     </div>
     <?php foreach ($usersData as $item): ?>
-        <?php $userUrl = Url::home(true)."users/view/".$item['user']['id'] ?>
+        <?php $userUrl = Url::to(['users/view', 'id' => $item['user']['id']]); ?>
         <div class="content-view__feedback-card user__search-wrapper">
             <div class="feedback-card__top">
                 <div class="user__search-icon">
@@ -39,13 +39,13 @@ $this->title = 'Users';
                     <p class="link-name"><a href="<?=$userUrl; ?>" class="link-regular"><?= $item['user']['name']; ?></a></p>
                     <span></span><span></span><span></span><span></span><span class="star-disabled"></span>
                     <b><?= $item['user']['rating']; ?></b>
-                    <p class="user__search-content"><?= $item['user']['detail']->about; ?></p>
+                    <p class="user__search-content"><?= $item['user']['detail']['about']; ?></p>
                 </div>
                 <span class="new-task__time"><?= $item['user']['pastTime']; ?></span>
             </div>
             <div class="link-specialization user__search-link--bottom">
                 <?php foreach ($item['user']['categories'] as $category): ?>
-                    <a href="#" class="link-regular"><?= $category->name; ?></a>
+                    <a href="#" class="link-regular"><?= $category['name']; ?></a>
                 <?php endforeach; ?>
             </div>
         </div>

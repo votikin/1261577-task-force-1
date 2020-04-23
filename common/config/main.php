@@ -11,6 +11,10 @@ return [
             'showScriptName' => false,
             'enableStrictParsing' => false,
             'rules' => [
+//                'defaultRoute' => 'index',
+                'tasks/' => 'tasks/index',
+                'users/' => 'users/index',
+                'signup' => 'signup/index',
                 'tasks/view/<id:\d+>' => 'tasks/view',
                 'users/view/<id:\d+>' => 'users/view',
             ],

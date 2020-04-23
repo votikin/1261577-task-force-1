@@ -32,11 +32,19 @@ class Detail
     {
         $this->about = $about;
         $this->address = $address;
-        if($birthday === null)
-        {
+        if($birthday === null) {
             $birthday = date('Y-m-d');
         }
         $this->age = StringHelper::getAge(DateTime::createFromFormat('Y-m-d', $birthday));
+    }
+
+    public function toArray()
+    {
+        return [
+            'about' => $this->about,
+            'address' => $this->address,
+            'age' => $this->age,
+        ];
     }
 
 }

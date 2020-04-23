@@ -6,6 +6,7 @@ use Codeception\Test\Unit;
 use common\fixtures\CategoryFixture;
 use common\fixtures\ResponseFixture;
 use common\fixtures\TaskFixture;
+use common\fixtures\UserFixture;
 use taskForce\task\domain\TasksRepository;
 
 class TasksListTest extends Unit
@@ -35,6 +36,10 @@ class TasksListTest extends Unit
             'response' => [
                 'class' => ResponseFixture::class,
                 'dataFile' => \Yii::$app->getBasePath() . '/fixtures/data/response.php'
+            ],
+            'user' => [
+                'class' => UserFixture::class,
+                'dataFile' => \Yii::$app->getBasePath() . '/fixtures/data/user.php'
             ],
         ];
     }

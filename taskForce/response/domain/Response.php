@@ -21,7 +21,7 @@ class Response
     /**
      * @var DateTime
      */
-    public $created_at;
+    public $dateCreate;
 
     /**
      * @var User
@@ -33,7 +33,7 @@ class Response
         return [
             'comment' => $this->comment,
             'price' => $this->price,
-            'pastTime' => StringHelper::getPastTime($this->created_at),
+            'pastTime' => StringHelper::getPastTime($this->dateCreate),
             'user' => $this->user,
         ];
     }

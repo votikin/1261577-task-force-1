@@ -3,11 +3,14 @@
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
 
-/* @var $this yii\web\View */
+/** @var $this yii\web\View
+ * @var $signUpModel \frontend\models\SignUpModel
+ */
 
 $this->title = 'Регистрация';
+$this->params['isRegisterPage'] = true;
 $cities = \yii\helpers\ArrayHelper::map($city,'id','name');
-//TODO Выяснить, почему не работает required на стороне сервера
+
 ?>
 
 <section class="registration__user">
@@ -20,45 +23,54 @@ $cities = \yii\helpers\ArrayHelper::map($city,'id','name');
             'options' => ['class' => 'registration__user-form form-create','enctype' => 'multipart/form-data'],
             'enableClientValidation' => false,
             'fieldConfig' => ['options' => ['tag' => false],'template' => "{label}\n{input}\n{error}"],
-//            'fieldConfig' => ['errorOptions' => ['encode' => false, 'class' => 'help-block']]
         ]); ?>
         <?=$form->field($signUpModel,'email')
         ->input('email',array(
                 'placeholder' => 'kumarm@mail.ru',
-                'id' => '16',
                 'class' => 'input textarea',
                 'rows' => '1',
                 'required' => true
-            ))
-            ->label("Электронная почта"); ?>
+            ));
+        ?>
         <span>Введите валидный адрес электронной почты</span>
         <?=$form->field($signUpModel,'userName')
             ->textInput(array(
                 'class' => 'input textarea',
-                'id' => '17',
                 'placeholder' => 'Мамедов Кумар',
                 'rows' => '1',
                 'required' => true
-            ))
-            ->label('Ваше имя'); ?>
+            ));
+        ?>
         <span>Введите ваше имя и фамилию</span>
         <?=$form->field($signUpModel,'city')
             ->dropDownList($cities,array(
-                    'id' => '18',
                     'class' => 'multiple-select input town-select registration-town',
-                    'size' => '1'))
-            ->label('Город проживания') ?>
+                    'size' => '1'));
+        ?>
         <span>Укажите город, чтобы находить подходящие задачи</span>
-        <?=$form->field($signUpModel,'password',[])
+        <?=$form->field($signUpModel,'password',['labelOptions' => ['class' => 'input-danger']])
             ->passwordInput(array(
-                'id' => '19',
                 'class' => 'input textarea',
-                'required' => true
-            ))
-            ->label('Пароль',array('class' => 'input-danger')); ?>
+                'required' => true,
+            ));
+            ?>
         <span>Длина пароля от 8 символов</span>
         <?= Html::submitButton('Cоздать аккаунт', ['class' => 'button button__registration']) ?>
         <?php ActiveForm::end(); ?>
     </div>
 </section>
 
+<?php $this->beginBlock('woman'); ?>
+    <div class="clipart-woman">
+        <img src="./img/clipart-woman.png" width="238" height="450">
+    </div>
+    <div class="clipart-message">
+        <div class="clipart-message-text">
+            <h2>Знаете ли вы, что?</h2>
+            <p>После регистрации вам будет доступно более
+                двух тысяч заданий из двадцати разных категорий.</p>
+            <p>В среднем, наши исполнители зарабатывают
+                от 500 рублей в час.</p>
+        </div>
+    </div>
+<?php $this->endBlock(); ?>

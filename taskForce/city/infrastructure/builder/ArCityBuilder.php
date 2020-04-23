@@ -7,6 +7,10 @@ use taskForce\city\domain\City;
 
 class ArCityBuilder
 {
+    /**
+     * @param model $model
+     * @return City
+     */
     public function build(model $model): City
     {
         $city = new City();

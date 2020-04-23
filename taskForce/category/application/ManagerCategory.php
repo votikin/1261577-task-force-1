@@ -2,6 +2,7 @@
 
 namespace taskForce\category\application;
 
+use taskForce\category\domain\CategoriesList;
 use taskForce\category\domain\CategoriesRepository;
 use taskForce\category\domain\Category;
 
@@ -10,7 +11,7 @@ class ManagerCategory
     /**
      * @var CategoriesRepository
      */
-    private $category;
+    private $categories;
 
     /**
      * ManagerCategory constructor.
@@ -18,15 +19,15 @@ class ManagerCategory
      */
     public function __construct(CategoriesRepository $category)
     {
-        $this->category = $category;
+        $this->categories = $category;
     }
 
     /**
-     * @return array
+     * @return CategoriesList
      */
-    public function getAllCategories(): array
+    public function getAllCategories(): CategoriesList
     {
-        return $this->category->getAll();
+        return $this->categories->getAll();
     }
 
     /**
@@ -35,16 +36,16 @@ class ManagerCategory
      */
     public function getCategoryByTaskId(int $id): Category
     {
-        return $this->category->getCategoryByTaskId($id);
+        return $this->categories->getCategoryByTaskId($id);
     }
 
     /**
      * @param $id
-     * @return array
+     * @return CategoriesList
      */
-    public function getCategoriesByUserId($id): array
+    public function getCategoriesByUserId($id): CategoriesList
     {
-        return $this->category->getCategoriesByUserId($id);
+        return $this->categories->getCategoriesByUserId($id);
     }
 
 }

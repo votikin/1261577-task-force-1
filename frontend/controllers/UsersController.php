@@ -3,18 +3,18 @@
 namespace frontend\controllers;
 
 use taskForce\category\application\ManagerCategory;
-use taskForce\category\domain\Category;
+use taskForce\category\domain\CategoriesList;
 use taskForce\review\application\ManagerReview;
-use taskForce\review\domain\Review;
+use taskForce\review\domain\ReviewsList;
 use taskForce\task\application\ManagerTask;
 use taskForce\task\domain\Task;
 use taskForce\user\application\ManagerUser;
 use taskForce\user\domain\User;
+use taskForce\user\domain\UsersList;
 use Yii;
 use yii\web\Controller;
 use frontend\models\UserSearchModel;
 
-//TODO Выяснить, где лучше собрать userData - в контроллере или менеджере
 class UsersController extends Controller
 {
     /**
@@ -49,24 +49,19 @@ class UsersController extends Controller
     public function actionIndex()
     {
         /**
-         * @var $categories Category[]
-         * @var $users User[]
+         * @var $categories CategoriesList
+         * @var $users UsersList
          */
         $userSearchModel = new UserSearchModel();
 
         $categories = $this->managerCategory->getAllCategories();
-        $categoriesList = [];
-        foreach ($categories as $category) {
-            $categoriesList[$category->id] = $category->name;
-        }
-
-        $users = $this->managerUser->getAllExecutors();
         $userSearchModel->load(Yii::$app->request->post());
         if(Yii::$app->request->getIsPost()) {
             $request = Yii::$app->request->post();
             $users = $this->managerUser->getExecutorsByFilter($request['UserSearchModel']);
+        } else {
+            $users = $this->managerUser->getAllExecutors();
         }
-
         $usersData = [];
         foreach ($users as $user) {
             $usersData[] = [
@@ -78,7 +73,7 @@ class UsersController extends Controller
 
         return $this->render('index',[
             'usersData' => $usersData,
-            'categories' => $categoriesList,
+            'categories' => $categories->toIdKeyNameValueArray(),
             'userSearchModel' => $userSearchModel,
         ]);
     }
@@ -87,19 +82,18 @@ class UsersController extends Controller
     {
         /**
          * @var $user User
-         * @var $reviews Review[]
+         * @var $reviews ReviewsList
          * @var $reviewTask Task
          */
+
         $reviews = $this->managerReview->getReviewsByExecutorId($id);
         $reviewsData = [];
         foreach ($reviews as $review){
-            $reviewCreator = $this->managerUser->getAuthorByReviewId($review->id);
-            $reviewTask = $this->managerTask->getById($review->task_id);
             $reviewsData[] = [
                 'review' => $review->toArray(),
-                'name' => $reviewCreator->name,
-                'avatar' =>$reviewCreator->avatar,
-                'task' => $reviewTask->shortName,
+                'name' => $review->task->author->name,
+                'avatar' =>$review->task->author->avatar,
+                'task' => $review->task->shortName,
             ];
         }
         $user = $this->managerUser->getExecutorById($id);

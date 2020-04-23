@@ -4,6 +4,8 @@ namespace taskForce\review\infrastructure;
 
 use frontend\models\Review as modelReview;
 use frontend\models\Task;
+use frontend\models\User;
+use taskForce\review\domain\ReviewsList;
 use taskForce\review\domain\ReviewsRepository;
 use taskForce\review\infrastructure\builder\ArReviewBuilder;
 
@@ -23,7 +25,10 @@ class ArReviewsRepository implements ReviewsRepository
         $this->builder = $builder;
     }
 
-
+    /**
+     * @param int $id
+     * @return int
+     */
     public function getCountReviewsByExecutorId(int $id): int
     {
         return modelReview::find()
@@ -32,17 +37,22 @@ class ArReviewsRepository implements ReviewsRepository
         ->count();
     }
 
-    public function getReviewsByExecutorId(int $id): array
+    /**
+     * @param int $id
+     * @return ReviewsList
+     */
+    public function getReviewsByExecutorId(int $id): ReviewsList
     {
         $reviews = modelReview::find()
                     ->joinWith('task')
                     ->where([Task::tableName().".executor_id" => $id])
                     ->all();
-        $reviewsList = [];
+        $reviewsList = new ReviewsList();
         foreach ($reviews as $review) {
             $reviewsList[] = $this->builder->build($review);
         }
 
         return $reviewsList;
     }
+
 }

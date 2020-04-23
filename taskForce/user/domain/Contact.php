@@ -32,4 +32,13 @@ class Contact
         $this->email = $email;
     }
 
+    public function toArray()
+    {
+        return [
+            'phone' => $this->phone,
+            'skype' => $this->skype,
+            'email' => $this->email,
+        ];
+    }
+
 }

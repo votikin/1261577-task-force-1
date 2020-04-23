@@ -69,12 +69,6 @@ class CategoriesListTest extends Unit
         $this->assertEquals("Переезды",$category->name);
     }
 
-    public function testCheckCategoriesByUserIdIsArray()
-    {
-        $category = $this->categories->getCategoriesByUserId(5);
-        $this->assertIsArray($category);
-    }
-
     public function testGetCategoriesByUserId()
     {
         $categories = $this->categories->getCategoriesByUserId(1);

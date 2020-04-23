@@ -2,14 +2,11 @@
 
 namespace taskForce\category\domain;
 
-
-use taskForce\user\domain\User;
-
 interface CategoriesRepository
 {
-    public function getAll(): array;
+    public function getAll(): CategoriesList;
 
     public function getCategoryByTaskId(int $id): Category;
 
-    public function getCategoriesByUserId(int $id): array;
+    public function getCategoriesByUserId(int $id): CategoriesList;
 }

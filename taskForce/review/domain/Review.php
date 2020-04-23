@@ -2,6 +2,8 @@
 
 namespace taskForce\review\domain;
 
+use taskForce\task\domain\Task;
+
 class Review
 {
     /**
@@ -20,9 +22,9 @@ class Review
     public $estimate;
 
     /**
-     * @var int
+     * @var Task
      */
-    public $task_id;
+    public $task;
 
     public function toArray()
     {

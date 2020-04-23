@@ -3,7 +3,6 @@
 namespace frontend\models;
 
 use taskForce\user\domain\Contact;
-use taskForce\user\domain\Detail;
 use yii\db\ActiveRecord;
 use taskForce\user\domain\User;
 use frontend\models\User as modelUser;
@@ -33,7 +32,20 @@ class SignUpModel extends ActiveRecord
         ];
     }
 
-    public function createUser()
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'email' => 'Электронная почта',
+            'userName' => 'Ваше имя',
+            'city' => 'Город проживания',
+            'password' => 'Пароль',
+        ];
+    }
+
+    public function makeUser()
     {
         $user = new User();
         $user->name = $this->userName;

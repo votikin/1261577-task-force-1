@@ -3,6 +3,7 @@
 namespace taskForce\response\infrastructure;
 
 use frontend\models\Response;
+use taskForce\response\domain\ResponsesList;
 use taskForce\response\domain\ResponsesRepository;
 use taskForce\response\infrastructure\builder\ArResponseBuilder;
 
@@ -24,12 +25,12 @@ class ArResponsesRepository implements ResponsesRepository
 
     /**
      * @param int $id
-     * @return array
+     * @return ResponsesList
      */
-    public function getByTaskId(int $id): array
+    public function getByTaskId(int $id): ResponsesList
     {
         $responses =  Response::find()->where(['task_id' => $id])->all();
-        $responsesList = [];
+        $responsesList = new ResponsesList();
         foreach ($responses as $response) {
             $responsesList[] = $this->builder->build($response);
         }

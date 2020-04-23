@@ -2,6 +2,7 @@
 
 namespace taskForce\city\application;
 
+use taskForce\city\domain\CitiesList;
 use taskForce\city\domain\CitiesRepository;
 use taskForce\city\domain\City;
 
@@ -10,7 +11,7 @@ class ManagerCity
     /**
      * @var CitiesRepository
      */
-    private $city;
+    private $cities;
 
     /**
      * ManagerCity constructor.
@@ -18,15 +19,15 @@ class ManagerCity
      */
     public function __construct(CitiesRepository $city)
     {
-        $this->city = $city;
+        $this->cities = $city;
     }
 
     /**
-     * @return array
+     * @return CitiesList
      */
-    public function getAllCities(): array
+    public function getAllCities(): CitiesList
     {
-        return $this->city->getAllCities();
+        return $this->cities->getAllCities();
     }
 
     /**
@@ -35,6 +36,6 @@ class ManagerCity
      */
     public function getCityById(int $id): City
     {
-        return $this->city->getCityById($id);
+        return $this->cities->getCityById($id);
     }
 }

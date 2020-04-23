@@ -22,6 +22,10 @@ class ArUserFilter
         $this->queryBuilder = $queryBuilder;
     }
 
+    /**
+     * @param array $filters
+     * @return ActiveQuery
+     */
     public function apply(array $filters)
     {
             foreach ($filters as $paramName => $value) {
@@ -33,11 +37,17 @@ class ArUserFilter
         return $this->queryBuilder;
     }
 
+    /**
+     * @param $value
+     */
     private function name($value)
     {
         $this->queryBuilder->andWhere(['like','name',$value]);
     }
 
+    /**
+     * @param $value
+     */
     private function categories($value)
     {
         if($value !== "") {
@@ -47,6 +57,9 @@ class ArUserFilter
         }
     }
 
+    /**
+     * @param $value
+     */
     private function reviews($value)
     {
         if($value === "1") {

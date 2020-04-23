@@ -4,7 +4,7 @@ namespace frontend\controllers;
 
 use frontend\models\SignUpModel;
 use taskForce\city\application\ManagerCity;
-use taskForce\city\domain\City;
+use taskForce\city\domain\CitiesList;
 use taskForce\user\application\ManagerUser;
 use yii\web\Controller;
 use Yii;
@@ -31,30 +31,22 @@ class SignupController extends Controller
     public function actionIndex()
     {
         /**
-         * @var $cities City[]
+         * @var $cities CitiesList
          */
         $model = new SignUpModel();
         $cities = $this->managerCity->getAllCities();
-        $citiesList = [];
-        foreach ($cities as $city) {
-            $citiesList[] = $city->toArray();
-        }
-
-        if (Yii::$app->request->getIsPost()) {
-            $model->load(Yii::$app->request->post());
-
+        if ($model->load(Yii::$app->request->post())) {
             if ($model->validate()) {
-                $user = $model->createUser();
-                if($this->managerUser->createNewUser($user)) {
+                if ($this->managerUser->createNewUser($model->makeUser())) {
                     return $this->redirect(Yii::$app->getHomeUrl());
                 }
-            } else{
-                $model->password = null;
             }
+            $model->password = null;
         }
+
         return $this->render('index',[
             'signUpModel' => $model,
-            'city' => $citiesList,
+            'city' => $cities->toArray(),
         ]);
     }
 }

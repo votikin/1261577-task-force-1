@@ -6,9 +6,9 @@ interface TasksRepository
 {
     public function getById(int $id) : Task;
 
-    public function getByFilter(?array $filters): array;
+    public function getByFilter(array $filters = null): TasksList;
 
-    public function getAll(): array;
+    public function getAll(): TasksList;
 
     public function getCountTasksByExecutorId(int $id): int;
 

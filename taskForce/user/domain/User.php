@@ -3,7 +3,7 @@
 namespace taskForce\user\domain;
 
 use DateTime;
-use taskForce\category\domain\Category;
+use taskForce\category\domain\CategoriesList;
 use taskForce\share\StringHelper;
 
 class User
@@ -26,7 +26,7 @@ class User
     /**
      * @var DateTime
      */
-    public $created_at;
+    public $dateCreate;
 
     /**
      * @var Contact
@@ -36,7 +36,7 @@ class User
     /**
      * @var DateTime
      */
-    public $last_activity;
+    public $lastActivity;
 
     /**
      * @var double
@@ -44,9 +44,9 @@ class User
     public $rating;
 
     /**
-     * @var Category[]
+     * @var CategoriesList
      */
-    public $category;
+    public $categories;
 
     /**
      * @var Detail
@@ -63,18 +63,25 @@ class User
      */
     public $cityId;
 
+
+    public function __construct()
+    {
+        $this->contacts = new Contact();
+    }
+
+
     public function toArray()
     {
         return [
             'id' => $this->id,
             'avatar' => $this->avatar,
             'name' => $this->name,
-            'registrationPast' => StringHelper::getRegistrationPastTime($this->created_at),
-            'contacts' => $this->contacts,
-            'pastTime' => StringHelper::getPastActivityTime($this->last_activity),
+            'registrationPast' => StringHelper::getRegistrationPastTime($this->dateCreate),
+            'contacts' => $this->contacts->toArray(),
+            'pastTime' => StringHelper::getPastActivityTime($this->lastActivity),
             'rating' => $this->rating,
-            'categories' => $this->category,
-            'detail' => $this->detail,
+            'categories' => $this->categories->toArray(),
+            'detail' => $this->detail->toArray(),
             'city_id' => $this->cityId,
         ];
     }

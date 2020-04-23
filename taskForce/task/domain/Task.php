@@ -2,9 +2,11 @@
 
 namespace taskForce\task\domain;
 
+use taskForce\category\domain\CategoriesList;
 use taskForce\category\domain\Category;
 use DateTime;
 use taskForce\share\StringHelper;
+use taskForce\user\domain\User;
 
 class Task
 {
@@ -41,10 +43,10 @@ class Task
     /**
      * @var DateTime
      */
-    public $created_at;
+    public $dateCreate;
 
     /**
-     * @var Category
+     * @var CategoriesList
      */
     public $category;
 
@@ -53,6 +55,10 @@ class Task
      */
     public $location;
 
+    /**
+     * @var User
+     */
+    public $author;
 
     public function toArray()
     {
@@ -65,7 +71,7 @@ class Task
             'deadline' => $this->deadline,
             'location' => $this->location,
             'category' => $this->category,
-            'pastTime' => StringHelper::getPastTime($this->created_at),
+            'pastTime' => StringHelper::getPastTime($this->dateCreate),
         ];
     }
 }

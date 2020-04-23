@@ -15,19 +15,19 @@ $this->title = 'Detail task';
         <div class="content-view__card-wrapper">
             <div class="content-view__header">
                 <div class="content-view__headline">
-                    <h1><?=$taskData['short'];?></h1>
+                    <h1><?= $taskData['short']; ?></h1>
                     <span>Размещено в категории
-                                    <a href="#" class="link-regular"><?=$taskData['category']->name;?></a>
-                                    <?=$taskData['pastTime'];?></span>
+                                    <a href="#" class="link-regular"><?= $taskData['category']->name; ?></a>
+                                    <?= $taskData['pastTime']; ?></span>
                 </div>
-                <b class="new-task__price new-task__price--<?=$taskData['category']->icon;?> content-view-price">
-                    <?=$taskData['budget'];?><b> ₽</b>
+                <b class="new-task__price new-task__price--<?= $taskData['category']->icon; ?> content-view-price">
+                    <?= $taskData['budget']; ?><b> ₽</b>
                 </b>
-                <div class="new-task__icon new-task__icon--<?=$taskData['category']->icon;?> content-view-icon"></div>
+                <div class="new-task__icon new-task__icon--<?= $taskData['category']->icon; ?> content-view-icon"></div>
             </div>
             <div class="content-view__description">
                 <h3 class="content-view__h3">Общее описание</h3>
-                <p><?=$taskData['description'];?></p>
+                <p><?= $taskData['description']; ?></p>
             </div>
             <div class="content-view__attach">
                 <h3 class="content-view__h3">Вложения</h3>
@@ -59,22 +59,22 @@ $this->title = 'Detail task';
         </div>
     </div>
     <div class="content-view__feedback">
-        <h2>Отклики <span>(<?=count($responsesData); ?>)</span></h2>
+        <h2>Отклики <span>(<?= count($responsesData); ?>)</span></h2>
         <div class="content-view__feedback-wrapper">
             <?php foreach ($responsesData as $response): ?>
             <div class="content-view__feedback-card">
                 <div class="feedback-card__top">
-                    <a href="#"><img src="<?=$response['user']->avatar; ?>" width="55" height="55"></a>
+                    <a href="#"><img src="<?= $response['user']->avatar; ?>" width="55" height="55"></a>
                     <div class="feedback-card__top--name">
-                        <p><a href="#" class="link-regular"><?=$response['user']->name; ?></a></p>
+                        <p><a href="#" class="link-regular"><?= $response['user']->name; ?></a></p>
                         <span></span><span></span><span></span><span></span><span class="star-disabled"></span>
-                        <b><?=$response['user']->rating;?></b>
+                        <b><?= $response['user']->rating; ?></b>
                     </div>
-                    <span class="new-task__time"><?=$response['pastTime']; ?></span>
+                    <span class="new-task__time"><?= $response['pastTime']; ?></span>
                 </div>
                 <div class="feedback-card__content">
-                    <p><?=$response['comment']; ?></p>
-                    <span><?=$response['price']; ?> ₽</span>
+                    <p><?= $response['comment']; ?></p>
+                    <span><?= $response['price']; ?> ₽</span>
                 </div>
                 <div class="feedback-card__actions">
                     <a class="button__small-color request-button button"
@@ -92,12 +92,12 @@ $this->title = 'Detail task';
         <div class="profile-mini__wrapper">
             <h3>Заказчик</h3>
             <div class="profile-mini__top">
-                <img src="<?=$customerData['user']['avatar']; ?>" width="62" height="62" alt="Аватар заказчика">
+                <img src="<?= $customerData['user']['avatar']; ?>" width="62" height="62" alt="Аватар заказчика">
                 <div class="profile-mini__name five-stars__rate">
-                    <p><?=$customerData['user']['name']; ?></p>
+                    <p><?= $customerData['user']['name']; ?></p>
                 </div>
             </div>
-            <p class="info-customer"><span><?=$customerData['countTasks']; ?> заданий</span><span class="last-"><?=$customerData['user']['registrationPast']; ?> на сайте</span></p>
+            <p class="info-customer"><span><?= $customerData['countTasks']; ?> заданий</span><span class="last-"><?= $customerData['user']['registrationPast']; ?> на сайте</span></p>
             <a href="#" class="link-regular">Смотреть профиль</a>
         </div>
     </div>

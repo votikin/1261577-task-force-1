@@ -6,5 +6,5 @@ interface CitiesRepository
 {
     public function getCityById(int $id): City;
 
-    public function getAllCities(): array;
+    public function getAllCities(): CitiesList;
 }

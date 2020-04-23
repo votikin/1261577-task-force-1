@@ -2,6 +2,7 @@
 
 namespace taskForce\review\application;
 
+use taskForce\review\domain\ReviewsList;
 use taskForce\review\domain\ReviewsRepository;
 use taskForce\share\StringHelper;
 
@@ -28,14 +29,15 @@ class ManagerReview
     public function getFormatCountReviewsByExecutorId(int $id): string
     {
         $countReviews = $this->review->getCountReviewsByExecutorId($id);
+
         return StringHelper::declensionNum($countReviews,['%d отзыв','%d отзыва','%d отзывов']);
     }
 
     /**
      * @param int $id
-     * @return array
+     * @return ReviewsList
      */
-    public function getReviewsByExecutorId(int $id): array
+    public function getReviewsByExecutorId(int $id): ReviewsList
     {
         return $this->review->getReviewsByExecutorId($id);
     }

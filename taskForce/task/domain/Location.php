@@ -5,21 +5,21 @@ namespace taskForce\task\domain;
 class Location
 {
     /**
-     * @var double
+     * @var string
      */
     public $latitude;
 
     /**
-     * @var double
+     * @var string
      */
     public $longitude;
 
     /**
-     * meta constructor.
-     * @param $latitude
-     * @param $longitude
+     * Location constructor.
+     * @param string $latitude
+     * @param string $longitude
      */
-    public function __construct($latitude, $longitude)
+    public function __construct(string $latitude, string $longitude)
     {
         $this->latitude = $latitude;
         $this->longitude = $longitude;

@@ -3,16 +3,19 @@
 namespace frontend\controllers;
 
 use taskForce\category\application\ManagerCategory;
-use taskForce\category\domain\Category;
+use taskForce\category\domain\CategoriesList;
 use taskForce\response\application\ManagerResponse;
-use taskForce\response\domain\Response;
+use taskForce\response\domain\ResponsesList;
 use taskForce\task\application\ManagerTask;
 use taskForce\task\domain\Task;
+use taskForce\task\domain\TasksList;
 use taskForce\user\application\ManagerUser;
 use taskForce\user\domain\User;
 use Yii;
 use yii\web\Controller;
 use frontend\models\TaskSearchModel;
+
+//TODO Поменять адрес задания, наверное, там должн быть city_id
 
 class TasksController extends Controller
 {
@@ -48,31 +51,23 @@ class TasksController extends Controller
     public function actionIndex()
     {
         /**
-         * @var $categories Category[]
-         * @var $tasks Task[]
+         * @var $categories CategoriesList
+         * @var $tasks TasksList
          */
 
         $categories = $this->managerCategory->getAllCategories();
-        $categoriesList = [];
-        foreach ($categories as $category) {
-            $categoriesList[$category->id] = $category->name;
-        }
-
-        $tasks = $this->managerTask->getAllTasks();
         $taskSearchModel = new TaskSearchModel();
         $taskSearchModel->load(Yii::$app->request->post());
         if(Yii::$app->request->getIsPost()) {
             $request = Yii::$app->request->post();
             $tasks = $this->managerTask->getTasksByFilter($request['TaskSearchModel']);
-        }
-        $tasksData = [];
-        foreach ($tasks as $task) {
-            $tasksData[] = $task->toArray();
+        } else {
+            $tasks = $this->managerTask->getAllTasks();
         }
 
         return $this->render('index', [
-            'tasksData' => $tasksData,
-            'categories' => $categoriesList,
+            'tasksData' => $tasks->toArray(),
+            'categories' => $categories->toIdKeyNameValueArray(),
             'taskSearchModel' => $taskSearchModel,
         ]);
     }
@@ -82,7 +77,7 @@ class TasksController extends Controller
         /**
          * @var $task Task
          * @var $customer User
-         * @var $responses Response[]
+         * @var $responses ResponsesList
          */
         $task = $this->managerTask->getById($id);
         $customer = $this->managerUser->getCustomerByTaskId($task->id);
@@ -91,15 +86,11 @@ class TasksController extends Controller
             'countTasks' => $this->managerTask->getFormatCountTasksByCustomerId($customer->id),
         ];
         $responses = $this->managerResponse->getResponsesByTaskId($id);
-        $responsesData = [];
-        foreach ($responses as $response) {
-            $responsesData[] = $response->toArray();
-        }
 
         return $this->render('view',[
             'taskData' => $task->toArray(),
             'customerData' => $customerData,
-            'responsesData' => $responsesData,
+            'responsesData' => $responses->toArray(),
         ]);
     }
 }

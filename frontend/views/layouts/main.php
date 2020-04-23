@@ -7,11 +7,10 @@ use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
 use yii\helpers\Url;
+use frontend\components\widgets\UserHeader;
 
-$usersUrl = $userUrl = Url::home(true)."users";
-$tasksUrl = $userUrl = Url::home(true)."tasks";
-$signUpName = 'signup';
-$signUpUrl = Url::home(true)."signup";
+$usersUrl = $userUrl = Url::to(['users/']);
+$tasksUrl = $taskUrl = Url::to(['tasks/']);
 
 AppAsset::register($this);
 ?>
@@ -23,7 +22,7 @@ AppAsset::register($this);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php $this->registerCsrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
+    <title><?=  Html::encode($this->title) ?></title>
 
     <?php $this->head() ?>
 </head>
@@ -64,10 +63,10 @@ AppAsset::register($this);
             <div class="header__nav">
                 <ul class="header-nav__list site-list">
                     <li class="site-list__item">
-                        <a href="<?=$tasksUrl; ?>">Задания</a>
+                        <a href="<?= $tasksUrl; ?>">Задания</a>
                     </li>
                     <li class="site-list__item">
-                        <a href="<?=$usersUrl; ?>">Исполнители</a>
+                        <a href="<?= $usersUrl; ?>">Исполнители</a>
                     </li>
                     <li class="site-list__item">
                         <a href="#">Создать задание</a>
@@ -77,56 +76,10 @@ AppAsset::register($this);
                     </li>
                 </ul>
             </div>
-            <?php if(Yii::$app->request->pathInfo !== $signUpName) { ?>
-            <div class="header__town">
-                <select class="multiple-select input town-select" size="1" name="town[]">
-                    <option value="Moscow">Москва</option>
-                    <option selected value="SPB">Санкт-Петербург</option>
-                    <option value="Krasnodar">Краснодар</option>
-                    <option value="Irkutsk">Иркутск</option>
-                    <option value="Vladivostok">Владивосток</option>
-                </select>
-            </div>
-            <div class="header__lightbulb"></div>
-            <div class="lightbulb__pop-up">
-                <h3>Новые события</h3>
-                <p class="lightbulb__new-task lightbulb__new-task--message">
-                    Новое сообщение в чате
-                    <a href="#" class="link-regular">«Помочь с курсовой»</a>
-                </p>
-                <p class="lightbulb__new-task lightbulb__new-task--executor">
-                    Выбран исполнитель для
-                    <a href="#" class="link-regular">«Помочь с курсовой»</a>
-                </p>
-                <p class="lightbulb__new-task lightbulb__new-task--close">
-                    Завершено задание
-                    <a href="#" class="link-regular">«Помочь с курсовой»</a>
-                </p>
-            </div>
-            <div class="header__account">
-                <a class="header__account-photo">
-                    <img src="/img/user-photo.png"
-                         width="43" height="44"
-                         alt="Аватар пользователя">
-                </a>
-                <span class="header__account-name">
-                 Василий
-             </span>
-            </div>
-            <div class="account__pop-up">
-                <ul class="account__pop-up-list">
-                    <li>
-                        <a href="#">Мои задания</a>
-                    </li>
-                    <li>
-                        <a href="#">Настройки</a>
-                    </li>
-                    <li>
-                        <a href="#">Выход</a>
-                    </li>
-                </ul>
-            </div>
-            <?php } ?>
+            <?php if (!isset($this->params['isRegisterPage'])): ?>
+                <?= UserHeader::widget() ?>
+            <?php endif; ?>
+
         </div>
     </header>
     <main class="page-main">
@@ -182,21 +135,10 @@ AppAsset::register($this);
                      alt="Логотип HTML Academy">
             </a>
         </div>
-        <?php if(Yii::$app->request->pathInfo === $signUpName) {?>
-            <div class="clipart-woman">
-                <img src="./img/clipart-woman.png" width="238" height="450">
-            </div>
-            <div class="clipart-message">
-                <div class="clipart-message-text">
-                    <h2>Знаете ли вы, что?</h2>
-                    <p>После регистрации вам будет доступно более
-                        двух тысяч заданий из двадцати разных категорий.</p>
-                    <p>В среднем, наши исполнители зарабатывают
-                        от 500 рублей в час.</p>
-                </div>
-            </div>
-        <?php } ?>
 
+        <?php if (isset($this->blocks['woman'])): ?>
+            <?= $this->blocks['woman']; ?>
+        <?php endif; ?>
     </div>
 
 </footer>

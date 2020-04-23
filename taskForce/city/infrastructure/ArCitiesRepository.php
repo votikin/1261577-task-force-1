@@ -2,6 +2,7 @@
 
 namespace taskForce\city\infrastructure;
 
+use taskForce\city\domain\CitiesList;
 use taskForce\city\domain\CitiesRepository;
 use taskForce\city\domain\City;
 use frontend\models\City as modelCity;
@@ -30,14 +31,20 @@ class ArCitiesRepository implements CitiesRepository
     public function getCityById(int $id): City
     {
         $city = modelCity::findOne($id);
+        if (!$city) {
+            throw CityNotFoundException();
+        }
 
         return $this->builder->build($city);
     }
 
-    public function getAllCities(): array
+    /**
+     * @return CitiesList
+     */
+    public function getAllCities(): CitiesList
     {
         $cities = modelCity::find()->all();
-        $citiesList = [];
+        $citiesList = new CitiesList();
         foreach ($cities as $city) {
             $citiesList[] = $this->builder->build($city);
         }

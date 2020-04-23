@@ -4,6 +4,7 @@ namespace taskForce\task\application;
 
 use taskForce\share\StringHelper;
 use taskForce\task\domain\Task;
+use taskForce\task\domain\TasksList;
 use taskForce\task\domain\TasksRepository;
 
 class ManagerTask
@@ -32,18 +33,18 @@ class ManagerTask
     }
 
     /**
-     * @return array
+     * @return TasksList
      */
-    public function getAllTasks(): array
+    public function getAllTasks(): TasksList
     {
         return $this->task->getAll();
     }
 
     /**
      * @param array|null $filters
-     * @return array
+     * @return TasksList
      */
-    public function getTasksByFilter(?array $filters): array
+    public function getTasksByFilter(array $filters = null): TasksList
     {
         return $this->task->getByFilter($filters);
     }
@@ -55,6 +56,7 @@ class ManagerTask
     public function getFormatCountTasksByExecutorId(int $id): string
     {
         $countTasks = $this->task->getCountTasksByExecutorId($id);
+
         return StringHelper::declensionNum($countTasks,['%d задание','%d задания','%d заданий']);
     }
 
@@ -65,6 +67,7 @@ class ManagerTask
     public function getFormatCountTasksByCustomerId(int $id): string
     {
         $countTasks = $this->task->getCountTasksByCustomerId($id);
+
         return StringHelper::declensionNum($countTasks,['%d задание','%d задания','%d заданий']);
     }
 

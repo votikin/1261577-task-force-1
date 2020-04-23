@@ -7,8 +7,9 @@ use frontend\models\Role;
 use frontend\models\Task;
 use frontend\models\User as modelUser;
 use taskForce\user\domain\Contact;
-use taskForce\user\domain\NotFoundUserException;
+use taskForce\user\domain\UserNotFoundException;
 use taskForce\user\domain\User;
+use taskForce\user\domain\UsersList;
 use taskForce\user\domain\UsersRepository;
 use taskForce\user\infrastructure\builder\ArUserBuilder;
 use taskForce\user\infrastructure\filters\ArUserFilter;
@@ -29,11 +30,14 @@ class ArUsersRepository implements UsersRepository
         $this->builder = $builder;
     }
 
-    public function getAllExecutors(): array
+    /**
+     * @return UsersList
+     */
+    public function getAllExecutors(): UsersList
     {
         $role = Role::findOne(['name' => Role::EXECUTOR_ROLE]);
         $users = modelUser::find() ->where(['role_id' => $role->id])->all();
-        $usersList = [];
+        $usersList = new UsersList();
         foreach ($users as $user) {
             $usersList[] = $this->builder->build($user);
         }
@@ -41,18 +45,26 @@ class ArUsersRepository implements UsersRepository
         return $usersList;
     }
 
+    /**
+     * @param int $id
+     * @return User
+     * @throws UserNotFoundException
+     */
     public function getExecutorById(int $id): User
     {
         $role = Role::findOne(['name' => Role::EXECUTOR_ROLE]);
         $user = modelUser::findOne(['role_id' => $role->id,'id' => $id]);
         if($user === null) {
-            throw new NotFoundUserException();
+            throw new UserNotFoundException();
         }
         return $this->builder->build($user,true);
     }
 
-
-    public function getExecutorsByFilter(?array $filters): array
+    /**
+     * @param array|null $filters
+     * @return UsersList
+     */
+    public function getExecutorsByFilter(array $filters = null): UsersList
     {
         $role = Role::findOne(['name' => Role::EXECUTOR_ROLE]);
         $users = modelUser::find()->orderBy('created_at DESC')->where(['role_id' => $role->id]);
@@ -61,7 +73,7 @@ class ArUsersRepository implements UsersRepository
             $users = $filter->apply($filters);
         }
         $users = $users->all();
-        $usersList = [];
+        $usersList = new UsersList();
         foreach ($users as $user) {
             $usersList[] = $this->builder->build($user);
         }
@@ -69,7 +81,10 @@ class ArUsersRepository implements UsersRepository
         return $usersList;
     }
 
-
+    /**
+     * @param int $id
+     * @return User
+     */
     public function getCustomerByTaskId(int $id): User
     {
         $task = Task::findOne($id);
@@ -78,6 +93,10 @@ class ArUsersRepository implements UsersRepository
         return $this->builder->build($user);
     }
 
+    /**
+     * @param int $id
+     * @return User
+     */
     public function getAuthorByReviewId(int $id): User
     {
         $review = Review::findOne($id);
@@ -87,6 +106,10 @@ class ArUsersRepository implements UsersRepository
         return $this->builder->build($user);
     }
 
+    /**
+     * @param User $user
+     * @return bool
+     */
     public function createNewUser(User $user): bool
     {
         $newUser = new modelUser();
@@ -99,6 +122,9 @@ class ArUsersRepository implements UsersRepository
         return $newUser->save();
     }
 
+    /**
+     * @return array
+     */
     public function getAllUsers(): array
     {
         $users = modelUser::find()->all();

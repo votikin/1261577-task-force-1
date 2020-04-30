@@ -17,7 +17,7 @@ use frontend\models\TaskSearchModel;
 
 //TODO Поменять адрес задания, наверное, там должн быть city_id
 
-class TasksController extends Controller
+class TasksController extends SecuredController
 {
     /**
      * @var ManagerUser

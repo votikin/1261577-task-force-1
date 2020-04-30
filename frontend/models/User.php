@@ -5,6 +5,7 @@ namespace frontend\models;
 use Yii;
 use \yii\db\ActiveRecord;
 use \yii\db\ActiveQuery;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "user".
@@ -40,7 +41,7 @@ use \yii\db\ActiveQuery;
  * @property UserCategory[] $userCategories
  * @property UserSubscription[] $userSubscriptions
  */
-class User extends ActiveRecord
+class User extends ActiveRecord implements IdentityInterface
 {
     private $_tasksCount;
     private $_customerTasksCount;
@@ -239,5 +240,50 @@ class User extends ActiveRecord
         }
 
         return $this->_customerTasksCount;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function findIdentity($id)
+    {
+        return self::findOne($id);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        // TODO: Implement findIdentityByAccessToken() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getId()
+    {
+        return $this->getPrimaryKey();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAuthKey()
+    {
+        // TODO: Implement getAuthKey() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateAuthKey($authKey)
+    {
+        // TODO: Implement validateAuthKey() method.
+    }
+
+    public function validatePassword($password)
+    {
+        return \Yii::$app->security->validatePassword($password, $this->password);
     }
 }

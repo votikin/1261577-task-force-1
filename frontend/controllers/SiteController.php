@@ -74,7 +74,9 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+//        return $this->redirect(Yii::$app->getHomeUrl());
+        return $this->goHome();
+//        return $this->render('index');
     }
 
     /**

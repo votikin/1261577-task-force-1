@@ -1,4 +1,9 @@
 <?php
+
+use yii\helpers\Url;
+
+$logoutUrl = Url::to(['logout/']);
+$currentUser = Yii::$app->user->identity->name;
 ?>
 <div class="header__town">
     <select class="multiple-select input town-select" size="1" name="town[]">
@@ -32,7 +37,7 @@
              alt="Аватар пользователя">
     </a>
     <span class="header__account-name">
-                     Василий
+                     <?= $currentUser; ?>
                  </span>
 </div>
 <div class="account__pop-up">
@@ -44,7 +49,7 @@
             <a href="#">Настройки</a>
         </li>
         <li>
-            <a href="#">Выход</a>
+            <a href="<?= $logoutUrl; ?>">Выход</a>
         </li>
     </ul>
 </div>

@@ -76,4 +76,8 @@ class ManagerUser
         return $this->user->createNewUser($user);
     }
 
+    public function getUserById(int $id): User
+    {
+        return $this->user->getUserById($id);
+    }
 }

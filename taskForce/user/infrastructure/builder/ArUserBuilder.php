@@ -35,7 +35,7 @@ class ArUserBuilder
         $user->detail = $detail;
         $user->cityId = $model->city_id;
         if($detailView === true) {
-            $contacts = new Contact($model->phone, $model->skype, $model->email);
+            $contacts = new Contact($model->email, $model->phone, $model->skype);
             $user->contacts = $contacts;
         }
 

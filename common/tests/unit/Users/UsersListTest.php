@@ -148,6 +148,10 @@ class UsersListTest extends Unit
         $this->assertCount(21,$users);
     }
 
-
+    public function testGetUserById()
+    {
+        $user = $this->users->getUserById(3);
+        $this->assertEquals('bogdan11@kulikova.net',$user->contacts->email);
+    }
 
 }

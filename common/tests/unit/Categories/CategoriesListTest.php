@@ -8,7 +8,6 @@ use common\fixtures\TaskFixture;
 use common\fixtures\UserCategoryFixture;
 use common\fixtures\UserFixture;
 use taskForce\category\domain\CategoriesRepository;
-use taskForce\category\domain\Category;
 
 class CategoriesListTest extends Unit
 {

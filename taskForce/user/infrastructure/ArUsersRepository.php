@@ -135,4 +135,13 @@ class ArUsersRepository implements UsersRepository
 
         return $usersList;
     }
+
+    public function getUserById(int $id): User
+    {
+        $user = modelUser::findOne($id);
+        if($user === null) {
+            throw new UserNotFoundException();
+        }
+        return $this->builder->build($user,true);
+    }
 }

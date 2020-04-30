@@ -12,10 +12,9 @@ use taskForce\user\application\ManagerUser;
 use taskForce\user\domain\User;
 use taskForce\user\domain\UsersList;
 use Yii;
-use yii\web\Controller;
 use frontend\models\UserSearchModel;
 
-class UsersController extends Controller
+class UsersController extends SecuredController
 {
     /**
      * @var ManagerCategory
@@ -108,5 +107,12 @@ class UsersController extends Controller
             'reviewsData' => $reviewsData,
         ]);
     }
-}
 
+    public function actionLogout()
+    {
+        \Yii::$app->user->logout();
+
+        return $this->goHome();
+    }
+
+}

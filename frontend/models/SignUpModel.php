@@ -9,8 +9,6 @@ use frontend\models\User as modelUser;
 
 class SignUpModel extends ActiveRecord
 {
-
-
     public $email;
     public $userName;
     public $password;
@@ -49,7 +47,8 @@ class SignUpModel extends ActiveRecord
     {
         $user = new User();
         $user->name = $this->userName;
-        $user->setPassword($this->password);
+        $hash = password_hash($this->password, PASSWORD_DEFAULT);
+        $user->setPassword($hash);
         $user->cityId = $this->city;
         $contacts = new Contact($this->email);
         $user->contacts = $contacts;

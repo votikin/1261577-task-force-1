@@ -4,7 +4,9 @@ namespace taskForce\category\domain;
 
 interface CategoriesRepository
 {
-    public function getAll();
+    public function getAll(): CategoriesList;
 
-    public function getAllArray();
+    public function getCategoryByTaskId(int $id): Category;
+
+    public function getCategoriesByUserId(int $id): CategoriesList;
 }

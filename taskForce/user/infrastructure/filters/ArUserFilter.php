@@ -5,6 +5,7 @@ namespace taskForce\user\infrastructure\filters;
 use frontend\models\UserCategory;
 use yii\db\ActiveQuery;
 
+//TODO реализовать фильтры сейчас свободен, сейчас онлайн, в избранном!
 class ArUserFilter
 {
     /**
@@ -21,6 +22,10 @@ class ArUserFilter
         $this->queryBuilder = $queryBuilder;
     }
 
+    /**
+     * @param array $filters
+     * @return ActiveQuery
+     */
     public function apply(array $filters)
     {
             foreach ($filters as $paramName => $value) {
@@ -32,21 +37,17 @@ class ArUserFilter
         return $this->queryBuilder;
     }
 
+    /**
+     * @param $value
+     */
     private function name($value)
     {
         $this->queryBuilder->andWhere(['like','name',$value]);
     }
 
-    private function city($value)
-    {
-        $this->queryBuilder->andWhere(['city_id' => $value]);
-    }
-
-    private function role($value)
-    {
-        $this->queryBuilder->andWhere(['role' => $value]);
-    }
-
+    /**
+     * @param $value
+     */
     private function categories($value)
     {
         if($value !== "") {
@@ -56,6 +57,9 @@ class ArUserFilter
         }
     }
 
+    /**
+     * @param $value
+     */
     private function reviews($value)
     {
         if($value === "1") {

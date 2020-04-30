@@ -2,79 +2,146 @@
 
 namespace taskForce\user\infrastructure;
 
-<<<<<<< HEAD
 use frontend\models\Review;
+use frontend\models\Role;
 use frontend\models\Task;
-use frontend\models\User;
+use frontend\models\User as modelUser;
+use taskForce\user\domain\Contact;
+use taskForce\user\domain\UserNotFoundException;
+use taskForce\user\domain\User;
+use taskForce\user\domain\UsersList;
 use taskForce\user\domain\UsersRepository;
+use taskForce\user\infrastructure\builder\ArUserBuilder;
 use taskForce\user\infrastructure\filters\ArUserFilter;
-use yii\web\NotFoundHttpException;
-=======
-use frontend\models\User;
-use taskForce\user\domain\UsersRepository;
-use taskForce\user\infrastructure\filters\ArFilterUsers;
->>>>>>> b65ce07df64321bec9cfc7162e598ae9b70d5fc4
 
 class ArUsersRepository implements UsersRepository
 {
-    public function getById(int $id)
+    /**
+     * @var ArUserBuilder
+     */
+    private $builder;
+
+    /**
+     * ArUsersRepository constructor.
+     * @param ArUserBuilder $builder
+     */
+    public function __construct(ArUserBuilder $builder)
     {
-<<<<<<< HEAD
-        $user = User::findOne($id);
-        if($user === null) {
-            throw new NotFoundHttpException("Такого пользователя не существует");
+        $this->builder = $builder;
+    }
+
+    /**
+     * @return UsersList
+     */
+    public function getAllExecutors(): UsersList
+    {
+        $role = Role::findOne(['name' => Role::EXECUTOR_ROLE]);
+        $users = modelUser::find() ->where(['role_id' => $role->id])->all();
+        $usersList = new UsersList();
+        foreach ($users as $user) {
+            $usersList[] = $this->builder->build($user);
         }
 
-        return $user;
-=======
-        $user = User::find()->where(['id' => $id]);
-
-        return $id;
->>>>>>> b65ce07df64321bec9cfc7162e598ae9b70d5fc4
+        return $usersList;
     }
 
-    public function getAll()
+    /**
+     * @param int $id
+     * @return User
+     * @throws UserNotFoundException
+     */
+    public function getExecutorById(int $id): User
     {
-        return User::find()->all();
+        $role = Role::findOne(['name' => Role::EXECUTOR_ROLE]);
+        $user = modelUser::findOne(['role_id' => $role->id,'id' => $id]);
+        if($user === null) {
+            throw new UserNotFoundException();
+        }
+        return $this->builder->build($user,true);
     }
 
-<<<<<<< HEAD
-    public function getByFilter(?array $filters)
+    /**
+     * @param array|null $filters
+     * @return UsersList
+     */
+    public function getExecutorsByFilter(array $filters = null): UsersList
     {
-        $users = User::find()->orderBy('created_at DESC');
+        $role = Role::findOne(['name' => Role::EXECUTOR_ROLE]);
+        $users = modelUser::find()->orderBy('created_at DESC')->where(['role_id' => $role->id]);
         if(!is_null($filters)) {
             $filter = new ArUserFilter($users);
             $users = $filter->apply($filters);
         }
-
-        return $users->all();
-    }
-
-    public function getUserCategories(object $user)
-    {
-        $userCategories = [];
-        foreach ($user->categories as $item) {
-            $userCategories[] = $item->name;
+        $users = $users->all();
+        $usersList = new UsersList();
+        foreach ($users as $user) {
+            $usersList[] = $this->builder->build($user);
         }
 
-        return $userCategories;
+        return $usersList;
     }
 
-    public function getCountUserReviews(int $id)
+    /**
+     * @param int $id
+     * @return User
+     */
+    public function getCustomerByTaskId(int $id): User
     {
-        return Review::find()
-                ->joinWith('task')
-                ->where([Task::tableName().".executor_id" => $id])
-                ->count();
-    }
-=======
-    public function getByFilter(array $filters)
-    {
-        $users = User::find();
-        $filter = new ArFilterUsers($users);
-        $users = $filter->apply($filters);
+        $task = Task::findOne($id);
+        $user = modelUser::findOne($task->user_id);
 
-        return $users->all();
+        return $this->builder->build($user);
     }
->>>>>>> b65ce07df64321bec9cfc7162e598ae9b70d5fc4
+
+    /**
+     * @param int $id
+     * @return User
+     */
+    public function getAuthorByReviewId(int $id): User
+    {
+        $review = Review::findOne($id);
+        $task = Task::findOne($review->task_id);
+        $user = modelUser::findOne($task->user_id);
+
+        return $this->builder->build($user);
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function createNewUser(User $user): bool
+    {
+        $newUser = new modelUser();
+        $contact = new Contact($user->contacts->email);
+        $newUser->email = $contact->email;
+        $newUser->name = $user->name;
+        $newUser->password = $user->getPassword();
+        $newUser->city_id = $user->cityId;
+
+        return $newUser->save();
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllUsers(): array
+    {
+        $users = modelUser::find()->all();
+        $usersList = [];
+        foreach ($users as $user) {
+            $usersList[] = $this->builder->build($user);
+        }
+
+        return $usersList;
+    }
+
+    public function getUserById(int $id): User
+    {
+        $user = modelUser::findOne($id);
+        if($user === null) {
+            throw new UserNotFoundException();
+        }
+        return $this->builder->build($user,true);
+    }
 }

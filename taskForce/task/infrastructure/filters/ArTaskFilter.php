@@ -22,6 +22,10 @@ class ArTaskFilter
         $this->queryBuilder = $queryBuilder;
     }
 
+    /**
+     * @param array $filters
+     * @return ActiveQuery
+     */
     public function apply(array $filters)
     {
         foreach ($filters as $paramName => $value) {
@@ -33,6 +37,9 @@ class ArTaskFilter
         return $this->queryBuilder;
     }
 
+    /**
+     * @param $value
+     */
     private function categories($value)
     {
         if($value !== "") {
@@ -40,6 +47,9 @@ class ArTaskFilter
         }
     }
 
+    /**
+     * @param $value
+     */
     private function responses($value)
     {
         if($value === "1") {
@@ -47,6 +57,9 @@ class ArTaskFilter
         }
     }
 
+    /**
+     * @param $value
+     */
     private function name($value)
     {
         $this->queryBuilder->andWhere(['or',
@@ -55,9 +68,13 @@ class ArTaskFilter
         ]);
     }
 
+    /**
+     * @param $value
+     * @throws \Exception
+     */
     private function period($value)
     {
-        if($value !== "0") {
+        if($value === '1' || $value === '2' || $value === '3') {
             $currentTime = new \DateTime();
             $needTime = new \DateTime();
             switch ($value) {

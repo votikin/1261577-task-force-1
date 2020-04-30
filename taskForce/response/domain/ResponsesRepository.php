@@ -4,5 +4,5 @@ namespace taskForce\response\domain;
 
 interface ResponsesRepository
 {
-    public function getByTaskId(int $id);
+    public function getByTaskId(int $id): ResponsesList;
 }

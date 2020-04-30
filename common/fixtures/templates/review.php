@@ -13,4 +13,5 @@ return [
     'description' => $faker->realText(100),
     'estimate' => $faker->numberBetween(1,5),
     'task_id' => $faker->numberBetween(1,$countTask),
+    'created_at' => $faker->dateTimeBetween('-1 years','now')->format("Y-m-d H:i:s"),
 ];

@@ -10,6 +10,7 @@ use frontend\models\TaskStatus;
 use frontend\models\User;
 
 $faker->addProvider(new Faker\Provider\ru_RU\Text($faker));
+$faker->addProvider(new Faker\Provider\ru_RU\Address($faker));
 $categoryCount = Category::find()->count();
 $cityCount = City::find()->count();
 $userCount = User::find()->count();
@@ -18,8 +19,12 @@ $status = TaskStatus::findOne([TaskStatus::tableName().".name" => TaskStatus::NA
 return [
     'short' => $faker->realText(30),
     'description' => $faker->realText(100),
+    'address' => $faker->address,
     'budget' => $faker->numberBetween(500,5000),
     'deadline' => $faker->dateTimeBetween('now','+1 years')->format("Y-m-d H:i:s"),
+    'latitude' => $faker->latitude,
+    'longitude' => $faker->longitude,
+    'updated_at' => $faker->dateTimeBetween('-1 years','now')->format("Y-m-d H:i:s"),
     'category_id' => $faker->numberBetween(1,$categoryCount),
     'city_id' => $faker->numberBetween(1,$cityCount),
     'user_id' => $faker->numberBetween(1,$userCount),

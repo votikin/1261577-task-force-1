@@ -11,15 +11,15 @@ $this->title = 'Tasks';
     <div class="new-task__wrapper">
         <h1>Новые задания</h1>
         <?php foreach ($tasksData as $item): ?>
-        <?php $taskUrl = Url::home(true)."tasks/view/".$item['id'] ?>
+            <?php $taskUrl = Url::to(['tasks/view', 'id' => $item['id']]); ?>
             <div class="new-task__card">
                 <div class="new-task__title">
-                    <a href="<?=$taskUrl; ?>" class="link-regular"><h2><?= $item['short']; ?></h2></a>
-                    <a  class="new-task__type link-regular" href="#"><p><?= $item['category_name']; ?></p></a>
+                    <a href="<?= $taskUrl; ?>" class="link-regular"><h2><?= $item['short']; ?></h2></a>
+                    <a  class="new-task__type link-regular" href="#"><p><?= $item['category']->name; ?></p></a>
                 </div>
-                <div class="new-task__icon new-task__icon--<?= $item['category_icon']; ?>"></div>
+                <div class="new-task__icon new-task__icon--<?= $item['category']->icon; ?>"></div>
                 <p class="new-task_description"><?= $item['description']; ?></p>
-                <b class="new-task__price new-task__price--<?= $item['category_icon']; ?>"><?= $item['budget']; ?><b> ₽</b></b>
+                <b class="new-task__price new-task__price--<?= $item['category']->icon; ?>"><?= $item['budget']; ?><b> ₽</b></b>
                 <p class="new-task__place"><?= $item['address']; ?></p>
                 <span class="new-task__time"><?= $item['pastTime']; ?></span>
             </div>
@@ -55,15 +55,11 @@ $this->title = 'Tasks';
                     'class' => 'checkbox__input'
                 ]) ?>
             </fieldset>
-            <?= $form->field($taskSearchModel, 'period')->dropDownList([
-                    '0' => 'За всё время',
-                    '1' => 'За год',
-                    '2' => 'За месяц',
-                    '3' => 'За день',
-                ])->label('Период'); ?>
-        <?= $form->field($taskSearchModel,'name')
-            ->textInput(['class' => 'input-middle input'])
-            ->label('Поиск по названию',['class' => 'search-task__name']); ?>
+            <?= $form->field($taskSearchModel, 'period')->dropDownList($taskSearchModel::PERIOD_VALUES);
+            ?>
+        <?= $form->field($taskSearchModel,'name', ['labelOptions' => ['class' => 'search-task__name']])
+            ->textInput(['class' => 'input-middle input']);
+        ?>
             <button class="button" type="submit">Искать</button>
         <?php ActiveForm::end(); ?>
     </div>

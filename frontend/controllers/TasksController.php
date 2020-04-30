@@ -79,6 +79,7 @@ class TasksController extends SecuredController
          * @var $customer User
          * @var $responses ResponsesList
          */
+        
         $task = $this->managerTask->getById($id);
         $customer = $this->managerUser->getCustomerByTaskId($task->id);
         $customerData = [

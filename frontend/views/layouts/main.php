@@ -11,6 +11,7 @@ use frontend\components\widgets\UserHeader;
 
 $usersUrl = $userUrl = Url::to(['users/']);
 $tasksUrl = $taskUrl = Url::to(['tasks/']);
+$createUrl = Url::to(['create/']);
 
 AppAsset::register($this);
 ?>
@@ -69,7 +70,7 @@ AppAsset::register($this);
                         <a href="<?= $usersUrl; ?>">Исполнители</a>
                     </li>
                     <li class="site-list__item">
-                        <a href="#">Создать задание</a>
+                        <a href="<?= $createUrl; ?>">Создать задание</a>
                     </li>
                     <li class="site-list__item">
                         <a>Мой профиль</a>

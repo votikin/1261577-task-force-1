@@ -18,6 +18,7 @@ class Role extends \yii\db\ActiveRecord
      * {@inheritdoc}
      */
     const EXECUTOR_ROLE = 'executor';
+    const CUSTOMER_ROLE = 'customer';
 
     /**
      * {@inheritdoc}

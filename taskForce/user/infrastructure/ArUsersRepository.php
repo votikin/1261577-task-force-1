@@ -8,6 +8,7 @@ use frontend\models\Task;
 use frontend\models\User as modelUser;
 use taskForce\user\domain\Contact;
 use taskForce\user\domain\UserNotFoundException;
+use taskForce\user\domain\UserNotSaveException;
 use taskForce\user\domain\User;
 use taskForce\user\domain\UsersList;
 use taskForce\user\domain\UsersRepository;
@@ -109,6 +110,7 @@ class ArUsersRepository implements UsersRepository
     /**
      * @param User $user
      * @return bool
+     * @throws UserNotSaveException
      */
     public function createNewUser(User $user): bool
     {
@@ -118,8 +120,11 @@ class ArUsersRepository implements UsersRepository
         $newUser->name = $user->name;
         $newUser->password = $user->getPassword();
         $newUser->city_id = $user->cityId;
+        if(!$newUser->save()){
+            throw new UserNotSaveException();
+        }
 
-        return $newUser->save();
+        return true;
     }
 
     /**
@@ -142,6 +147,7 @@ class ArUsersRepository implements UsersRepository
         if($user === null) {
             throw new UserNotFoundException();
         }
+
         return $this->builder->build($user,true);
     }
 }

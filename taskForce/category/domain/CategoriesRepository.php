@@ -9,4 +9,6 @@ interface CategoriesRepository
     public function getCategoryByTaskId(int $id): Category;
 
     public function getCategoriesByUserId(int $id): CategoriesList;
+
+    public function getCategoryById(int $id): Category;
 }

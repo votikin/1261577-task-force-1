@@ -61,15 +61,15 @@ $this->title = 'Detail user';
         <div class="content-view__feedback-wrapper reviews-wrapper">
             <?php foreach ($reviewsData as $review): ?>
                 <div class="feedback-card__reviews">
-                    <p class="link-task link">Задание <a href="#" class="link-regular">«<?= $review['task']; ?>»</a></p>
+                    <p class="link-task link">Задание <a href="#" class="link-regular">«<?= $review['task']['short']; ?>»</a></p>
                     <div class="card__review">
-                        <a href="#"><img src="<?= $review['avatar']; ?>" width="55" height="54"></a>
+                        <a href="#"><img src="<?= $review['task']['author']['avatar']; ?>" width="55" height="54"></a>
                         <div class="feedback-card__reviews-content">
-                            <p class="link-name link"><a href="#" class="link-regular"><?= $review['name']; ?></a></p>
-                            <p class="review-text"><?= $review['review']['description']; ?></p>
+                            <p class="link-name link"><a href="#" class="link-regular"><?= $review['task']['author']['name']; ?></a></p>
+                            <p class="review-text"><?= $review['description']; ?></p>
                         </div>
                         <div class="card__review-rate">
-                            <p class="five-rate big-rate"><?= $review['review']['estimate']; ?><span></span></p>
+                            <p class="five-rate big-rate"><?= $review['estimate']; ?><span></span></p>
                         </div>
                     </div>
                 </div>

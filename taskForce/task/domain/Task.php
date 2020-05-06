@@ -3,10 +3,9 @@
 namespace taskForce\task\domain;
 
 use taskForce\category\domain\CategoriesList;
-use taskForce\category\domain\Category;
 use DateTime;
 use taskForce\share\StringHelper;
-use taskForce\user\domain\User;
+use taskForce\user\domain\UsersList;
 
 class Task
 {
@@ -51,14 +50,27 @@ class Task
     public $category;
 
     /**
-     * @var location
+     * @var Location
      */
     public $location;
 
     /**
-     * @var User
+     * @var UsersList
      */
     public $author;
+
+    /**
+     * @var ImageList
+     */
+    public $images;
+
+    /**
+     * Task constructor.
+     */
+    public function __construct()
+    {
+        $this->images = new ImageList();
+    }
 
     public function toArray()
     {
@@ -70,8 +82,10 @@ class Task
             'budget' => $this->budget,
             'deadline' => $this->deadline,
             'location' => $this->location,
-            'category' => $this->category,
+            'category' => $this->category->toArray(),
             'pastTime' => StringHelper::getPastTime($this->dateCreate),
+            'author' => $this->author->toArray(),
+            'images' => $this->images->toArray(),
         ];
     }
 }

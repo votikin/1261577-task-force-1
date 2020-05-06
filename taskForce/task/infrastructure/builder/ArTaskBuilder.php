@@ -3,8 +3,8 @@
 namespace taskForce\task\infrastructure\builder;
 
 use frontend\models\Task as modelTask;
-use frontend\models\User;
 use taskForce\category\infrastructure\builder\ArCategoryBuilder;
+use taskForce\task\domain\ImageList;
 use taskForce\task\domain\Location;
 use taskForce\task\domain\Task;
 use taskForce\user\infrastructure\builder\ArUserBuilder;
@@ -31,6 +31,12 @@ class ArTaskBuilder
         $task->category = $categoryBuilder->build($model->category);
         if($detailView === true) {
             $task->location = new Location($model->latitude, $model->longitude); //dto
+            $imageBuilder = new ArImageBuilder();
+            $imageList = new ImageList();
+            foreach ($model->taskImages as $image) {
+                $imageList[] = $imageBuilder->build($image);
+            }
+            $task->images = $imageList;
         }
 
         return $task;

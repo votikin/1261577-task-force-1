@@ -15,11 +15,11 @@ $this->title = 'Tasks';
             <div class="new-task__card">
                 <div class="new-task__title">
                     <a href="<?= $taskUrl; ?>" class="link-regular"><h2><?= $item['short']; ?></h2></a>
-                    <a  class="new-task__type link-regular" href="#"><p><?= $item['category']->name; ?></p></a>
+                    <a  class="new-task__type link-regular" href="#"><p><?= $item['category']['name']; ?></p></a>
                 </div>
-                <div class="new-task__icon new-task__icon--<?= $item['category']->icon; ?>"></div>
+                <div class="new-task__icon new-task__icon--<?= $item['category']['icon']; ?>"></div>
                 <p class="new-task_description"><?= $item['description']; ?></p>
-                <b class="new-task__price new-task__price--<?= $item['category']->icon; ?>"><?= $item['budget']; ?><b> ₽</b></b>
+                <b class="new-task__price new-task__price--<?= $item['category']['icon']; ?>"><?= $item['budget']; ?><b> ₽</b></b>
                 <p class="new-task__place"><?= $item['address']; ?></p>
                 <span class="new-task__time"><?= $item['pastTime']; ?></span>
             </div>

@@ -19,7 +19,7 @@ class Location
      * @param string $latitude
      * @param string $longitude
      */
-    public function __construct(string $latitude, string $longitude)
+    public function __construct(string $latitude = null, string $longitude = null)
     {
         $this->latitude = $latitude;
         $this->longitude = $longitude;

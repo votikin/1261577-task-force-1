@@ -3,6 +3,7 @@
 namespace taskForce\review\domain;
 
 use taskForce\task\domain\Task;
+use taskForce\task\domain\TasksList;
 
 class Review
 {
@@ -22,7 +23,7 @@ class Review
     public $estimate;
 
     /**
-     * @var Task
+     * @var TasksList
      */
     public $task;
 
@@ -31,6 +32,7 @@ class Review
         return [
             'description' => $this->description,
             'estimate' => $this->estimate,
+            'task' => $this->task->toArray(),
         ];
 
     }

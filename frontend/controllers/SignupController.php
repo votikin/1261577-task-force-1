@@ -9,7 +9,7 @@ use taskForce\user\application\ManagerUser;
 use yii\web\Controller;
 use Yii;
 
-class SignupController extends Controller
+class SignupController extends AnonimAccessController
 {
     /**
      * @var ManagerCity
@@ -35,14 +35,15 @@ class SignupController extends Controller
          */
         $model = new SignUpModel();
         $cities = $this->managerCity->getAllCities();
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->validate()) {
-                if ($this->managerUser->createNewUser($model->makeUser())) {
-                    return $this->redirect(Yii::$app->getHomeUrl());
-                }
-            }
-            $model->password = null;
+        $postData = Yii::$app->request->post();
+        if ($model->load($postData) && $model->validate()) {
+            $this->managerUser->createNewUser($model->makeUser());
+            $user = $model->getUser();
+            \Yii::$app->user->login($user);
+
+            return $this->goHome();
         }
+        $model->password = null;
 
         return $this->render('index',[
             'signUpModel' => $model,

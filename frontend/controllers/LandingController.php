@@ -4,10 +4,11 @@ namespace frontend\controllers;
 
 use frontend\models\LoginForm;
 use yii\bootstrap\ActiveForm;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 
-class LandingController extends Controller
+class LandingController extends AnonimAccessController
 {
     public function actionIndex()
     {

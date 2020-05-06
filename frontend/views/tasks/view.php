@@ -8,6 +8,8 @@
 
 $this->title = 'Detail task';
 //TODO отработать вложения, адрес
+//TODO я бы убрал таблицу роль из бд, добавил бы поле boolean в user
+//TODO работа с файлами, связанными с заданием и юзером (изображения)
 ?>
 
 <section class="content-view">
@@ -17,13 +19,13 @@ $this->title = 'Detail task';
                 <div class="content-view__headline">
                     <h1><?= $taskData['short']; ?></h1>
                     <span>Размещено в категории
-                                    <a href="#" class="link-regular"><?= $taskData['category']->name; ?></a>
+                                    <a href="#" class="link-regular"><?= $taskData['category']['name']; ?></a>
                                     <?= $taskData['pastTime']; ?></span>
                 </div>
-                <b class="new-task__price new-task__price--<?= $taskData['category']->icon; ?> content-view-price">
+                <b class="new-task__price new-task__price--<?= $taskData['category']['icon']; ?> content-view-price">
                     <?= $taskData['budget']; ?><b> ₽</b>
                 </b>
-                <div class="new-task__icon new-task__icon--<?= $taskData['category']->icon; ?> content-view-icon"></div>
+                <div class="new-task__icon new-task__icon--<?= $taskData['category']['icon']; ?> content-view-icon"></div>
             </div>
             <div class="content-view__description">
                 <h3 class="content-view__h3">Общее описание</h3>
@@ -31,14 +33,15 @@ $this->title = 'Detail task';
             </div>
             <div class="content-view__attach">
                 <h3 class="content-view__h3">Вложения</h3>
-                <a href="#">my_picture.jpeg</a>
-                <a href="#">agreement.docx</a>
+                <?php foreach ($taskData['images'] as $image): ?>
+                <a href="<?= $image['path']; ?>" target="_blank"><?= basename($image['path']); ?></a>
+                <?php endforeach; ?>
             </div>
             <div class="content-view__location">
                 <h3 class="content-view__h3">Расположение</h3>
                 <div class="content-view__location-wrapper">
                     <div class="content-view__map">
-                        <a href="#"><img src="./img/map.jpg" width="361" height="292"
+                        <a href="#"><img src="/img/map.jpg" width="361" height="292"
                                          alt="Москва, Новый арбат, 23 к. 1"></a>
                     </div>
                     <div class="content-view__address">
@@ -64,11 +67,11 @@ $this->title = 'Detail task';
             <?php foreach ($responsesData as $response): ?>
             <div class="content-view__feedback-card">
                 <div class="feedback-card__top">
-                    <a href="#"><img src="<?= $response['user']->avatar; ?>" width="55" height="55"></a>
+                    <a href="#"><img src="<?= $response['user']['avatar']; ?>" width="55" height="55"></a>
                     <div class="feedback-card__top--name">
-                        <p><a href="#" class="link-regular"><?= $response['user']->name; ?></a></p>
+                        <p><a href="#" class="link-regular"><?= $response['user']['name']; ?></a></p>
                         <span></span><span></span><span></span><span></span><span class="star-disabled"></span>
-                        <b><?= $response['user']->rating; ?></b>
+                        <b><?= $response['user']['rating']; ?></b>
                     </div>
                     <span class="new-task__time"><?= $response['pastTime']; ?></span>
                 </div>

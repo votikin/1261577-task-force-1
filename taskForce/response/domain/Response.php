@@ -5,6 +5,7 @@ namespace taskForce\response\domain;
 use DateTime;
 use taskForce\share\StringHelper;
 use taskForce\user\domain\User;
+use taskForce\user\domain\UsersList;
 
 class Response
 {
@@ -24,7 +25,7 @@ class Response
     public $dateCreate;
 
     /**
-     * @var User
+     * @var UsersList
      */
     public $user;
 
@@ -34,7 +35,7 @@ class Response
             'comment' => $this->comment,
             'price' => $this->price,
             'pastTime' => StringHelper::getPastTime($this->dateCreate),
-            'user' => $this->user,
+            'user' => $this->user->toArray(),
         ];
     }
 }

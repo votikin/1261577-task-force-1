@@ -66,4 +66,14 @@ class ArCategoriesRepository implements CategoriesRepository
 
         return $userCategories;
     }
+
+    public function getCategoryById(int $id): Category
+    {
+        $category = modelCategory::findOne($id);
+        if($category === null) {
+            throw CategoryNotFoundException();
+        }
+
+        return $this->builder->build($category);
+    }
 }

@@ -86,12 +86,22 @@ class TasksController extends SecuredController
             'user' => $customer->toArray(),
             'countTasks' => $this->managerTask->getFormatCountTasksByCustomerId($customer->id),
         ];
-        $responses = $this->managerResponse->getResponsesByTaskId($id);
+        $isExecutor = false;
+        $userId = Yii::$app->user->getId();
+        if(!$this->managerUser->isExecutor($userId)) {
+            $responses = $this->managerResponse->getResponsesByTaskId($id);
+        } else {
+            $responses = $this->managerResponse->getUserResponseToTask($userId, $task->id);
+            if(count($responses) !== 0) {
+                $isExecutor = true;
+            }
+        }
 
         return $this->render('view',[
             'taskData' => $task->toArray(),
             'customerData' => $customerData,
             'responsesData' => $responses->toArray(),
+            'isExecutor' => $isExecutor,
         ]);
     }
 }

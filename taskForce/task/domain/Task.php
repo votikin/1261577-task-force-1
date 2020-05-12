@@ -2,10 +2,10 @@
 
 namespace taskForce\task\domain;
 
-use taskForce\category\domain\CategoriesList;
 use DateTime;
+use taskForce\category\domain\Category;
 use taskForce\share\StringHelper;
-use taskForce\user\domain\UsersList;
+use taskForce\user\domain\User;
 
 class Task
 {
@@ -45,7 +45,7 @@ class Task
     public $dateCreate;
 
     /**
-     * @var CategoriesList
+     * @var Category
      */
     public $category;
 
@@ -55,7 +55,7 @@ class Task
     public $location;
 
     /**
-     * @var UsersList
+     * @var User
      */
     public $author;
 
@@ -70,6 +70,8 @@ class Task
     public function __construct()
     {
         $this->images = new ImageList();
+        $this->category = new Category();
+        $this->author = new User();
     }
 
     public function toArray()

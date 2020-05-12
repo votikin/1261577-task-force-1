@@ -67,6 +67,8 @@ class User
     public function __construct()
     {
         $this->contacts = new Contact();
+        $this->categories = new CategoriesList();
+        $this->detail = new Detail();
     }
 
 

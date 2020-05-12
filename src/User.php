@@ -7,8 +7,8 @@
     class User
     {
         //Roles
-        public const EXECUTOR_ROLE = "Executor";
-        public const CUSTOMER_ROLE = "Customer";
+        public const EXECUTOR_ROLE = "executor";
+        public const CUSTOMER_ROLE = "customer";
 
         private $userId;
         private $userRole;

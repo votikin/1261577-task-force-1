@@ -11,6 +11,7 @@ class ArImageBuilder
     {
         $image = new Image();
         $image->path = $model->path;
+        $image->task_id = $model->task_id;
 
         return $image;
     }

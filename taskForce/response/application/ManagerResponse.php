@@ -2,6 +2,7 @@
 
 namespace taskForce\response\application;
 
+use taskForce\response\domain\Response;
 use taskForce\response\domain\ResponsesList;
 use taskForce\response\domain\ResponsesRepository;
 
@@ -30,4 +31,8 @@ class ManagerResponse
         return $this->response->getByTaskId($id);
     }
 
+    public function getUserResponseToTask(int $user_id, int $task_id): ResponsesList
+    {
+        return $this->response->getUserResponseToTask($user_id, $task_id);
+    }
 }

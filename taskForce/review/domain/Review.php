@@ -3,7 +3,6 @@
 namespace taskForce\review\domain;
 
 use taskForce\task\domain\Task;
-use taskForce\task\domain\TasksList;
 
 class Review
 {
@@ -23,7 +22,7 @@ class Review
     public $estimate;
 
     /**
-     * @var TasksList
+     * @var Task
      */
     public $task;
 

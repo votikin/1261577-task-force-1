@@ -16,7 +16,7 @@ interface TasksRepository
 
     public function createNewTask(Task $task): Task;
 
-    public function removeTaskById(int $id): bool;
+    public function removeTaskById(int $id): void;
 
-    public function addTaskImageRows(Image $image): bool;
+    public function addTaskImageRows(Image $image): void ;
 }

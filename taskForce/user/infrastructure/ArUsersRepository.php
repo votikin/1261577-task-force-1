@@ -112,7 +112,7 @@ class ArUsersRepository implements UsersRepository
      * @return bool
      * @throws UserNotSaveException
      */
-    public function createNewUser(User $user): bool
+    public function createNewUser(User $user): User
     {
         $newUser = new modelUser();
         $contact = new Contact($user->contacts->email);
@@ -124,7 +124,7 @@ class ArUsersRepository implements UsersRepository
             throw new UserNotSaveException();
         }
 
-        return true;
+        return $this->builder->build($newUser);
     }
 
     /**
@@ -149,5 +149,19 @@ class ArUsersRepository implements UsersRepository
         }
 
         return $this->builder->build($user,true);
+    }
+
+    public function isExecutor(int $id): bool
+    {
+        $user = modelUser::findOne($id);
+        if($user === null) {
+            throw new UserNotFoundException();
+        }
+        $role = Role::findOne($user->role_id);
+        if($role->name === Role::CUSTOMER_ROLE) {
+            return false;
+        }
+
+        return true;
     }
 }

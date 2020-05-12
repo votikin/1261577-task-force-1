@@ -5,7 +5,6 @@ namespace taskForce\response\domain;
 use DateTime;
 use taskForce\share\StringHelper;
 use taskForce\user\domain\User;
-use taskForce\user\domain\UsersList;
 
 class Response
 {
@@ -25,9 +24,19 @@ class Response
     public $dateCreate;
 
     /**
-     * @var UsersList
+     * @var User
      */
     public $user;
+
+    /**
+     * Response constructor.
+     * @param User $user
+     */
+    public function __construct()
+    {
+        $this->user = new User();
+    }
+
 
     public function toArray()
     {

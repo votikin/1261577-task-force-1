@@ -51,10 +51,11 @@ class CreateController extends SecuredController
         if($model->load($postData) && $model->validate()) {
             $model->files = UploadedFile::getInstances($model, 'files');
             $task = $this->managerTask->createNewTask($model->makeNewTask());
-            if ($model->upload($task->id)) {
+            if($this->managerTask->attachImagesToTask($task->id,$model->files)) {
                 $this->goHome();
             } else {
                 $this->managerTask->removeTaskById($task->id);
+                $model->addError('files', 'Ошибка загрузки файлов, обратитесь к системному администратору.');
             }
         }
 

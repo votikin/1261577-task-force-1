@@ -13,7 +13,6 @@ use taskForce\task\domain\TasksRepository;
 use taskForce\task\infrastructure\builder\ArTaskBuilder;
 use taskForce\task\infrastructure\filters\ArTaskFilter;
 use taskForce\user\domain\TaskNotSaveException;
-use taskForce\task\domain\TaskNotDeleteException;
 use taskForce\task\domain\TaskImageNotCreateException;
 
 class ArTasksRepository implements TasksRepository
@@ -117,20 +116,12 @@ class ArTasksRepository implements TasksRepository
         return $this->builder->build($newTask);
     }
 
-    public function removeTaskById(int $id): bool
+    public function removeTaskById(int $id): void
     {
-        $task = modelTask::findOne($id);
-        if($task === null) {
-            throw new TaskNotFoundException();
-        }
-        if(!$task->delete()) {
-            throw new TaskNotDeleteException();
-        }
-
-        return true;
+        modelTask::deleteAll(['id' => $id]);
     }
 
-    public function addTaskImageRows(Image $image): bool
+    public function addTaskImageRows(Image $image): void
     {
         $taskImage = new TaskImage();
         $taskImage->path = $image->path;
@@ -138,7 +129,5 @@ class ArTasksRepository implements TasksRepository
         if(!$taskImage->save()) {
             throw new TaskImageNotCreateException();
         }
-
-        return true;
     }
 }

@@ -7,9 +7,12 @@ use taskForce\task\domain\Image;
 use taskForce\task\domain\Task;
 use taskForce\task\domain\TasksList;
 use taskForce\task\domain\TasksRepository;
+use yii\helpers\FileHelper;
+use yii\web\UploadedFile;
 
 class ManagerTask
 {
+    const IMAGES_DIR = '/img/tasks/';
     /**
      * @var TasksRepository
      */
@@ -81,14 +84,36 @@ class ManagerTask
         return $this->task->createNewTask($task);
     }
 
-    public function removeTaskById(int $id): bool
+    public function removeTaskById(int $id): void
     {
-        return $this->task->removeTaskById($id);
+        $this->task->removeTaskById($id);
     }
 
-    public function addTaskImageRows(Image $image): bool
+    public function attachImagesToTask(int $taskId, $files): bool
     {
-        return $this->task->addTaskImageRows($image);
-    }
+        /**
+         * @var $files UploadedFile[]
+         */
+        $dbPath = self::IMAGES_DIR . $taskId . '/';
+        $dir = \Yii::getAlias('@frontend/web' . $dbPath);
+        try {
+            if (!file_exists($dir)) {
+                FileHelper::createDirectory($dir);
+            }
+            foreach ($files as $file) {
+                $dbPathLocal = $dbPath;
+                $filePath = $file->baseName . '.' . $file->extension;
+                $dbPathLocal .= $filePath;
+                $fullPath = $dir . $filePath;
+                $file->saveAs($fullPath);
+                $image = new Image($dbPathLocal, $taskId);
+                $this->task->addTaskImageRows($image);
+            }
+        }
+        catch (\Exception $e) {
+            return false;
+        }
 
+        return true;
+    }
 }

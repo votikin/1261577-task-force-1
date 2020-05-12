@@ -2,26 +2,14 @@
 
 namespace frontend\models;
 
-use taskForce\category\application\ManagerCategory;
 use taskForce\task\application\ManagerTask;
 use taskForce\task\domain\Image;
-use taskForce\user\application\ManagerUser;
 use yii\db\ActiveRecord;
 use yii\web\UploadedFile;
 use taskForce\task\domain\Task;
 
 class TaskCreateModel extends ActiveRecord
 {
-    /**
-     * @var ManagerCategory
-     */
-    private $managerCategory;
-
-    /**
-     * @var ManagerUser
-     */
-    private $managerUser;
-
     /**
      * @var ManagerTask
      */
@@ -42,8 +30,6 @@ class TaskCreateModel extends ActiveRecord
 
     public function init()
     {
-        $this->managerCategory = \Yii::$container->get(ManagerCategory::class);
-        $this->managerUser = \Yii::$container->get(ManagerUser::class);
         $this->managerTask = \Yii::$container->get(ManagerTask::class);
         parent::init();
     }
@@ -81,39 +67,16 @@ class TaskCreateModel extends ActiveRecord
         ];
     }
 
-    public function upload(int $number)
-    {
-        if($this->validate()) {
-            $dbPath = '/img/tasks/' . $number . '/';
-            $path = $_SERVER['DOCUMENT_ROOT'] . $dbPath;
-            if (!mkdir($path, 0777, true)) {
-                return false;
-            }
-            foreach ($this->files as $file) {
-                $dbPathLocal = $dbPath;
-                $filePath = $file->baseName . '.' . $file->extension;
-                $dbPathLocal .= $filePath;
-                $fullPath = $path . $filePath;
-                $file->saveAs($fullPath);
-                $image = new Image($dbPathLocal, $number);
-                $this->managerTask->addTaskImageRows($image);
-            }
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public function makeNewTask()
     {
         $task = new Task();
         $task->shortName = $this->short;
         $task->description = $this->description;
-        $task->category = $this->managerCategory->getCategoryById($this->category_id);
+        $task->category->id = $this->category_id;
         $task->location = $this->location;
         $task->budget = $this->budget;
         $task->deadline = $this->deadline;
-        $task->author = $this->managerUser->getUserById(\Yii::$app->user->getId());
+        $task->author->id = \Yii::$app->user->getId();
         $task->images = $this->files;
 
         return $task;

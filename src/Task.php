@@ -70,7 +70,6 @@
 		}
 		public function setStatus(string $status)
         {
-            //Является ли бросание исключений в реализации класса "побочным действием"? Правильно ли так делать по стандартам?
             if($status === self::EXECUTE_TASK && $this->executorId === null) {
                 throw new UserException("Need choose executor for this task");
             }

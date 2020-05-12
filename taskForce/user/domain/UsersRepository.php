@@ -14,10 +14,12 @@ interface UsersRepository
 
     public function getAuthorByReviewId(int $id): User;
 
-    public function createNewUser(User $user): bool;
+    public function createNewUser(User $user): User;
 
     public function getAllUsers(): array;
 
     public function getUserById(int $id): User;
+
+    public function isExecutor(int $id): bool;
 
 }

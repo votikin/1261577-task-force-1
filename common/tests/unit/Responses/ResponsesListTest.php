@@ -4,6 +4,7 @@ namespace common\tests\Responses;
 
 use Codeception\Test\Unit;
 use common\fixtures\ResponseFixture;
+use common\fixtures\UserFixture;
 use taskForce\response\domain\ResponsesRepository;
 
 class ResponsesListTest extends Unit
@@ -31,6 +32,10 @@ class ResponsesListTest extends Unit
                 'class' => ResponseFixture::class,
                 'dataFile' => \Yii::$app->getBasePath() . '/fixtures/data/response.php'
             ],
+            'user' => [
+                'class' => UserFixture::class,
+                'dataFile' => \Yii::$app->getBasePath() . '/fixtures/data/user.php'
+            ],
         ];
     }
 
@@ -38,5 +43,11 @@ class ResponsesListTest extends Unit
     {
         $responses = $this->responses->getByTaskId(6);
         $this->assertCount(3,$responses);
+    }
+
+    public function testGetUserResponseToTask()
+    {
+        $response = $this->responses->getUserResponseToTask(2,4);
+        $this->assertNull($response->toArray());
     }
 }

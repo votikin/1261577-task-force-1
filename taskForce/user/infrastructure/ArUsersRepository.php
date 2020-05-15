@@ -164,4 +164,5 @@ class ArUsersRepository implements UsersRepository
 
         return true;
     }
+
 }

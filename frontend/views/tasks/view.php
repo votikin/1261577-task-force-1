@@ -9,6 +9,8 @@
 
 use frontend\components\widgets\ResponsesButtons;
 use frontend\models\TaskStatus;
+use frontend\components\widgets\StarsWidget;
+use yii\helpers\Url;
 
 $this->title = 'Detail task';
 $currentUserId = Yii::$app->user->getId();
@@ -24,12 +26,14 @@ $currentUserId = Yii::$app->user->getId();
         <h2>Отклики <span>(<?= count($responsesData); ?>)</span></h2>
         <div class="content-view__feedback-wrapper">
             <?php foreach ($responsesData as $response): ?>
+                <?php $userUrl = Url::to(['users/view', 'id' => $response['user']['id']]) ?>
                 <div class="content-view__feedback-card">
                     <div class="feedback-card__top">
-                        <a href="#"><img src="<?= $response['user']['avatar']; ?>" width="55" height="55"></a>
+                        <a href="<?= $userUrl; ?>"><img src="<?= $response['user']['avatar']; ?>" width="55" height="55"></a>
                         <div class="feedback-card__top--name">
-                            <p><a href="#" class="link-regular"><?= $response['user']['name']; ?></a></p>
-                            <span></span><span></span><span></span><span></span><span class="star-disabled"></span>
+                            <p><a href="<?= $userUrl; ?>" class="link-regular"><?= $response['user']['name']; ?></a></p>
+<!--                            <span></span><span></span><span></span><span></span><span class="star-disabled"></span>-->
+                            <?= StarsWidget::widget(['rating' => $response['user']['rating']]); ?>
                             <b><?= $response['user']['rating']; ?></b>
                         </div>
                         <span class="new-task__time"><?= $response['pastTime']; ?></span>

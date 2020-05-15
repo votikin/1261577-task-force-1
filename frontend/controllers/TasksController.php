@@ -48,6 +48,11 @@ class TasksController extends SecuredController
         parent::init();
     }
 
+    public function beforeAction($action) {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
+    }
+
     public function actionIndex()
     {
         /**
@@ -103,5 +108,20 @@ class TasksController extends SecuredController
             'responsesData' => $responses->toArray(),
             'isExecutor' => $isExecutor,
         ]);
+    }
+
+    public function actionRemoveResponse()
+    {
+        if(isset($_POST['paramId'])) {
+            $this->managerResponse->refuseResponse($_POST['paramId']);
+        }
+    }
+
+    public function actionSetExecutor()
+    {
+        if(isset($_POST['paramUser']) && isset($_POST['paramTask'])) {
+            $task = $this->managerTask->setExecutorForTask($_POST['paramUser'],$_POST['paramTask']);
+//            echo "user=".$_POST['paramUser']."   task=".$_POST['paramTask'];
+        }
     }
 }

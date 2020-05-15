@@ -14,6 +14,7 @@ use taskForce\task\infrastructure\builder\ArTaskBuilder;
 use taskForce\task\infrastructure\filters\ArTaskFilter;
 use taskForce\user\domain\TaskNotSaveException;
 use taskForce\task\domain\TaskImageNotCreateException;
+use taskForce\share\Exceptions\NotSaveException;
 
 class ArTasksRepository implements TasksRepository
 {
@@ -129,5 +130,20 @@ class ArTasksRepository implements TasksRepository
         if(!$taskImage->save()) {
             throw new TaskImageNotCreateException();
         }
+    }
+
+    public function setExecutorForTask(int $user_id, int $task_id): Task
+    {
+        $task = modelTask::findOne(['id' => $task_id]);
+        if($task === null) {
+            throw new TaskNotFoundException();
+        }
+        $task->executor_id = $user_id;
+        $task->status_id = TaskStatus::findOne(['name' => TaskStatus::NAME_STATUS_JOB])->id;
+        if (!$task->save()) {
+            throw new NotSaveException();
+        }
+
+        return $this->builder->build($task);
     }
 }

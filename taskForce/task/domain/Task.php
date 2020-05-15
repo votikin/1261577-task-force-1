@@ -65,6 +65,11 @@ class Task
     public $images;
 
     /**
+     * @var Status
+     */
+    public $status;
+
+    /**
      * Task constructor.
      */
     public function __construct()
@@ -72,6 +77,7 @@ class Task
         $this->images = new ImageList();
         $this->category = new Category();
         $this->author = new User();
+        $this->status = new Status();
     }
 
     public function toArray()
@@ -88,6 +94,7 @@ class Task
             'pastTime' => StringHelper::getPastTime($this->dateCreate),
             'author' => $this->author->toArray(),
             'images' => $this->images->toArray(),
+            'status' => $this->status->toArray(),
         ];
     }
 }

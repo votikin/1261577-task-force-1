@@ -7,4 +7,6 @@ interface ResponsesRepository
     public function getByTaskId(int $id): ResponsesList;
 
     public function getUserResponseToTask(int $user_id, int $task_id): ResponsesList;
+
+    public function refuseResponse(int $id): void;
 }

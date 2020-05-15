@@ -6,7 +6,9 @@ use Codeception\Test\Unit;
 use common\fixtures\CategoryFixture;
 use common\fixtures\ResponseFixture;
 use common\fixtures\TaskFixture;
+use common\fixtures\TaskStatusFixture;
 use common\fixtures\UserFixture;
+use frontend\models\TaskStatus;
 use taskForce\task\domain\TasksRepository;
 
 class TasksListTest extends Unit
@@ -40,6 +42,10 @@ class TasksListTest extends Unit
             'user' => [
                 'class' => UserFixture::class,
                 'dataFile' => \Yii::$app->getBasePath() . '/fixtures/data/user.php'
+            ],
+            'task_status' => [
+                'class' => TaskStatusFixture::class,
+                'dataFile' => \Yii::$app->getBasePath() . '/fixtures/data/task_status.php'
             ],
         ];
     }
@@ -101,5 +107,11 @@ class TasksListTest extends Unit
     {
         $countTasks = $this->tasks->getCountTasksByCustomerId(4);
         $this->assertEquals(5, $countTasks);
+    }
+
+    public function testSetExecutorForTask()
+    {
+        $task = $this->tasks->setExecutorForTask(5,1);
+        $this->assertEquals('61',$task->id);
     }
 }

@@ -7,6 +7,9 @@
  * @var $isExecutor bool
  */
 
+use frontend\components\widgets\ResponsesButtons;
+use frontend\models\TaskStatus;
+
 $this->title = 'Detail task';
 $currentUserId = Yii::$app->user->getId();
 
@@ -14,15 +17,6 @@ $currentUserId = Yii::$app->user->getId();
 //TODO я бы убрал таблицу роль из бд, добавил бы поле boolean в user
 //TODO работа с файлами, связанными с заданием и юзером (изображения)
 ?>
-
-<?php $this->beginBlock('responsesButtons'); ?>
-<div class="feedback-card__actions">
-    <a class="button__small-color request-button button"
-       type="button">Подтвердить</a>
-    <a class="button__small-color refusal-button button"
-       type="button">Отказать</a>
-</div>
-<?php $this->endBlock(); ?>
 
 <?php $this->beginBlock('responses'); ?>
 
@@ -44,8 +38,10 @@ $currentUserId = Yii::$app->user->getId();
                         <p><?= $response['comment']; ?></p>
                         <span><?= $response['price']; ?> ₽</span>
                     </div>
-                    <?php if ($currentUserId === $customerData['user']['id']): ?>
-                        <?= $this->blocks['responsesButtons']; ?>
+                    <?php if ($currentUserId === $customerData['user']['id'] &&
+                        $response['isDeleted'] == 0 &&
+                        $taskData['status']['name'] === TaskStatus::NAME_STATUS_NEW): ?>
+                        <?= ResponsesButtons::widget(['response' => $response, 'task' => $taskData['id']]) ?>
                     <?php endif; ?>
                 </div>
             <?php endforeach; ?>

@@ -18,6 +18,7 @@ class TaskStatus extends \yii\db\ActiveRecord
      * {@inheritdoc}
      */
     const NAME_STATUS_NEW = 'Новое';
+    const NAME_STATUS_JOB = 'В работе';
 
     /**
      * {@inheritdoc}

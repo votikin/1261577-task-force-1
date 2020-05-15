@@ -35,4 +35,9 @@ class ManagerResponse
     {
         return $this->response->getUserResponseToTask($user_id, $task_id);
     }
+
+    public function refuseResponse(int $id): void
+    {
+        $this->response->refuseResponse($id);
+    }
 }

@@ -9,6 +9,11 @@ use taskForce\user\domain\User;
 class Response
 {
     /**
+     * @var int
+     */
+    public $id;
+
+    /**
      * @var string
      */
     public $comment;
@@ -29,6 +34,11 @@ class Response
     public $user;
 
     /**
+     * @var bool
+     */
+    public $is_deleted;
+
+    /**
      * Response constructor.
      * @param User $user
      */
@@ -41,10 +51,12 @@ class Response
     public function toArray()
     {
         return [
+            'id' => $this->id,
             'comment' => $this->comment,
             'price' => $this->price,
             'pastTime' => StringHelper::getPastTime($this->dateCreate),
             'user' => $this->user->toArray(),
+            'isDeleted' => $this->is_deleted,
         ];
     }
 }

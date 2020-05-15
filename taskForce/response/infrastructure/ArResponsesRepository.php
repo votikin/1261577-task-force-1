@@ -53,4 +53,14 @@ class ArResponsesRepository implements ResponsesRepository
         return $responsesList;
     }
 
+    public function refuseResponse(int $id): void
+    {
+        $response = modelResponse::findOne($id);
+        if($response === null) {
+            throw new ResponseNotFoundException();
+        }
+        $response->is_deleted = 1;
+        $response->save();
+    }
+
 }

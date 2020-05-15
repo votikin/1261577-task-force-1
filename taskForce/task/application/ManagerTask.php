@@ -116,4 +116,9 @@ class ManagerTask
 
         return true;
     }
+
+    public function setExecutorForTask(int $user_id, int $task_id): Task
+    {
+        return $this->task->setExecutorForTask($user_id,$task_id);
+    }
 }

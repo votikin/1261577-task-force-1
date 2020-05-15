@@ -24,6 +24,7 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php $this->registerCsrfMetaTags() ?>
     <title><?=  Html::encode($this->title) ?></title>
+<!--    <script src="/js/jquery-3.5.1.min.js" type="text/javascript" ></script>-->
 
     <?php $this->head() ?>
 </head>
@@ -149,3 +150,4 @@ AppAsset::register($this);
 </body>
 </html>
 <?php $this->endPage() ?>
+

@@ -14,10 +14,12 @@ class ArResponseBuilder
     public function build(modelResponse $model): Response
     {
         $response = new Response();
+        $response->id = $model->id;
         $response->comment = $model->comment;
         $response->price = $model->price;
         $response->dateCreate = $model->created_at;
         $response->user = $model->user;
+        $response->is_deleted = $model->is_deleted;
 
         return $response;
     }

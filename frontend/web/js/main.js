@@ -56,3 +56,34 @@ if (starRating.length) {
     inputField.value = rating;
   });
 }
+
+$(document).ready(function () {
+  $('.refusal-button').on('click',function () {
+    $.ajax({
+      url: "/tasks/remove-response/",
+      type: "POST",
+      data: {
+        'paramId':$(this).data('id'),
+      },
+      success: function () {
+        location.reload();
+      }
+    })
+  })
+});
+
+$(document).ready(function () {
+  $('.request-button').on('click',function () {
+    $.ajax({
+      url: "/tasks/set-executor/",
+      type: "POST",
+      data: {
+        'paramUser':$(this).data('user'),
+        'paramTask':$(this).data('task'),
+      },
+      success: function () {
+        location.reload();
+      }
+    })
+  })
+});

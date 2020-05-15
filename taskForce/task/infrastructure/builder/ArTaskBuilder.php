@@ -21,6 +21,7 @@ class ArTaskBuilder
         $task = new Task();
         $categoryBuilder = new ArCategoryBuilder();
         $userBuilder = new ArUserBuilder();
+        $statusBuilder = new ArStatusBuilder();
         $task->author = $userBuilder->build($model->user);
         $task->id = $model->id;
         $task->shortName = $model->short;
@@ -29,6 +30,8 @@ class ArTaskBuilder
         $task->budget = $model->budget;
         $task->dateCreate = $model->created_at;
         $task->category = $categoryBuilder->build($model->category);
+        $task->status = $statusBuilder->build($model->status);
+
         if($detailView === true) {
             $task->location = new Location($model->latitude, $model->longitude); //dto
             $imageBuilder = new ArImageBuilder();

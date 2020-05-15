@@ -19,4 +19,6 @@ interface TasksRepository
     public function removeTaskById(int $id): void;
 
     public function addTaskImageRows(Image $image): void ;
+
+    public function setExecutorForTask(int $user_id, int $task_id): Task;
 }

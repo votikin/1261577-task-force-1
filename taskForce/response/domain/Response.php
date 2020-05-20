@@ -39,6 +39,11 @@ class Response
     public $is_deleted;
 
     /**
+     * @var int
+     */
+    public $taskId;
+
+    /**
      * Response constructor.
      * @param User $user
      */

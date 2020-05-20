@@ -11,6 +11,8 @@ use frontend\components\widgets\ResponsesButtons;
 use frontend\models\TaskStatus;
 use frontend\components\widgets\StarsWidget;
 use yii\helpers\Url;
+use yii\bootstrap\ActiveForm;
+use yii\bootstrap\Html;
 
 $this->title = 'Detail task';
 $currentUserId = Yii::$app->user->getId();
@@ -32,7 +34,6 @@ $currentUserId = Yii::$app->user->getId();
                         <a href="<?= $userUrl; ?>"><img src="<?= $response['user']['avatar']; ?>" width="55" height="55"></a>
                         <div class="feedback-card__top--name">
                             <p><a href="<?= $userUrl; ?>" class="link-regular"><?= $response['user']['name']; ?></a></p>
-<!--                            <span></span><span></span><span></span><span></span><span class="star-disabled"></span>-->
                             <?= StarsWidget::widget(['rating' => $response['user']['rating']]); ?>
                             <b><?= $response['user']['rating']; ?></b>
                         </div>
@@ -148,21 +149,26 @@ $currentUserId = Yii::$app->user->getId();
     </div>
 </section>
 
-<section class="modal response-form form-modal" id="response-form">
+<section class="response-form form-modal" id="response-form">
     <h2>Отклик на задание</h2>
-    <form action="#" method="post">
-        <p>
-            <label class="form-modal-description" for="response-payment">Ваша цена</label>
-            <input class="response-form-payment input input-middle input-money" type="text" name="response-payment" id="response-payment">
-        </p>
-        <p>
-            <label class="form-modal-description" for="response-comment">Комментарий</label>
-            <textarea class="input textarea" rows="4" id="response-comment" name="response-comment" placeholder="Place your text"></textarea>
-        </p>
-        <button class="button modal-button" type="submit">Отправить</button>
-    </form>
+    <?php $form = ActiveForm::begin([
+        'method' => 'POST',
+        'fieldConfig' => ['template' => "<p>{label}\n{input}\n{error}</p>",
+            'labelOptions' => ['class' => 'form-modal-description']],
+    ]); ?>
+    <?= $form->field($responseUserModel, 'price')
+        ->textInput(['class' => 'response-form-payment input input-middle input-money']); ?>
+    <?= $form->field($responseUserModel,'comment')
+        ->textarea([
+            'class' => 'input textarea',
+            'rows' => '4',
+            'placeholder' => 'Ваш комментарий',
+        ]); ?>
+    <?= Html::submitButton('Отправить', ['class' => 'button modal-button']) ?>
+    <?php ActiveForm::end(); ?>
     <button class="form-modal-close" type="button">Закрыть</button>
 </section>
+
 <section class="modal completion-form form-modal" id="complete-form">
     <h2>Завершение задания</h2>
     <p class="form-modal-description">Задание выполнено?</p>

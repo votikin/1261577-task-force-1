@@ -13,14 +13,14 @@ $this->title = 'Landing';
     'fieldConfig' => ['template' => "{label}\n{input}\n{error}"],
     'enableAjaxValidation' => true,
 ]); ?>
-<?=$form->field($loginForm,'email',['labelOptions' => ['class' => 'form-modal-description']])
+<?= $form->field($loginForm,'email',['labelOptions' => ['class' => 'form-modal-description']])
     ->input('email',array(
         'placeholder' => 'kumarm@mail.ru',
         'class' => 'enter-form-email input input-middle',
         'required' => true
     ));
 ?>
-<?=$form->field($loginForm,'password',['labelOptions' => ['class' => 'form-modal-description']])
+<?= $form->field($loginForm,'password',['labelOptions' => ['class' => 'form-modal-description']])
     ->passwordInput(array(
         'class' => 'enter-form-email input input-middle',
         'required' => true,

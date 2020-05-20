@@ -8,6 +8,7 @@ use taskForce\response\domain\ResponsesList;
 use taskForce\response\domain\ResponsesRepository;
 use taskForce\response\infrastructure\builder\ArResponseBuilder;
 use taskForce\response\domain\ResponseNotFoundException;
+use taskForce\share\Exceptions\NotSaveException;
 
 class ArResponsesRepository implements ResponsesRepository
 {
@@ -63,4 +64,25 @@ class ArResponsesRepository implements ResponsesRepository
         $response->save();
     }
 
+    public function addNewResponse(Response $response): void
+    {
+        $newResponse = new modelResponse();
+        $newResponse->price = $response->price;
+        $newResponse->comment = $response->comment;
+        $newResponse->user_id = $response->user->id;
+        $newResponse->task_id = $response->taskId;
+        if(!$newResponse->save()) {
+            throw new NotSaveException();
+        }
+    }
+
+    public function getResponseById(int $id): Response
+    {
+        $response = modelResponse::findOne($id);
+        if($response === null) {
+            throw new ResponseNotFoundException();
+        }
+
+        return $this->builder->build($response);
+    }
 }

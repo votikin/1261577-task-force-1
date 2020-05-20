@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use frontend\models\ResponseUserModel;
 use taskForce\category\application\ManagerCategory;
 use taskForce\category\domain\CategoriesList;
 use taskForce\response\application\ManagerResponse;
@@ -50,6 +51,7 @@ class TasksController extends SecuredController
 
     public function beforeAction($action) {
         $this->enableCsrfValidation = false;
+
         return parent::beforeAction($action);
     }
 
@@ -85,6 +87,10 @@ class TasksController extends SecuredController
          * @var $responses ResponsesList
          */
 
+        $responseUserModel = new ResponseUserModel();
+        if($responseUserModel->load(Yii::$app->request->post())){
+
+        }
         $task = $this->managerTask->getById($id);
         $customer = $this->managerUser->getCustomerByTaskId($task->id);
         $customerData = [
@@ -107,21 +113,31 @@ class TasksController extends SecuredController
             'customerData' => $customerData,
             'responsesData' => $responses->toArray(),
             'isExecutor' => $isExecutor,
+            'responseUserModel' => $responseUserModel,
         ]);
     }
 
     public function actionRemoveResponse()
     {
-        if(isset($_POST['paramId'])) {
-            $this->managerResponse->refuseResponse($_POST['paramId']);
+        $responseId = Yii::$app->request->post('responseId');
+        if(isset($responseId)) {
+            $response = $this->managerResponse->getResponseById($responseId);
+            $task = $this->managerTask->getById($response->taskId);
+            if (Yii::$app->user->getId() === $task->author->id) {
+                $this->managerResponse->refuseResponse($responseId);
+            }
         }
     }
 
     public function actionSetExecutor()
     {
-        if(isset($_POST['paramUser']) && isset($_POST['paramTask'])) {
-            $task = $this->managerTask->setExecutorForTask($_POST['paramUser'],$_POST['paramTask']);
-//            echo "user=".$_POST['paramUser']."   task=".$_POST['paramTask'];
+        $userId = Yii::$app->request->post('userId');
+        $taskId = Yii::$app->request->post('taskId');
+        if(isset($userId) && isset($taskId)) {
+            $task = $this->managerTask->getById($taskId);
+            if(Yii::$app->user->getId() === $task->author->id) {
+                $task = $this->managerTask->setExecutorForTask($userId, $taskId);
+            }
         }
     }
 }

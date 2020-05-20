@@ -8,6 +8,7 @@ class ResponsesButtons extends Widget
 {
     public $response;
     public $task;
+
     public function run()
     {
         return $this->render('responses-buttons',[

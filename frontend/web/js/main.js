@@ -58,12 +58,12 @@ if (starRating.length) {
 }
 
 $(document).ready(function () {
-  $('.refusal-button').on('click',function () {
+  $('.response-refusal-button').on('click',function () {
     $.ajax({
       url: "/tasks/remove-response/",
       type: "POST",
       data: {
-        'paramId':$(this).data('id'),
+        'responseId':$(this).data('id'),
       },
       success: function () {
         location.reload();
@@ -73,13 +73,13 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-  $('.request-button').on('click',function () {
+  $('.response-request-button').on('click',function () {
     $.ajax({
       url: "/tasks/set-executor/",
       type: "POST",
       data: {
-        'paramUser':$(this).data('user'),
-        'paramTask':$(this).data('task'),
+        'userId':$(this).data('user'),
+        'taskId':$(this).data('task'),
       },
       success: function () {
         location.reload();

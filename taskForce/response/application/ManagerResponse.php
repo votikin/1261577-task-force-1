@@ -40,4 +40,14 @@ class ManagerResponse
     {
         $this->response->refuseResponse($id);
     }
+
+    public function addNewResponse(Response $response):void
+    {
+        $this->response->addNewResponse($response);
+    }
+
+    public function getResponseById(int $id): Response
+    {
+        return $this->response->getResponseById($id);
+    }
 }

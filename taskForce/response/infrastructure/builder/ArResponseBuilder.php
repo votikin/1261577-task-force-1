@@ -20,6 +20,7 @@ class ArResponseBuilder
         $response->dateCreate = $model->created_at;
         $response->user = $model->user;
         $response->is_deleted = $model->is_deleted;
+        $response->taskId = $model->task_id;
 
         return $response;
     }

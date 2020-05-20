@@ -8,6 +8,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 
+//TODO модальное окно закрывается при неудаче
 class LandingController extends AnonimAccessController
 {
     public function actionIndex()
@@ -16,7 +17,7 @@ class LandingController extends AnonimAccessController
         $loginForm = new LoginForm();
         if (\Yii::$app->request->getIsPost()) {
             $loginForm->load(\Yii::$app->request->post());
-            if (\Yii::$app->request->isAjax && $loginForm->load(\Yii::$app->request->post())) {
+            if (\Yii::$app->request->isAjax) {
                 \Yii::$app->response->format = Response::FORMAT_JSON;
                 return ActiveForm::validate($loginForm);
             }

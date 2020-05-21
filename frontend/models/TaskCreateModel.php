@@ -4,9 +4,11 @@ namespace frontend\models;
 
 use taskForce\task\application\ManagerTask;
 use taskForce\task\domain\Image;
+use taskForce\user\domain\User;
 use yii\db\ActiveRecord;
 use yii\web\UploadedFile;
 use taskForce\task\domain\Task;
+use taskForce\category\domain\Category;
 
 class TaskCreateModel extends ActiveRecord
 {
@@ -72,11 +74,15 @@ class TaskCreateModel extends ActiveRecord
         $task = new Task();
         $task->shortName = $this->short;
         $task->description = $this->description;
-        $task->category->id = $this->category_id;
+        $category = new Category();
+        $category->id = $this->category_id;
+        $task->category = $category;
         $task->location = $this->location;
         $task->budget = $this->budget;
         $task->deadline = $this->deadline;
-        $task->author->id = \Yii::$app->user->getId();
+        $user = new User();
+        $user->id = \Yii::$app->user->getId();
+        $task->author = $user;
         $task->images = $this->files;
 
         return $task;

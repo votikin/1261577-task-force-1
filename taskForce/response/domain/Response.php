@@ -45,13 +45,25 @@ class Response
 
     /**
      * Response constructor.
-     * @param User $user
+     * @param int|null $id
+     * @param string|null $comment
+     * @param int|null $price
+     * @param DateTime|null $dateCreate
+     * @param User|null $user
+     * @param bool|null $is_deleted
+     * @param int|null $taskId
      */
-    public function __construct()
+    public function __construct(int $id = null, string $comment = null, int $price = null, DateTime $dateCreate = null,
+                                User $user = null, bool $is_deleted = null, int $taskId = null)
     {
-        $this->user = new User();
+        $this->id = $id;
+        $this->comment = $comment;
+        $this->price = $price;
+        $this->dateCreate = $dateCreate;
+        $this->user = $user;
+        $this->is_deleted = $is_deleted;
+        $this->taskId = $taskId;
     }
-
 
     public function toArray()
     {

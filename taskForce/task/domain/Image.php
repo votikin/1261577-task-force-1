@@ -16,8 +16,8 @@ class Image
 
     /**
      * Image constructor.
-     * @param string $path
-     * @param int $task_id
+     * @param string|null $path
+     * @param int|null $task_id
      */
     public function __construct(string $path = null, int $task_id = null)
     {

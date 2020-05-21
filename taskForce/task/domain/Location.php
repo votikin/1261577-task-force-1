@@ -16,14 +16,13 @@ class Location
 
     /**
      * Location constructor.
-     * @param string $latitude
-     * @param string $longitude
+     * @param string|null $latitude
+     * @param string|null $longitude
      */
     public function __construct(string $latitude = null, string $longitude = null)
     {
         $this->latitude = $latitude;
         $this->longitude = $longitude;
     }
-
 
 }

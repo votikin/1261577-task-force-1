@@ -21,6 +21,7 @@ class ArUserBuilder
         $user = new User();
         $categoryBuilder = new ArCategoryBuilder();
         $categoriesList = new CategoriesList();
+        $contacts = new Contact();
         foreach ($model->categories as $category) {
             $categoriesList[] = $categoryBuilder->build($category);
         }
@@ -35,9 +36,11 @@ class ArUserBuilder
         $user->detail = $detail;
         $user->cityId = $model->city_id;
         if($detailView === true) {
-            $contacts = new Contact($model->email, $model->phone, $model->skype);
-            $user->contacts = $contacts;
+            $contacts->email = $model->email;
+            $contacts->phone = $model->phone;
+            $contacts->skype = $model->skype;
         }
+        $user->contacts = $contacts;
 
         return $user;
     }

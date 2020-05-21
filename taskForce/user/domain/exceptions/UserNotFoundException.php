@@ -1,6 +1,6 @@
 <?php
 
-namespace taskForce\user\domain;
+namespace taskForce\user\domain\exceptions;
 
 use Exception;
 

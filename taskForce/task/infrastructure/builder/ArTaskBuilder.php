@@ -31,16 +31,18 @@ class ArTaskBuilder
         $task->dateCreate = $model->created_at;
         $task->category = $categoryBuilder->build($model->category);
         $task->status = $statusBuilder->build($model->status);
-
+        $location = new Location();
+        $imageList = new ImageList();
         if($detailView === true) {
-            $task->location = new Location($model->latitude, $model->longitude); //dto
+            $location->longitude = $model->longitude;
+            $location->latitude = $model->latitude;
             $imageBuilder = new ArImageBuilder();
-            $imageList = new ImageList();
             foreach ($model->taskImages as $image) {
                 $imageList[] = $imageBuilder->build($image);
             }
-            $task->images = $imageList;
         }
+        $task->location = $location;
+        $task->images = $imageList;
 
         return $task;
     }

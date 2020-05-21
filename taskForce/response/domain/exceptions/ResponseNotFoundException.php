@@ -1,6 +1,6 @@
 <?php
 
-namespace taskForce\response\domain;
+namespace taskForce\response\domain\exceptions;
 
 class ResponseNotFoundException extends \Exception
 {}

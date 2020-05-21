@@ -71,14 +71,38 @@ class Task
 
     /**
      * Task constructor.
+     * @param int|null $id
+     * @param string|null $shortName
+     * @param string|null $description
+     * @param string|null $address
+     * @param int|null $budget
+     * @param DateTime|null $deadline
+     * @param DateTime|null $dateCreate
+     * @param Category|null $category
+     * @param Location|null $location
+     * @param User|null $author
+     * @param ImageList|null $images
+     * @param Status|null $status
      */
-    public function __construct()
+    public function __construct(int $id = null, string $shortName = null, string $description = null,
+                                string $address = null, int $budget = null, DateTime $deadline = null,
+                                DateTime $dateCreate = null, Category $category = null, Location $location = null,
+                                User $author = null, ImageList $images = null, Status $status = null)
     {
-        $this->images = new ImageList();
-        $this->category = new Category();
-        $this->author = new User();
-        $this->status = new Status();
+        $this->id = $id;
+        $this->shortName = $shortName;
+        $this->description = $description;
+        $this->address = $address;
+        $this->budget = $budget;
+        $this->deadline = $deadline;
+        $this->dateCreate = $dateCreate;
+        $this->category = $category;
+        $this->location = $location;
+        $this->author = $author;
+        $this->images = $images;
+        $this->status = $status;
     }
+
 
     public function toArray()
     {

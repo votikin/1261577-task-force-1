@@ -7,7 +7,7 @@ use taskForce\response\domain\Response;
 use taskForce\response\domain\ResponsesList;
 use taskForce\response\domain\ResponsesRepository;
 use taskForce\response\infrastructure\builder\ArResponseBuilder;
-use taskForce\response\domain\ResponseNotFoundException;
+use taskForce\response\domain\exceptions\ResponseNotFoundException;
 use taskForce\share\Exceptions\NotSaveException;
 
 class ArResponsesRepository implements ResponsesRepository

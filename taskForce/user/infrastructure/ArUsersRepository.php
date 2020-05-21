@@ -6,9 +6,9 @@ use frontend\models\Review;
 use frontend\models\Role;
 use frontend\models\Task;
 use frontend\models\User as modelUser;
+use taskForce\share\Exceptions\NotSaveException;
 use taskForce\user\domain\Contact;
-use taskForce\user\domain\UserNotFoundException;
-use taskForce\user\domain\UserNotSaveException;
+use taskForce\user\domain\exceptions\UserNotFoundException;
 use taskForce\user\domain\User;
 use taskForce\user\domain\UsersList;
 use taskForce\user\domain\UsersRepository;
@@ -109,8 +109,8 @@ class ArUsersRepository implements UsersRepository
 
     /**
      * @param User $user
-     * @return bool
-     * @throws UserNotSaveException
+     * @return User
+     * @throws NotSaveException
      */
     public function createNewUser(User $user): User
     {
@@ -121,7 +121,7 @@ class ArUsersRepository implements UsersRepository
         $newUser->password = $user->getPassword();
         $newUser->city_id = $user->cityId;
         if(!$newUser->save()){
-            throw new UserNotSaveException();
+            throw new NotSaveException();
         }
 
         return $this->builder->build($newUser);

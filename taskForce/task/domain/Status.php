@@ -16,8 +16,8 @@ class Status
 
     /**
      * Status constructor.
-     * @param int $id
-     * @param string $name
+     * @param int|null $id
+     * @param string|null $name
      */
     public function __construct(int $id = null, string $name = null)
     {

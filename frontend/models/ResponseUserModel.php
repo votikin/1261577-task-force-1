@@ -4,6 +4,7 @@ namespace frontend\models;
 
 use yii\db\ActiveRecord;
 use taskForce\response\domain\Response;
+use taskForce\user\domain\User;
 
 class ResponseUserModel extends ActiveRecord
 {
@@ -30,7 +31,9 @@ class ResponseUserModel extends ActiveRecord
         $response = new Response();
         $response->price = $this->price;
         $response->comment = $this->comment;
-        $response->user->id = \Yii::$app->user->getId();
+        $user = new User();
+        $user->id = \Yii::$app->user->getId();
+        $response->user = $user;
         $response->taskId = $taskId;
 
         return $response;

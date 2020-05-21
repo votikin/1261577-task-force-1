@@ -2,7 +2,6 @@
 
 namespace  taskForce\task\domain;
 
-use taskForce\task\domain\Image;
 use taskForce\share\BaseList;
 
 class ImageList extends BaseList

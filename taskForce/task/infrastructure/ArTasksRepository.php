@@ -6,14 +6,12 @@ use frontend\models\Task as modelTask;
 use frontend\models\TaskImage;
 use frontend\models\TaskStatus;
 use taskForce\task\domain\Image;
-use taskForce\task\domain\TaskNotFoundException;
+use taskForce\task\domain\exceptions\TaskNotFoundException;
 use taskForce\task\domain\Task;
 use taskForce\task\domain\TasksList;
 use taskForce\task\domain\TasksRepository;
 use taskForce\task\infrastructure\builder\ArTaskBuilder;
 use taskForce\task\infrastructure\filters\ArTaskFilter;
-use taskForce\user\domain\TaskNotSaveException;
-use taskForce\task\domain\TaskImageNotCreateException;
 use taskForce\share\Exceptions\NotSaveException;
 
 class ArTasksRepository implements TasksRepository
@@ -100,6 +98,7 @@ class ArTasksRepository implements TasksRepository
         return modelTask::find()->where(['user_id' => $id])->count();
     }
 
+
     public function createNewTask(Task $task): Task
     {
         $newTask = new modelTask();
@@ -111,7 +110,7 @@ class ArTasksRepository implements TasksRepository
         $newTask->user_id = $task->author->id;
         $newTask->status_id = TaskStatus::findOne(['name' => TaskStatus::NAME_STATUS_NEW])->id;
         if(!$newTask->save()){
-            throw new TaskNotSaveException();
+            throw new NotSaveException();
         }
 
         return $this->builder->build($newTask);
@@ -128,7 +127,7 @@ class ArTasksRepository implements TasksRepository
         $taskImage->path = $image->path;
         $taskImage->task_id = $image->task_id;
         if(!$taskImage->save()) {
-            throw new TaskImageNotCreateException();
+            throw new NotSaveException();
         }
     }
 

@@ -3,7 +3,6 @@
 namespace frontend\models;
 
 use taskForce\task\application\ManagerTask;
-use taskForce\task\domain\Image;
 use taskForce\user\domain\User;
 use yii\db\ActiveRecord;
 use yii\web\UploadedFile;
@@ -82,7 +81,7 @@ class TaskCreateModel extends ActiveRecord
         $task->deadline = $this->deadline;
         $user = new User();
         $user->id = \Yii::$app->user->getId();
-        $task->author = $user;
+        $task->admin = $user;
         $task->images = $this->files;
 
         return $task;

@@ -13,6 +13,7 @@ use frontend\components\widgets\StarsWidget;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
+use frontend\models\CompleteTaskModel;
 
 $this->title = 'Detail task';
 $currentUserId = Yii::$app->user->getId();
@@ -164,7 +165,7 @@ $currentUserId = Yii::$app->user->getId();
             'rows' => '4',
             'placeholder' => 'Ваш комментарий',
         ]); ?>
-    <?= Html::submitButton('Отправить', ['class' => 'button modal-button']) ?>
+    <?= Html::submitButton('Отправить', ['class' => 'button modal-button response-form-button']) ?>
     <?php ActiveForm::end(); ?>
     <button class="form-modal-close" type="button">Закрыть</button>
 </section>
@@ -194,8 +195,19 @@ $currentUserId = Yii::$app->user->getId();
         <input type="hidden" name="rating" id="rating">
         <button class="button modal-button" type="submit">Отправить</button>
     </form>
+    <?php $completeForm = ActiveForm::begin([
+        'method' => 'POST',
+    ]); ?>
+    <?= $completeForm->field($completeTaskModel,'result')
+        ->radioList(CompleteTaskModel::RESULT_STATUS,[
+            'class' => 'completion-input',
+            'labelOptions' => ['class' => 'completion-label']
+        ]); ?>
+    <?php ActiveForm::end(); ?>
     <button class="form-modal-close" type="button">Закрыть</button>
 </section>
+
+
 <section class="modal form-modal refusal-form" id="refuse-form">
     <h2>Отказ от задания</h2>
     <p>

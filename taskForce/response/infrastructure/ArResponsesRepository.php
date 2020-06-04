@@ -66,13 +66,15 @@ class ArResponsesRepository implements ResponsesRepository
 
     public function addNewResponse(Response $response): void
     {
-        $newResponse = new modelResponse();
-        $newResponse->price = $response->price;
-        $newResponse->comment = $response->comment;
-        $newResponse->user_id = $response->user->id;
-        $newResponse->task_id = $response->taskId;
-        if(!$newResponse->save()) {
-            throw new NotSaveException();
+        if(!modelResponse::find()->where(['user_id'=>$response->user->id,'task_id'=>$response->taskId])->exists()) {
+            $newResponse = new modelResponse();
+            $newResponse->price = $response->price;
+            $newResponse->comment = $response->comment;
+            $newResponse->user_id = $response->user->id;
+            $newResponse->task_id = $response->taskId;
+            if (!$newResponse->save()) {
+                throw new NotSaveException();
+            }
         }
     }
 

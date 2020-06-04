@@ -87,3 +87,20 @@ $(document).ready(function () {
     })
   })
 });
+
+$(document).ready(function () {
+  $('.response-form-button').on('click',function () {
+  //   $.ajax({
+  //     url: "/tasks/set-executor/",
+  //     type: "POST",
+  //     data: {
+  //       'userId':$(this).data('user'),
+  //       'taskId':$(this).data('task'),
+  //     },
+  //     success: function () {
+  //       location.reload();
+  //     }
+  //   })
+    alert('H1');
+  })
+});

@@ -4,11 +4,8 @@ namespace frontend\controllers;
 
 use frontend\models\LoginForm;
 use yii\bootstrap\ActiveForm;
-use yii\filters\AccessControl;
-use yii\web\Controller;
 use yii\web\Response;
 
-//TODO модальное окно закрывается при неудаче
 class LandingController extends AnonimAccessController
 {
     public function actionIndex()

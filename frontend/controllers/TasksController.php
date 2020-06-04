@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use frontend\models\CompleteTaskModel;
 use frontend\models\ResponseUserModel;
 use taskForce\category\application\ManagerCategory;
 use taskForce\category\domain\CategoriesList;
@@ -87,9 +88,12 @@ class TasksController extends SecuredController
          * @var $responses ResponsesList
          */
 
+        $userId = Yii::$app->user->getId();
+        $completeTaskModel = new CompleteTaskModel();
         $responseUserModel = new ResponseUserModel();
-        if($responseUserModel->load(Yii::$app->request->post())){
-
+        if($responseUserModel->load(Yii::$app->request->post()) && $this->managerUser->isExecutor($userId)){
+            $this->managerResponse->addNewResponse($responseUserModel->makeNewResponse($id));
+            $this->refresh();
         }
         $task = $this->managerTask->getById($id);
         $customer = $this->managerUser->getCustomerByTaskId($task->id);
@@ -98,7 +102,7 @@ class TasksController extends SecuredController
             'countTasks' => $this->managerTask->getFormatCountTasksByCustomerId($customer->id),
         ];
         $isExecutor = false;
-        $userId = Yii::$app->user->getId();
+
         if(!$this->managerUser->isExecutor($userId)) {
             $responses = $this->managerResponse->getResponsesByTaskId($id);
         } else {
@@ -114,6 +118,7 @@ class TasksController extends SecuredController
             'responsesData' => $responses->toArray(),
             'isExecutor' => $isExecutor,
             'responseUserModel' => $responseUserModel,
+            'completeTaskModel' => $completeTaskModel,
         ]);
     }
 

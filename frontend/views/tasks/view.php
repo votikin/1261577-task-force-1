@@ -14,6 +14,7 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
 use frontend\models\CompleteTaskModel;
+use kartik\rating\StarRating;
 
 $this->title = 'Detail task';
 $currentUserId = Yii::$app->user->getId();
@@ -97,12 +98,18 @@ $currentUserId = Yii::$app->user->getId();
             </div>
         </div>
         <div class="content-view__action-buttons">
+            <?php if(in_array('RESPONSE_ACTION',$availableActions)): ?>
             <button class=" button button__big-color response-button open-modal"
                     type="button" data-for="response-form">Откликнуться</button>
+            <?php endif; ?>
+            <?php if(in_array('FAIL_ACTION',$availableActions)): ?>
             <button class="button button__big-color refusal-button open-modal"
                     type="button" data-for="refuse-form">Отказаться</button>
+            <?php endif; ?>
+            <?php if(in_array('COMPLETE_ACTION',$availableActions)): ?>
             <button class="button button__big-color request-button open-modal"
                     type="button" data-for="complete-form">Завершить</button>
+            <?php endif; ?>
         </div>
     </div>
     <?php if ($currentUserId === $customerData['user']['id'] || $isExecutor === true): ?>
@@ -165,44 +172,57 @@ $currentUserId = Yii::$app->user->getId();
             'rows' => '4',
             'placeholder' => 'Ваш комментарий',
         ]); ?>
-    <?= Html::submitButton('Отправить', ['class' => 'button modal-button response-form-button']) ?>
+    <?= Html::submitButton('Отправить', ['class' => 'button modal-button']) ?>
     <?php ActiveForm::end(); ?>
     <button class="form-modal-close" type="button">Закрыть</button>
 </section>
 
 <section class="modal completion-form form-modal" id="complete-form">
     <h2>Завершение задания</h2>
-    <p class="form-modal-description">Задание выполнено?</p>
-    <form action="#" method="post">
-        <input class="visually-hidden completion-input completion-input--yes" type="radio" id="completion-radio--yes" name="completion" value="yes">
-        <label class="completion-label completion-label--yes" for="completion-radio--yes">Да</label>
-        <input class="visually-hidden completion-input completion-input--difficult" type="radio" id="completion-radio--yet" name="completion" value="difficulties">
-        <label  class="completion-label completion-label--difficult" for="completion-radio--yet">Возникли проблемы</label>
-        <p>
-            <label class="form-modal-description" for="completion-comment">Комментарий</label>
-            <textarea class="input textarea" rows="4" id="completion-comment" name="completion-comment" placeholder="Place your text"></textarea>
-        </p>
-        <p class="form-modal-description">
-            Оценка
-        <div class="feedback-card__top--name completion-form-star">
-            <span class="star-disabled"></span>
-            <span class="star-disabled"></span>
-            <span class="star-disabled"></span>
-            <span class="star-disabled"></span>
-            <span class="star-disabled"></span>
-        </div>
-        </p>
-        <input type="hidden" name="rating" id="rating">
-        <button class="button modal-button" type="submit">Отправить</button>
-    </form>
+<!--    <p class="form-modal-description">Задание выполнено?</p>-->
+<!--    <form action="#" method="post">-->
+<!--        <input class="visually-hidden completion-input completion-input--yes" type="radio" id="completion-radio--yes" name="completion" value="yes">-->
+<!--        <label class="completion-label completion-label--yes" for="completion-radio--yes">Да</label>-->
+<!--        <input class="visually-hidden completion-input completion-input--difficult" type="radio" id="completion-radio--yet" name="completion" value="difficulties">-->
+<!--        <label  class="completion-label completion-label--difficult" for="completion-radio--yet">Возникли проблемы</label>-->
+<!--        <p>-->
+<!--            <label class="form-modal-description" for="completion-comment">Комментарий</label>-->
+<!--            <textarea class="input textarea" rows="4" id="completion-comment" name="completion-comment" placeholder="Place your text"></textarea>-->
+<!--        </p>-->
+<!--        <p class="form-modal-description">-->
+<!--            Оценка-->
+<!--        <div class="feedback-card__top--name completion-form-star">-->
+<!--            <span class="star-disabled"></span>-->
+<!--            <span class="star-disabled"></span>-->
+<!--            <span class="star-disabled"></span>-->
+<!--            <span class="star-disabled"></span>-->
+<!--            <span class="star-disabled"></span>-->
+<!--        </div>-->
+<!--        </p>-->
+<!--        <input type="hidden" name="rating" id="rating">-->
+<!--        <button class="button modal-button" type="submit">Отправить</button>-->
+<!--    </form>-->
     <?php $completeForm = ActiveForm::begin([
         'method' => 'POST',
+        'fieldConfig' => ['template' => "<p>{label}\n{input}\n{error}</p>",
+            'labelOptions' => ['class' => 'form-modal-description']],
     ]); ?>
     <?= $completeForm->field($completeTaskModel,'result')
         ->radioList(CompleteTaskModel::RESULT_STATUS,[
             'class' => 'completion-input',
             'labelOptions' => ['class' => 'completion-label']
         ]); ?>
+    <?= $completeForm->field($completeTaskModel,'comment')
+        ->textarea([
+            'class' => 'input textarea',
+            'rows' => '4',
+            'placeholder' => 'Place your text',
+        ]); ?>
+    <?= $completeForm->field($completeTaskModel,'estimate')->widget(StarRating::class,[
+        'pluginOptions' => ['step' => 1],
+        'language' => 'ru',
+    ]); ?>
+    <?= Html::submitButton('Отправить', ['class' => 'button modal-button']) ?>
     <?php ActiveForm::end(); ?>
     <button class="form-modal-close" type="button">Закрыть</button>
 </section>
@@ -217,8 +237,8 @@ $currentUserId = Yii::$app->user->getId();
     </p>
     <button class="button__form-modal button" id="close-modal"
             type="button">Отмена</button>
-    <button class="button__form-modal refusal-button button"
-            type="button">Отказаться</button>
+    <button class="button__form-modal refusal-button button fail-button" data-user="<?= \Yii::$app->user->getId(); ?>"
+            data-task="<?= $taskData['id']; ?>" type="button">Отказаться</button>
     <button class="form-modal-close" type="button">Закрыть</button>
 </section>
 

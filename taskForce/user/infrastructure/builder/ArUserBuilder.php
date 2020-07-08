@@ -16,8 +16,11 @@ class ArUserBuilder
      * @param bool $detailView
      * @return User
      */
-    public function build(modelUser $model, $detailView = false): User
+    public function build(modelUser $model = null, $detailView = false): User
     {
+        if($model === null) {
+            $model = new modelUser();
+        }
         $user = new User();
         $categoryBuilder = new ArCategoryBuilder();
         $categoriesList = new CategoriesList();

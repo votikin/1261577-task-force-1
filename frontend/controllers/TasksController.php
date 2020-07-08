@@ -4,20 +4,22 @@ namespace frontend\controllers;
 
 use frontend\models\CompleteTaskModel;
 use frontend\models\ResponseUserModel;
+use frontend\models\TaskStatus;
 use taskForce\category\application\ManagerCategory;
 use taskForce\category\domain\CategoriesList;
 use taskForce\response\application\ManagerResponse;
 use taskForce\response\domain\ResponsesList;
+use taskForce\review\application\ManagerReview;
 use taskForce\task\application\ManagerTask;
 use taskForce\task\domain\Task;
 use taskForce\task\domain\TasksList;
 use taskForce\user\application\ManagerUser;
 use taskForce\user\domain\User;
 use Yii;
-use yii\web\Controller;
 use frontend\models\TaskSearchModel;
 
 //TODO Поменять адрес задания, наверное, там должн быть city_id
+//TODO Сделать кнопку отмены задания.
 
 class TasksController extends SecuredController
 {
@@ -41,12 +43,18 @@ class TasksController extends SecuredController
      */
     private $managerResponse;
 
+    /**
+     * @var ManagerReview
+     */
+    private $managerReview;
+
     public function init()
     {
         $this->managerUser = \Yii::$container->get(ManagerUser::class);
         $this->managerTask = \Yii::$container->get(ManagerTask::class);
         $this->managerCategory = \Yii::$container->get(ManagerCategory::class);
         $this->managerResponse = \Yii::$container->get(ManagerResponse::class);
+        $this->managerReview = \Yii::$container->get(ManagerReview::class);
         parent::init();
     }
 
@@ -91,9 +99,17 @@ class TasksController extends SecuredController
         $userId = Yii::$app->user->getId();
         $completeTaskModel = new CompleteTaskModel();
         $responseUserModel = new ResponseUserModel();
-        if($responseUserModel->load(Yii::$app->request->post()) && $this->managerUser->isExecutor($userId)){
+        if($responseUserModel->load(Yii::$app->request->post()) && $this->managerUser->isExecutor($userId)) {
             $this->managerResponse->addNewResponse($responseUserModel->makeNewResponse($id));
             $this->refresh();
+        }
+        if($completeTaskModel->load(Yii::$app->request->post()) && !$this->managerUser->isExecutor($userId)) {
+            if($completeTaskModel->result == CompleteTaskModel::COMPLETE_RESULT) {
+                $this->managerTask->setTaskStatus(TaskStatus::NAME_STATUS_COMPLETE,$id);
+            } else {
+                $this->managerTask->setTaskStatus(TaskStatus::NAME_STATUS_FAIL,$id);
+            }
+            $this->managerReview->addNewReview($completeTaskModel->makeNewReview($id));
         }
         $task = $this->managerTask->getById($id);
         $customer = $this->managerUser->getCustomerByTaskId($task->id);
@@ -112,6 +128,8 @@ class TasksController extends SecuredController
             }
         }
 
+        $availableActions = $this->managerTask->getAvailableActions($id);
+
         return $this->render('view',[
             'taskData' => $task->toArray(),
             'customerData' => $customerData,
@@ -119,6 +137,7 @@ class TasksController extends SecuredController
             'isExecutor' => $isExecutor,
             'responseUserModel' => $responseUserModel,
             'completeTaskModel' => $completeTaskModel,
+            'availableActions' => $availableActions,
         ]);
     }
 
@@ -143,6 +162,15 @@ class TasksController extends SecuredController
             if(Yii::$app->user->getId() === $task->author->id) {
                 $task = $this->managerTask->setExecutorForTask($userId, $taskId);
             }
+        }
+    }
+
+    public function actionFailTask()
+    {
+        $userId = Yii::$app->request->post('userId');
+        $taskId = Yii::$app->request->post('taskId');
+        if(isset($userId) && isset($taskId)) {
+            $this->managerTask->setTaskStatus(TaskStatus::NAME_STATUS_FAIL,$taskId);
         }
     }
 }

@@ -23,6 +23,7 @@ class ResponseUserModel extends ActiveRecord
     {
         return [
             ['price','integer', 'message' => 'Необходимо целое число'],
+            ['comment','safe'],
         ];
     }
 

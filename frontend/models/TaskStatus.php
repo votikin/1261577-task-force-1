@@ -19,6 +19,9 @@ class TaskStatus extends \yii\db\ActiveRecord
      */
     const NAME_STATUS_NEW = 'Новое';
     const NAME_STATUS_JOB = 'В работе';
+    const NAME_STATUS_CANCEL = 'Отменено';
+    const NAME_STATUS_COMPLETE = 'Выполнено';
+    const NAME_STATUS_FAIL = 'Провалено';
 
     /**
      * {@inheritdoc}

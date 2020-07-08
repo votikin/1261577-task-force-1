@@ -7,4 +7,6 @@ interface ReviewsRepository
     public function getCountReviewsByExecutorId(int $id): int;
 
     public function getReviewsByExecutorId(int $id): ReviewsList;
+
+    public function addNewReview(Review $review): void;
 }

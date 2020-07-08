@@ -5,6 +5,11 @@ namespace taskForce\task\infrastructure;
 use frontend\models\Task as modelTask;
 use frontend\models\TaskImage;
 use frontend\models\TaskStatus;
+use taskForce\task\action\CancelAction;
+use taskForce\task\action\CompleteAction;
+use taskForce\task\action\ExecuteAction;
+use taskForce\task\action\FailAction;
+use taskForce\task\action\ResponseAction;
 use taskForce\task\domain\Image;
 use taskForce\task\domain\exceptions\TaskNotFoundException;
 use taskForce\task\domain\Task;
@@ -144,5 +149,34 @@ class ArTasksRepository implements TasksRepository
         }
 
         return $this->builder->build($task);
+    }
+
+    public function getAllActions(): array
+    {
+        return [ExecuteAction::class,CancelAction::class,CompleteAction::class,FailAction::class,ResponseAction::class];
+    }
+
+    public function setFailTaskStatus(int $task_id): void
+    {
+        $task = modelTask::findOne(['id' => $task_id]);
+        if($task === null) {
+            throw new TaskNotFoundException();
+        }
+        $task->status_id = TaskStatus::findOne(['name' => TaskStatus::NAME_STATUS_FAIL])->id;
+        if (!$task->save()) {
+            throw new NotSaveException();
+        }
+    }
+
+    public function setTaskStatus(string $status, int $task_id): void
+    {
+        $task = modelTask::findOne(['id' => $task_id]);
+        if($task === null) {
+            throw new TaskNotFoundException();
+        }
+        $task->status_id = TaskStatus::findOne(['name' => $status])->id;
+        if (!$task->save()) {
+            throw new NotSaveException();
+        }
     }
 }

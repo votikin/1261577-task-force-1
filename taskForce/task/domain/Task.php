@@ -70,6 +70,16 @@ class Task
     public $status;
 
     /**
+     * @var User
+     */
+    public $executor;
+
+    /**
+     * @var int
+     */
+    public $countResponses;
+
+    /**
      * Task constructor.
      * @param int|null $id
      * @param string|null $shortName
@@ -83,11 +93,14 @@ class Task
      * @param User|null $author
      * @param ImageList|null $images
      * @param Status|null $status
+     * @param User|null $executor
+     * @param int|null $countResponses
      */
     public function __construct(int $id = null, string $shortName = null, string $description = null,
                                 string $address = null, int $budget = null, DateTime $deadline = null,
                                 DateTime $dateCreate = null, Category $category = null, Location $location = null,
-                                User $author = null, ImageList $images = null, Status $status = null)
+                                User $author = null, ImageList $images = null, Status $status = null,
+                                User $executor = null, int $countResponses = null)
     {
         $this->id = $id;
         $this->shortName = $shortName;
@@ -101,8 +114,9 @@ class Task
         $this->author = $author;
         $this->images = $images;
         $this->status = $status;
+        $this->executor = $executor;
+        $this->countResponses = $countResponses;
     }
-
 
     public function toArray()
     {
@@ -119,6 +133,8 @@ class Task
             'author' => $this->author->toArray(),
             'images' => $this->images->toArray(),
             'status' => $this->status->toArray(),
+            'executor' => $this->executor->toArray(),
+            'countResponses' => $this->countResponses,
         ];
     }
 }

@@ -121,4 +121,26 @@ class ManagerTask
     {
         return $this->task->setExecutorForTask($user_id,$task_id);
     }
+
+    public function getAvailableActions(int $task_id): array
+    {
+        $currentTask = $this->task->getById($task_id);
+        $availableActs = [];
+        foreach ($this->task->getAllActions() as $class) {
+            if($class::isAvailable($currentTask)) {
+                $availableActs[] = $class::getInternalName();
+            }
+        }
+        return $availableActs;
+    }
+
+    public function setFailTaskStatus(int $task_id): void
+    {
+        $this->task->setFailTaskStatus($task_id);
+    }
+
+    public function setTaskStatus(string $status, int $task_id): void
+    {
+        $this->task->setTaskStatus($status, $task_id);
+    }
 }

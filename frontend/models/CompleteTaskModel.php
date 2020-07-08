@@ -3,12 +3,16 @@
 namespace frontend\models;
 
 use yii\db\ActiveRecord;
+use taskForce\review\domain\Review;
+use taskForce\task\domain\Task;
 
 class CompleteTaskModel extends ActiveRecord
 {
+    const COMPLETE_RESULT = '1';
+    const FAIL_RESULT = '0';
     const RESULT_STATUS = [
-        '0' => 'ДА',
-        '1' => 'ВОЗНИКЛИ ПРОБЛЕМЫ',
+        self::COMPLETE_RESULT => 'ДА',
+        self::FAIL_RESULT => 'ВОЗНИКЛИ ПРОБЛЕМЫ',
     ];
 
     public $result;
@@ -27,17 +31,22 @@ class CompleteTaskModel extends ActiveRecord
     public function rules()
     {
         return [
-            ['result','radioIsCheck'],
+            ['result','required','message'=>'Задание выполнено?'],
             ['estimate','required'],
+            ['comment','safe'],
         ];
     }
 
-    public function radioIsCheck($attribute,$params){
-        if(!$this->hasErrors()){
-            if(empty($this->result)){
-                $this->addError('result', "Выполнено ли задание?");
-            }
+    public function makeNewReview(int $taskId) {
+        $review = new Review();
+        $review->description = $this->comment;
+        $review->estimate = $this->estimate;
+        $task = new Task();
+        $task->id = $taskId;
+        $review->task = $task;
+        $review->isComplete = $this->result;
 
-        }
+        return $review;
     }
+
 }

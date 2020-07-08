@@ -20,6 +20,7 @@ class ArReviewBuilder
         $review->description = $model->description;
         $review->estimate = $model->estimate;
         $review->task = $taskBuilder->build($model->task);
+        $review->isComplete = $model->is_complete;
 
         return $review;
     }

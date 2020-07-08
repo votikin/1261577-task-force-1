@@ -23,6 +23,7 @@ class ArTaskBuilder
         $userBuilder = new ArUserBuilder();
         $statusBuilder = new ArStatusBuilder();
         $task->author = $userBuilder->build($model->user);
+        $task->executor = $userBuilder->build($model->executor);
         $task->id = $model->id;
         $task->shortName = $model->short;
         $task->description = $model->description;
@@ -41,6 +42,7 @@ class ArTaskBuilder
                 $imageList[] = $imageBuilder->build($image);
             }
         }
+        $task->countResponses = $model->getResponsesCount();
         $task->location = $location;
         $task->images = $imageList;
 

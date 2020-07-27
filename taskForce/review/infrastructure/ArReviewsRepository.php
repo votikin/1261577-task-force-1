@@ -4,10 +4,11 @@ namespace taskForce\review\infrastructure;
 
 use frontend\models\Review as modelReview;
 use frontend\models\Task;
-use frontend\models\User;
+use taskForce\review\domain\Review;
 use taskForce\review\domain\ReviewsList;
 use taskForce\review\domain\ReviewsRepository;
 use taskForce\review\infrastructure\builder\ArReviewBuilder;
+use taskForce\share\Exceptions\NotSaveException;
 
 class ArReviewsRepository implements ReviewsRepository
 {
@@ -53,6 +54,21 @@ class ArReviewsRepository implements ReviewsRepository
         }
 
         return $reviewsList;
+    }
+
+    /**
+     * @param Review $review
+     */
+    public function addNewReview(Review $review): void
+    {
+        $newReview = new modelReview();
+        $newReview->description = $review->description;
+        $newReview->estimate = $review->estimate;
+        $newReview->task_id = $review->task->id;
+        $newReview->is_complete = $review->isComplete;
+        if(!$newReview->save()) {
+            throw new NotSaveException();
+        }
     }
 
 }

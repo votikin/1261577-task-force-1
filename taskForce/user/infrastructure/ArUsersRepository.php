@@ -6,8 +6,9 @@ use frontend\models\Review;
 use frontend\models\Role;
 use frontend\models\Task;
 use frontend\models\User as modelUser;
+use taskForce\share\Exceptions\NotSaveException;
 use taskForce\user\domain\Contact;
-use taskForce\user\domain\UserNotFoundException;
+use taskForce\user\domain\exceptions\UserNotFoundException;
 use taskForce\user\domain\User;
 use taskForce\user\domain\UsersList;
 use taskForce\user\domain\UsersRepository;
@@ -108,9 +109,10 @@ class ArUsersRepository implements UsersRepository
 
     /**
      * @param User $user
-     * @return bool
+     * @return User
+     * @throws NotSaveException
      */
-    public function createNewUser(User $user): bool
+    public function createNewUser(User $user): User
     {
         $newUser = new modelUser();
         $contact = new Contact($user->contacts->email);
@@ -118,8 +120,11 @@ class ArUsersRepository implements UsersRepository
         $newUser->name = $user->name;
         $newUser->password = $user->getPassword();
         $newUser->city_id = $user->cityId;
+        if(!$newUser->save()){
+            throw new NotSaveException();
+        }
 
-        return $newUser->save();
+        return $this->builder->build($newUser);
     }
 
     /**
@@ -142,6 +147,22 @@ class ArUsersRepository implements UsersRepository
         if($user === null) {
             throw new UserNotFoundException();
         }
+
         return $this->builder->build($user,true);
     }
+
+    public function isExecutor(int $id): bool
+    {
+        $user = modelUser::findOne($id);
+        if($user === null) {
+            throw new UserNotFoundException();
+        }
+        $role = Role::findOne($user->role_id);
+        if($role->name === Role::CUSTOMER_ROLE) {
+            return false;
+        }
+
+        return true;
+    }
+
 }

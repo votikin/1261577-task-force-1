@@ -9,6 +9,7 @@ use taskForce\category\domain\CategoriesList;
 use taskForce\category\domain\CategoriesRepository;
 use taskForce\category\domain\Category;
 use taskForce\category\infrastructure\builder\ArCategoryBuilder;
+use taskForce\category\domain\exceptions\CategoryNotFoundException;
 
 class ArCategoriesRepository implements CategoriesRepository
 {
@@ -65,5 +66,15 @@ class ArCategoriesRepository implements CategoriesRepository
         }
 
         return $userCategories;
+    }
+
+    public function getCategoryById(int $id): Category
+    {
+        $category = modelCategory::findOne($id);
+        if($category === null) {
+            throw new CategoryNotFoundException();
+        }
+
+        return $this->builder->build($category);
     }
 }

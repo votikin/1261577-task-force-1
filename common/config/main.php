@@ -15,6 +15,7 @@ return [
                 'tasks/' => 'tasks/index',
                 'users/' => 'users/index',
                 'signup' => 'signup/index',
+                'create' => 'create/index',
                 'logout' => 'users/logout',
                 'tasks/view/<id:\d+>' => 'tasks/view',
                 'users/view/<id:\d+>' => 'users/view',

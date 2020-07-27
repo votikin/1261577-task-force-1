@@ -12,6 +12,7 @@ use Yii;
  * @property string $estimate
  * @property string $created_at
  * @property int $task_id
+ * @property int|null $is_complete
  *
  * @property Task $task
  */
@@ -34,7 +35,7 @@ class Review extends \yii\db\ActiveRecord
             [['description', 'estimate'], 'string'],
             [['estimate', 'task_id'], 'required'],
             [['created_at'], 'safe'],
-            [['task_id'], 'integer'],
+            [['task_id', 'is_complete'], 'integer'],
             [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task_id' => 'id']],
         ];
     }
@@ -50,10 +51,13 @@ class Review extends \yii\db\ActiveRecord
             'estimate' => 'Estimate',
             'created_at' => 'Created At',
             'task_id' => 'Task ID',
+            'is_complete' => 'Is Complete',
         ];
     }
 
     /**
+     * Gets query for [[Task]].
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getTask()

@@ -3,8 +3,8 @@
 namespace taskForce\task\infrastructure\builder;
 
 use frontend\models\Task as modelTask;
-use frontend\models\User;
 use taskForce\category\infrastructure\builder\ArCategoryBuilder;
+use taskForce\task\domain\ImageList;
 use taskForce\task\domain\Location;
 use taskForce\task\domain\Task;
 use taskForce\user\infrastructure\builder\ArUserBuilder;
@@ -21,7 +21,9 @@ class ArTaskBuilder
         $task = new Task();
         $categoryBuilder = new ArCategoryBuilder();
         $userBuilder = new ArUserBuilder();
+        $statusBuilder = new ArStatusBuilder();
         $task->author = $userBuilder->build($model->user);
+        $task->executor = $userBuilder->build($model->executor);
         $task->id = $model->id;
         $task->shortName = $model->short;
         $task->description = $model->description;
@@ -29,9 +31,20 @@ class ArTaskBuilder
         $task->budget = $model->budget;
         $task->dateCreate = $model->created_at;
         $task->category = $categoryBuilder->build($model->category);
+        $task->status = $statusBuilder->build($model->status);
+        $location = new Location();
+        $imageList = new ImageList();
         if($detailView === true) {
-            $task->location = new Location($model->latitude, $model->longitude); //dto
+            $location->longitude = $model->longitude;
+            $location->latitude = $model->latitude;
+            $imageBuilder = new ArImageBuilder();
+            foreach ($model->taskImages as $image) {
+                $imageList[] = $imageBuilder->build($image);
+            }
         }
+        $task->countResponses = $model->getResponsesCount();
+        $task->location = $location;
+        $task->images = $imageList;
 
         return $task;
     }

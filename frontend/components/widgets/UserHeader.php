@@ -10,5 +10,4 @@ class UserHeader extends Widget
     {
         return $this->render('user-header');
     }
-    
 }

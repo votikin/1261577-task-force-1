@@ -48,4 +48,13 @@ class ManagerCategory
         return $this->categories->getCategoriesByUserId($id);
     }
 
+    /**
+     * @param int $id
+     * @return Category
+     */
+    public function getCategoryById(int $id): Category
+    {
+        return $this->categories->getCategoryById($id);
+    }
+
 }

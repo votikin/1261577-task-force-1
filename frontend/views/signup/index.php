@@ -2,9 +2,10 @@
 
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
+use frontend\models\SignUpModel;
 
 /** @var $this yii\web\View
- * @var $signUpModel \frontend\models\SignUpModel
+ * @var $signUpModel SignUpModel
  */
 
 $this->title = 'Регистрация';
@@ -24,7 +25,7 @@ $cities = \yii\helpers\ArrayHelper::map($city,'id','name');
             'enableClientValidation' => false,
             'fieldConfig' => ['options' => ['tag' => false],'template' => "{label}\n{input}\n{error}"],
         ]); ?>
-        <?=$form->field($signUpModel,'email')
+        <?= $form->field($signUpModel,'email')
         ->input('email',array(
                 'placeholder' => 'kumarm@mail.ru',
                 'class' => 'input textarea',
@@ -33,7 +34,7 @@ $cities = \yii\helpers\ArrayHelper::map($city,'id','name');
             ));
         ?>
         <span>Введите валидный адрес электронной почты</span>
-        <?=$form->field($signUpModel,'userName')
+        <?= $form->field($signUpModel,'userName')
             ->textInput(array(
                 'class' => 'input textarea',
                 'placeholder' => 'Мамедов Кумар',
@@ -42,13 +43,13 @@ $cities = \yii\helpers\ArrayHelper::map($city,'id','name');
             ));
         ?>
         <span>Введите ваше имя и фамилию</span>
-        <?=$form->field($signUpModel,'city')
+        <?= $form->field($signUpModel,'city')
             ->dropDownList($cities,array(
                     'class' => 'multiple-select input town-select registration-town',
                     'size' => '1'));
         ?>
         <span>Укажите город, чтобы находить подходящие задачи</span>
-        <?=$form->field($signUpModel,'password',['labelOptions' => ['class' => 'input-danger']])
+        <?= $form->field($signUpModel,'password',['labelOptions' => ['class' => 'input-danger']])
             ->passwordInput(array(
                 'class' => 'input textarea',
                 'required' => true,

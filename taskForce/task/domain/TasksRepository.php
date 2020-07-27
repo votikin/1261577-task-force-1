@@ -2,6 +2,8 @@
 
 namespace taskForce\task\domain;
 
+use frontend\models\TaskStatus;
+
 interface TasksRepository
 {
     public function getById(int $id) : Task;
@@ -13,4 +15,18 @@ interface TasksRepository
     public function getCountTasksByExecutorId(int $id): int;
 
     public function getCountTasksByCustomerId(int $id): int;
+
+    public function createNewTask(Task $task): Task;
+
+    public function removeTaskById(int $id): void;
+
+    public function addTaskImageRows(Image $image): void ;
+
+    public function setExecutorForTask(int $user_id, int $task_id): Task;
+
+    public function getAllActions(): array;
+
+    public function setFailTaskStatus(int $task_id): void;
+
+    public function setTaskStatus(string $status, int $task_id): void;
 }

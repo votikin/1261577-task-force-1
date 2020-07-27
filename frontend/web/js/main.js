@@ -56,3 +56,50 @@ if (starRating.length) {
     inputField.value = rating;
   });
 }
+
+$(document).ready(function () {
+  $('.response-refusal-button').on('click',function () {
+    $.ajax({
+      url: "/tasks/remove-response/",
+      type: "POST",
+      data: {
+        'responseId':$(this).data('id'),
+      },
+      success: function () {
+        location.reload();
+      }
+    })
+  })
+});
+
+$(document).ready(function () {
+  $('.response-request-button').on('click',function () {
+    $.ajax({
+      url: "/tasks/set-executor/",
+      type: "POST",
+      data: {
+        'userId':$(this).data('user'),
+        'taskId':$(this).data('task'),
+      },
+      success: function () {
+        location.reload();
+      }
+    })
+  })
+});
+
+$(document).ready(function () {
+  $('.fail-button').on('click',function () {
+    $.ajax({
+      url: "/tasks/fail-task/",
+      type: "POST",
+      data: {
+        'userId':$(this).data('user'),
+        'taskId':$(this).data('task'),
+      },
+      success: function () {
+        location.reload();
+      }
+    })
+  })
+});

@@ -2,6 +2,7 @@
 
 namespace taskForce\review\application;
 
+use taskForce\review\domain\Review;
 use taskForce\review\domain\ReviewsList;
 use taskForce\review\domain\ReviewsRepository;
 use taskForce\share\StringHelper;
@@ -42,4 +43,8 @@ class ManagerReview
         return $this->review->getReviewsByExecutorId($id);
     }
 
+    public function addNewReview(Review $review): void
+    {
+        $this->review->addNewReview($review);
+    }
 }

@@ -4,10 +4,9 @@ namespace frontend\controllers;
 
 use frontend\models\LoginForm;
 use yii\bootstrap\ActiveForm;
-use yii\web\Controller;
 use yii\web\Response;
 
-class LandingController extends Controller
+class LandingController extends AnonimAccessController
 {
     public function actionIndex()
     {
@@ -15,7 +14,7 @@ class LandingController extends Controller
         $loginForm = new LoginForm();
         if (\Yii::$app->request->getIsPost()) {
             $loginForm->load(\Yii::$app->request->post());
-            if (\Yii::$app->request->isAjax && $loginForm->load(\Yii::$app->request->post())) {
+            if (\Yii::$app->request->isAjax) {
                 \Yii::$app->response->format = Response::FORMAT_JSON;
                 return ActiveForm::validate($loginForm);
             }

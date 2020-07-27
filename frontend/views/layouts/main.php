@@ -11,6 +11,7 @@ use frontend\components\widgets\UserHeader;
 
 $usersUrl = $userUrl = Url::to(['users/']);
 $tasksUrl = $taskUrl = Url::to(['tasks/']);
+$createUrl = Url::to(['create/']);
 
 AppAsset::register($this);
 ?>
@@ -23,6 +24,7 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php $this->registerCsrfMetaTags() ?>
     <title><?=  Html::encode($this->title) ?></title>
+<!--    <script src="/js/jquery-3.5.1.min.js" type="text/javascript" ></script>-->
 
     <?php $this->head() ?>
 </head>
@@ -69,7 +71,7 @@ AppAsset::register($this);
                         <a href="<?= $usersUrl; ?>">Исполнители</a>
                     </li>
                     <li class="site-list__item">
-                        <a href="#">Создать задание</a>
+                        <a href="<?= $createUrl; ?>">Создать задание</a>
                     </li>
                     <li class="site-list__item">
                         <a>Мой профиль</a>
@@ -148,3 +150,4 @@ AppAsset::register($this);
 </body>
 </html>
 <?php $this->endPage() ?>
+

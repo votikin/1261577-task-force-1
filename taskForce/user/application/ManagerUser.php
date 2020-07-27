@@ -71,7 +71,7 @@ class ManagerUser
      * @param User $user
      * @return bool
      */
-    public function createNewUser(User $user): bool
+    public function createNewUser(User $user): User
     {
         return $this->user->createNewUser($user);
     }
@@ -79,5 +79,10 @@ class ManagerUser
     public function getUserById(int $id): User
     {
         return $this->user->getUserById($id);
+    }
+
+    public function isExecutor(int $id): bool
+    {
+        return $this->user->isExecutor($id);
     }
 }

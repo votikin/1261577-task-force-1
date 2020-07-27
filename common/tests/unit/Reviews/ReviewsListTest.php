@@ -6,6 +6,7 @@ use Codeception\Test\Unit;
 use common\fixtures\CategoryFixture;
 use common\fixtures\ReviewFixture;
 use common\fixtures\TaskFixture;
+use common\fixtures\TaskStatusFixture;
 use common\fixtures\UserFixture;
 use taskForce\review\domain\ReviewsRepository;
 
@@ -45,6 +46,10 @@ class ReviewsListTest extends Unit
             'category' => [
                 'class' => CategoryFixture::class,
                 'dataFile' => \Yii::$app->getBasePath() . '/fixtures/data/category.php'
+            ],
+            'task_status' => [
+                'class' => TaskStatusFixture::class,
+                'dataFile' => \Yii::$app->getBasePath() . '/fixtures/data/task_status.php'
             ],
         ];
     }

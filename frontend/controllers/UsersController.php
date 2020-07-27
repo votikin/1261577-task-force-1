@@ -86,15 +86,6 @@ class UsersController extends SecuredController
          */
 
         $reviews = $this->managerReview->getReviewsByExecutorId($id);
-        $reviewsData = [];
-        foreach ($reviews as $review){
-            $reviewsData[] = [
-                'review' => $review->toArray(),
-                'name' => $review->task->author->name,
-                'avatar' =>$review->task->author->avatar,
-                'task' => $review->task->shortName,
-            ];
-        }
         $user = $this->managerUser->getExecutorById($id);
         $userData = [
             'user' => $user->toArray(),
@@ -104,7 +95,7 @@ class UsersController extends SecuredController
 
         return $this->render('view', [
             'userData' => $userData,
-            'reviewsData' => $reviewsData,
+            'reviewsData' => $reviews->toArray(),
         ]);
     }
 

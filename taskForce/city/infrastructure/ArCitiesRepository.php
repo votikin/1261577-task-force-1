@@ -7,6 +7,7 @@ use taskForce\city\domain\CitiesRepository;
 use taskForce\city\domain\City;
 use frontend\models\City as modelCity;
 use taskForce\city\infrastructure\builder\ArCityBuilder;
+use taskForce\city\domain\exceptions\CityNotFoundException;
 
 class ArCitiesRepository implements CitiesRepository
 {
@@ -32,7 +33,7 @@ class ArCitiesRepository implements CitiesRepository
     {
         $city = modelCity::findOne($id);
         if (!$city) {
-            throw CityNotFoundException();
+            throw new CityNotFoundException();
         }
 
         return $this->builder->build($city);

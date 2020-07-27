@@ -16,11 +16,15 @@ class ArUserBuilder
      * @param bool $detailView
      * @return User
      */
-    public function build(modelUser $model, $detailView = false): User
+    public function build(modelUser $model = null, $detailView = false): User
     {
+        if($model === null) {
+            $model = new modelUser();
+        }
         $user = new User();
         $categoryBuilder = new ArCategoryBuilder();
         $categoriesList = new CategoriesList();
+        $contacts = new Contact();
         foreach ($model->categories as $category) {
             $categoriesList[] = $categoryBuilder->build($category);
         }
@@ -35,9 +39,11 @@ class ArUserBuilder
         $user->detail = $detail;
         $user->cityId = $model->city_id;
         if($detailView === true) {
-            $contacts = new Contact($model->email, $model->phone, $model->skype);
-            $user->contacts = $contacts;
+            $contacts->email = $model->email;
+            $contacts->phone = $model->phone;
+            $contacts->skype = $model->skype;
         }
+        $user->contacts = $contacts;
 
         return $user;
     }

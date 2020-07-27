@@ -10,7 +10,7 @@ class TaskSearchModel extends \yii\db\ActiveRecord
     public $responses;
     public $name;
     public $period;
-    public const PERIOD_VALUES = [
+    const PERIOD_VALUES = [
         '0' => 'За всё время',
         '1' => 'За год',
         '2' => 'За месяц',

@@ -161,4 +161,8 @@ return [
         'path' => 'https://lorempixel.com/640/480/?28920',
         'task_id' => 5,
     ],
+    'task_image40' => [
+        'path' => '/img/tasks/1/Im1.jpg',
+        'task_id' => 1,
+    ],
 ];

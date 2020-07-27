@@ -9,6 +9,7 @@ use frontend\models\User as modelUser;
 
 class SignUpModel extends ActiveRecord
 {
+    private $_user;
     public $email;
     public $userName;
     public $password;
@@ -21,6 +22,8 @@ class SignUpModel extends ActiveRecord
     {
         return [
             [['userName'], 'required', 'message' => 'Введите имя'],
+            [['email'], 'required', 'message' => 'Введите адрес почты'],
+            [['password'], 'required', 'message' => 'Это поле обязательно к заполнению'],
             ['email', 'email','message' => "Неправильный формат почтового адреса"],
             [['email','password','userName'], 'trim'],
             [['email','password','city'], 'required'],
@@ -54,5 +57,14 @@ class SignUpModel extends ActiveRecord
         $user->contacts = $contacts;
 
         return $user;
+    }
+
+    public function getUser()
+    {
+        if($this->_user === null) {
+            $this->_user = modelUser::findOne(['email' => $this->email]);
+        }
+
+        return $this->_user;
     }
 }

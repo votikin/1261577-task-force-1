@@ -51,8 +51,8 @@ class UsersController extends SecuredController
          * @var $categories CategoriesList
          * @var $users UsersList
          */
-        $userSearchModel = new UserSearchModel();
 
+        $userSearchModel = new UserSearchModel();
         $categories = $this->managerCategory->getAllCategories();
         $userSearchModel->load(Yii::$app->request->post());
         if(Yii::$app->request->getIsPost()) {

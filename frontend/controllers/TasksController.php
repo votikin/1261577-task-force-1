@@ -127,7 +127,6 @@ class TasksController extends SecuredController
                 $isExecutor = true;
             }
         }
-
         $availableActions = $this->managerTask->getAvailableActions($id);
 
         return $this->render('view',[

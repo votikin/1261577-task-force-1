@@ -58,6 +58,7 @@ class ArUsersRepository implements UsersRepository
         if($user === null) {
             throw new UserNotFoundException();
         }
+
         return $this->builder->build($user,true);
     }
 
@@ -141,6 +142,11 @@ class ArUsersRepository implements UsersRepository
         return $usersList;
     }
 
+    /**
+     * @param int $id
+     * @return User
+     * @throws UserNotFoundException
+     */
     public function getUserById(int $id): User
     {
         $user = modelUser::findOne($id);
@@ -151,6 +157,11 @@ class ArUsersRepository implements UsersRepository
         return $this->builder->build($user,true);
     }
 
+    /**
+     * @param int $id
+     * @return bool
+     * @throws UserNotFoundException
+     */
     public function isExecutor(int $id): bool
     {
         $user = modelUser::findOne($id);

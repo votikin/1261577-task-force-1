@@ -28,6 +28,7 @@ class ArCitiesRepository implements CitiesRepository
     /**
      * @param int $id
      * @return City
+     * @throws CityNotFoundException
      */
     public function getCityById(int $id): City
     {

@@ -25,7 +25,6 @@ class Image
         $this->task_id = $task_id;
     }
 
-
     public function toArray()
     {
         return [

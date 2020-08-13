@@ -103,7 +103,11 @@ class ArTasksRepository implements TasksRepository
         return modelTask::find()->where(['user_id' => $id])->count();
     }
 
-
+    /**
+     * @param Task $task
+     * @return Task
+     * @throws NotSaveException
+     */
     public function createNewTask(Task $task): Task
     {
         $newTask = new modelTask();
@@ -121,11 +125,18 @@ class ArTasksRepository implements TasksRepository
         return $this->builder->build($newTask);
     }
 
+    /**
+     * @param int $id
+     */
     public function removeTaskById(int $id): void
     {
         modelTask::deleteAll(['id' => $id]);
     }
 
+    /**
+     * @param Image $image
+     * @throws NotSaveException
+     */
     public function addTaskImageRows(Image $image): void
     {
         $taskImage = new TaskImage();
@@ -136,6 +147,13 @@ class ArTasksRepository implements TasksRepository
         }
     }
 
+    /**
+     * @param int $user_id
+     * @param int $task_id
+     * @return Task
+     * @throws NotSaveException
+     * @throws TaskNotFoundException
+     */
     public function setExecutorForTask(int $user_id, int $task_id): Task
     {
         $task = modelTask::findOne(['id' => $task_id]);
@@ -151,11 +169,19 @@ class ArTasksRepository implements TasksRepository
         return $this->builder->build($task);
     }
 
+    /**
+     * @return array
+     */
     public function getAllActions(): array
     {
         return [ExecuteAction::class,CancelAction::class,CompleteAction::class,FailAction::class,ResponseAction::class];
     }
 
+    /**
+     * @param int $task_id
+     * @throws NotSaveException
+     * @throws TaskNotFoundException
+     */
     public function setFailTaskStatus(int $task_id): void
     {
         $task = modelTask::findOne(['id' => $task_id]);
@@ -168,6 +194,12 @@ class ArTasksRepository implements TasksRepository
         }
     }
 
+    /**
+     * @param string $status
+     * @param int $task_id
+     * @throws NotSaveException
+     * @throws TaskNotFoundException
+     */
     public function setTaskStatus(string $status, int $task_id): void
     {
         $task = modelTask::findOne(['id' => $task_id]);

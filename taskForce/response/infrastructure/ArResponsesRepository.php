@@ -41,7 +41,11 @@ class ArResponsesRepository implements ResponsesRepository
         return $responsesList;
     }
 
-
+    /**
+     * @param int $user_id
+     * @param int $task_id
+     * @return ResponsesList
+     */
     public function getUserResponseToTask(int $user_id, int $task_id): ResponsesList
     {
         $response = modelResponse::findOne(['user_id' => $user_id, 'task_id' => $task_id,'is_deleted' => '0']);
@@ -54,6 +58,10 @@ class ArResponsesRepository implements ResponsesRepository
         return $responsesList;
     }
 
+    /**
+     * @param int $id
+     * @throws ResponseNotFoundException
+     */
     public function refuseResponse(int $id): void
     {
         $response = modelResponse::findOne($id);
@@ -64,6 +72,10 @@ class ArResponsesRepository implements ResponsesRepository
         $response->save();
     }
 
+    /**
+     * @param Response $response
+     * @throws NotSaveException
+     */
     public function addNewResponse(Response $response): void
     {
         if(!modelResponse::find()->where(['user_id'=>$response->user->id,'task_id'=>$response->taskId])->exists()) {
@@ -78,6 +90,11 @@ class ArResponsesRepository implements ResponsesRepository
         }
     }
 
+    /**
+     * @param int $id
+     * @return Response
+     * @throws ResponseNotFoundException
+     */
     public function getResponseById(int $id): Response
     {
         $response = modelResponse::findOne($id);

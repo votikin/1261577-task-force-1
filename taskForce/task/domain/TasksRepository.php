@@ -2,8 +2,6 @@
 
 namespace taskForce\task\domain;
 
-use frontend\models\TaskStatus;
-
 interface TasksRepository
 {
     public function getById(int $id) : Task;

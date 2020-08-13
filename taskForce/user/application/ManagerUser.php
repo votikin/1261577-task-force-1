@@ -2,7 +2,6 @@
 
 namespace taskForce\user\application;
 
-use taskForce\task\domain\Task;
 use taskForce\user\domain\User;
 use taskForce\user\domain\UsersList;
 use taskForce\user\domain\UsersRepository;
@@ -69,18 +68,26 @@ class ManagerUser
 
     /**
      * @param User $user
-     * @return bool
+     * @return User
      */
     public function createNewUser(User $user): User
     {
         return $this->user->createNewUser($user);
     }
 
+    /**
+     * @param int $id
+     * @return User
+     */
     public function getUserById(int $id): User
     {
         return $this->user->getUserById($id);
     }
 
+    /**
+     * @param int $id
+     * @return bool
+     */
     public function isExecutor(int $id): bool
     {
         return $this->user->isExecutor($id);

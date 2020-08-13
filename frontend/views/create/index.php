@@ -99,8 +99,4 @@ $categoriesList = ArrayHelper::map($categories,'id', 'name');
 
     <button form="task-form" class="button" type="submit">Опубликовать</button>
 </section>
-<!--Насчет этого скрипта не знаю, нужен ли он. Пока оставляю.-->
-<!--<script src="/js/dropzone.js"></script>-->
-<!--<script>-->
-<!--    var dropzone = new Dropzone("div.create__file", {url: "/", paramName: "Attach"});-->
-<!--</script>-->
+

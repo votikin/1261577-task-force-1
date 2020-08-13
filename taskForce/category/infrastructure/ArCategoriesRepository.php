@@ -68,6 +68,11 @@ class ArCategoriesRepository implements CategoriesRepository
         return $userCategories;
     }
 
+    /**
+     * @param int $id
+     * @return Category
+     * @throws CategoryNotFoundException
+     */
     public function getCategoryById(int $id): Category
     {
         $category = modelCategory::findOne($id);

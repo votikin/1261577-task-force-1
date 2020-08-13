@@ -43,6 +43,9 @@ class ManagerReview
         return $this->review->getReviewsByExecutorId($id);
     }
 
+    /**
+     * @param Review $review
+     */
     public function addNewReview(Review $review): void
     {
         $this->review->addNewReview($review);

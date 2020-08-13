@@ -21,7 +21,6 @@ $currentUserId = Yii::$app->user->getId();
 
 //TODO отработать вложения, адрес
 //TODO я бы убрал таблицу роль из бд, добавил бы поле boolean в user
-//TODO работа с файлами, связанными с заданием и юзером (изображения)
 ?>
 
 <?php $this->beginBlock('responses'); ?>
@@ -55,7 +54,6 @@ $currentUserId = Yii::$app->user->getId();
         </div>
     </div>
 <?php $this->endBlock(); ?>
-
 
 <section class="content-view">
     <div class="content-view__card">

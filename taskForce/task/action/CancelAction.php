@@ -4,7 +4,6 @@ namespace taskForce\task\action;
 
 use frontend\models\TaskStatus;
 use taskForce\task\domain\Task;
-use taskForce\user\domain\User;
 
 /**
  * Класс действия "Отменить"

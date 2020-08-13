@@ -16,11 +16,13 @@ class LandingController extends AnonimAccessController
             $loginForm->load(\Yii::$app->request->post());
             if (\Yii::$app->request->isAjax) {
                 \Yii::$app->response->format = Response::FORMAT_JSON;
+
                 return ActiveForm::validate($loginForm);
             }
             if ($loginForm->validate()) {
                 $user = $loginForm->getUser();
                 \Yii::$app->user->login($user);
+
                 return $this->goHome();
             }
         }

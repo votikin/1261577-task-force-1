@@ -6,7 +6,6 @@ use frontend\models\SignUpModel;
 use taskForce\city\application\ManagerCity;
 use taskForce\city\domain\CitiesList;
 use taskForce\user\application\ManagerUser;
-use yii\web\Controller;
 use Yii;
 
 class SignupController extends AnonimAccessController

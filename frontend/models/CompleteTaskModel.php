@@ -48,5 +48,4 @@ class CompleteTaskModel extends ActiveRecord
 
         return $review;
     }
-
 }

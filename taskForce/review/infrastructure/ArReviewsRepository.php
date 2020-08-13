@@ -58,6 +58,7 @@ class ArReviewsRepository implements ReviewsRepository
 
     /**
      * @param Review $review
+     * @throws NotSaveException
      */
     public function addNewReview(Review $review): void
     {

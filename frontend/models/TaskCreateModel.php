@@ -15,7 +15,6 @@ class TaskCreateModel extends ActiveRecord
      * @var ManagerTask
      */
     private $managerTask;
-
     public $short;
     public $description;
     public $category_id;

@@ -6,7 +6,6 @@ use frontend\models\Response;
 use frontend\models\Role;
 use frontend\models\TaskStatus;
 use taskForce\task\domain\Task;
-use taskForce\user\domain\User;
 
 /**
  * Класс действия "Откликнуться"

@@ -84,11 +84,19 @@ class ManagerTask
         return $this->task->createNewTask($task);
     }
 
+    /**
+     * @param int $id
+     */
     public function removeTaskById(int $id): void
     {
         $this->task->removeTaskById($id);
     }
 
+    /**
+     * @param int $taskId
+     * @param $files
+     * @return bool
+     */
     public function attachImagesToTask(int $taskId, $files): bool
     {
         /**
@@ -117,11 +125,20 @@ class ManagerTask
         return true;
     }
 
+    /**
+     * @param int $user_id
+     * @param int $task_id
+     * @return Task
+     */
     public function setExecutorForTask(int $user_id, int $task_id): Task
     {
         return $this->task->setExecutorForTask($user_id,$task_id);
     }
 
+    /**
+     * @param int $task_id
+     * @return array
+     */
     public function getAvailableActions(int $task_id): array
     {
         $currentTask = $this->task->getById($task_id);
@@ -131,14 +148,22 @@ class ManagerTask
                 $availableActs[] = $class::getInternalName();
             }
         }
+
         return $availableActs;
     }
 
+    /**
+     * @param int $task_id
+     */
     public function setFailTaskStatus(int $task_id): void
     {
         $this->task->setFailTaskStatus($task_id);
     }
 
+    /**
+     * @param string $status
+     * @param int $task_id
+     */
     public function setTaskStatus(string $status, int $task_id): void
     {
         $this->task->setTaskStatus($status, $task_id);

@@ -80,7 +80,7 @@ class TaskCreateModel extends ActiveRecord
         $task->deadline = $this->deadline;
         $user = new User();
         $user->id = \Yii::$app->user->getId();
-        $task->admin = $user;
+        $task->author = $user;
         $task->images = $this->files;
 
         return $task;

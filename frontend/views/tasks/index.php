@@ -2,6 +2,7 @@
 
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
+use yii\bootstrap\Html;
 
 /* @var $this yii\web\View */
 
@@ -15,7 +16,13 @@ $this->title = 'Tasks';
             <div class="new-task__card">
                 <div class="new-task__title">
                     <a href="<?= $taskUrl; ?>" class="link-regular"><h2><?= $item['short']; ?></h2></a>
-                    <a  class="new-task__type link-regular" href="#"><p><?= $item['category']['name']; ?></p></a>
+                    <?= Html::a($item['category']['name'],['tasks/'],[
+                        'class' => 'new-task__type link-regular',
+                        'data-method' => 'GET',
+                        'data-params' => [
+                            'categories' => $item['category']['id'],
+                        ]
+                    ]); ?>
                 </div>
                 <div class="new-task__icon new-task__icon--<?= $item['category']['icon']; ?>"></div>
                 <p class="new-task_description"><?= $item['description']; ?></p>

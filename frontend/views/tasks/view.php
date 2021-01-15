@@ -21,6 +21,7 @@ $currentUserId = Yii::$app->user->getId();
 
 //TODO отработать вложения, адрес
 //TODO я бы убрал таблицу роль из бд, добавил бы поле boolean в user
+//TODO каким образом сделать фильтрацию по категориям из вьюхи
 ?>
 
 <?php $this->beginBlock('responses'); ?>
@@ -62,7 +63,13 @@ $currentUserId = Yii::$app->user->getId();
                 <div class="content-view__headline">
                     <h1><?= $taskData['short']; ?></h1>
                     <span>Размещено в категории
-                                    <a href="#" class="link-regular"><?= $taskData['category']['name']; ?></a>
+                        <?= Html::a($taskData['category']['name'],['tasks/'],[
+                            'class' => 'link-regular',
+                            'data-method' => 'GET',
+                            'data-params' => [
+                                'categories' => $taskData['category']['id'],
+                            ]
+                            ]); ?>
                                     <?= $taskData['pastTime']; ?></span>
                 </div>
                 <b class="new-task__price new-task__price--<?= $taskData['category']['icon']; ?> content-view-price">

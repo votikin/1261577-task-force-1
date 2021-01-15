@@ -2,9 +2,12 @@
 
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
+use \yii\bootstrap\Html;
 
 /* @var $this yii\web\View
  * @var $usersData
+ * @var $userSearchModel
+ * @var $categories
  */
 
 $this->title = 'Users';
@@ -45,7 +48,13 @@ $this->title = 'Users';
             </div>
             <div class="link-specialization user__search-link--bottom">
                 <?php foreach ($item['user']['categories'] as $category): ?>
-                    <a href="#" class="link-regular"><?= $category['name']; ?></a>
+                    <?= Html::a($category['name'],['tasks/'],[
+                        'class' => 'link-regular',
+                        'data-method' => 'GET',
+                        'data-params' => [
+                            'categories' => $category['id'],
+                        ]
+                    ]); ?>
                 <?php endforeach; ?>
             </div>
         </div>

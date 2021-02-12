@@ -3,6 +3,7 @@
 namespace taskForce\task\domain;
 
 use DateTime;
+use frontend\modules\api\Api;
 use taskForce\category\domain\Category;
 use taskForce\share\StringHelper;
 use taskForce\user\domain\User;

@@ -118,6 +118,9 @@ class ArTasksRepository implements TasksRepository
         $newTask->deadline = $task->deadline;
         $newTask->user_id = $task->author->id;
         $newTask->status_id = TaskStatus::findOne(['name' => TaskStatus::NAME_STATUS_NEW])->id;
+        $newTask->latitude = $task->location->latitude;
+        $newTask->longitude = $task->location->longitude;
+        $newTask->address = $task->address;
 
         if(!$newTask->save()){
             throw new NotSaveException();

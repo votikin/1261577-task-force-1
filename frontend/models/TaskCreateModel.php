@@ -2,7 +2,10 @@
 
 namespace frontend\models;
 
+use frontend\controllers\TestController;
+use frontend\modules\api\Api;
 use taskForce\task\application\ManagerTask;
+use taskForce\task\domain\Location;
 use taskForce\user\domain\User;
 use yii\db\ActiveRecord;
 use yii\web\UploadedFile;
@@ -48,6 +51,7 @@ class TaskCreateModel extends ActiveRecord
             [['files'], 'file', 'skipOnEmpty' => true, 'maxFiles' => 4],
             ['budget', 'integer'],
             ['deadline', 'safe'],
+            ['location','string'],
         ];
     }
 
@@ -75,7 +79,15 @@ class TaskCreateModel extends ActiveRecord
         $category = new Category();
         $category->id = $this->category_id;
         $task->category = $category;
-        $task->location = $this->location;
+        $address = Api::mapApi($this->location);
+        $location = new Location();
+        if($address != '') {
+            $coordinates = explode(' ', $address);
+            $location->longitude = $coordinates[0];
+            $location->latitude = $coordinates[1];
+        }
+        $task->address = Api::mapApi($location->longitude." ".$location->latitude,'true');
+        $task->location = $location;
         $task->budget = $this->budget;
         $task->deadline = $this->deadline;
         $user = new User();

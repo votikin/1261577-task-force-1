@@ -20,6 +20,7 @@ use frontend\models\TaskSearchModel;
 
 //TODO Поменять адрес задания, наверное, там должн быть city_id
 //TODO Сделать кнопку отмены задания.
+//TODO Выяснить, где прописывать преобразование обратное адреса, в контроллере или в домене
 
 class TasksController extends SecuredController
 {

@@ -129,6 +129,8 @@ class Task
             'budget' => $this->budget,
             'deadline' => $this->deadline,
             'location' => $this->location,
+            'latitude' => $this->location->latitude,
+            'longitude' => $this->location->longitude,
             'category' => $this->category->toArray(),
             'pastTime' => StringHelper::getPastTime($this->dateCreate),
             'author' => $this->author->toArray(),

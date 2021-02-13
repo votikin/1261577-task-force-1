@@ -85,7 +85,6 @@ class TasksController extends SecuredController
             $tasks = $this->managerTask->getAllTasks();
         }
 
-
         return $this->render('index', [
             'tasksData' => $tasks->toArray(),
             'categories' => $categories->toIdKeyNameValueArray(),

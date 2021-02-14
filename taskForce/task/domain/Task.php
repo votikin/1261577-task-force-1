@@ -3,7 +3,6 @@
 namespace taskForce\task\domain;
 
 use DateTime;
-use frontend\modules\api\Api;
 use taskForce\category\domain\Category;
 use taskForce\share\StringHelper;
 use taskForce\user\domain\User;
@@ -81,6 +80,11 @@ class Task
     public $countResponses;
 
     /**
+     * @var int
+     */
+    public $cityId;
+
+    /**
      * Task constructor.
      * @param int|null $id
      * @param string|null $shortName
@@ -96,12 +100,13 @@ class Task
      * @param Status|null $status
      * @param User|null $executor
      * @param int|null $countResponses
+     * @param int|null $cityId
      */
     public function __construct(int $id = null, string $shortName = null, string $description = null,
                                 string $address = null, int $budget = null, DateTime $deadline = null,
                                 DateTime $dateCreate = null, Category $category = null, Location $location = null,
                                 User $author = null, ImageList $images = null, Status $status = null,
-                                User $executor = null, int $countResponses = null)
+                                User $executor = null, int $countResponses = null, int $cityId = null)
     {
         $this->id = $id;
         $this->shortName = $shortName;
@@ -117,6 +122,7 @@ class Task
         $this->status = $status;
         $this->executor = $executor;
         $this->countResponses = $countResponses;
+        $this->cityId = $cityId;
     }
 
     public function toArray()
@@ -138,6 +144,7 @@ class Task
             'status' => $this->status->toArray(),
             'executor' => $this->executor->toArray(),
             'countResponses' => $this->countResponses,
+            'cityId' => $this->cityId,
         ];
     }
 }

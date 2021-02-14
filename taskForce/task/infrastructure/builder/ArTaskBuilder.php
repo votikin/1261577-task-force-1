@@ -45,6 +45,7 @@ class ArTaskBuilder
         $task->countResponses = $model->getResponsesCount();
         $task->location = $location;
         $task->images = $imageList;
+        $task->cityId = $model->city_id;
 
         return $task;
     }

@@ -55,7 +55,7 @@ $categoriesList = ArrayHelper::map($categories,'id', 'name');
         <?= $form->field($taskCreateModel,'location')
             ->input('search',array(
                 'class' => 'input-navigation input-middle input',
-                'placeholder' => 'Санкт-Петербург, Калининский район',
+                'value' => "$city, ",
             )); ?>
         <span>Укажите адрес исполнения, если задание требует присутствия</span>
         <div class="create__price-time">

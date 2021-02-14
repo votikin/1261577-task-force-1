@@ -5,7 +5,9 @@ namespace frontend\controllers;
 use frontend\models\Role;
 use frontend\models\TaskCreateModel;
 use taskForce\category\application\ManagerCategory;
+use taskForce\city\application\ManagerCity;
 use taskForce\task\application\ManagerTask;
+use taskForce\user\application\ManagerUser;
 use yii\web\UploadedFile;
 
 class CreateController extends SecuredController
@@ -18,12 +20,24 @@ class CreateController extends SecuredController
     /**
      * @var ManagerTask
      */
-    public $managerTask;
+    private $managerTask;
+
+    /**
+     * @var ManagerUser
+     */
+    private $managerUser;
+
+    /**
+     * @var ManagerCity
+     */
+    private $managerCity;
 
     public function init()
     {
         $this->managerCategory = \Yii::$container->get(ManagerCategory::class);
         $this->managerTask = \Yii::$container->get(ManagerTask::class);
+        $this->managerUser = \Yii::$container->get(ManagerUser::class);
+        $this->managerCity = \Yii::$container->get(ManagerCity::class);
         parent::init();
     }
 
@@ -46,6 +60,8 @@ class CreateController extends SecuredController
     public function actionIndex()
     {
         $model = new TaskCreateModel();
+        $user = $this->managerUser->getUserById(\Yii::$app->user->getId());
+        $city = $this->managerCity->getCityById($user->cityId);
         $categories = $this->managerCategory->getAllCategories();
         $postData = \Yii::$app->request->post();
         if($model->load($postData) && $model->validate()) {
@@ -62,6 +78,7 @@ class CreateController extends SecuredController
         return $this->render('index',[
             'taskCreateModel' => $model,
             'categories' => $categories->toArray(),
+            'city' => $city->name,
         ]);
     }
 }

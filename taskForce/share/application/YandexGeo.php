@@ -1,6 +1,6 @@
 <?php
 
-namespace taskforce\share\application;
+namespace taskForce\share\application;
 
 use Yii;
 use GuzzleHttp\Client;
@@ -26,6 +26,7 @@ class YandexGeo
 
             $content = $response->getBody()->getContents();
             $response_data = json_decode($content);
+
             if($reverse == true) {
                 if(!isset($response_data->response->GeoObjectCollection->featureMember[0]->GeoObject->metaDataProperty
                         ->GeocoderMetaData->text)) {

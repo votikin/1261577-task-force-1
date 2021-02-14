@@ -2,8 +2,8 @@
 
 namespace frontend\models;
 
-use frontend\controllers\TestController;
-use frontend\modules\api\Api;
+use taskForce\city\application\ManagerCity;
+use taskforce\share\application\YandexGeo;
 use taskForce\task\application\ManagerTask;
 use taskForce\task\domain\Location;
 use taskForce\user\domain\User;
@@ -12,12 +12,11 @@ use yii\web\UploadedFile;
 use taskForce\task\domain\Task;
 use taskForce\category\domain\Category;
 
+//TODO Необходимо определять город и искать его в таблице city
+//TODO Срок исполнения - дата в формате гггг-мм-дд
+
 class TaskCreateModel extends ActiveRecord
 {
-    /**
-     * @var ManagerTask
-     */
-    private $managerTask;
     public $short;
     public $description;
     public $category_id;
@@ -31,11 +30,6 @@ class TaskCreateModel extends ActiveRecord
     public $budget;
     public $deadline;
 
-    public function init()
-    {
-        $this->managerTask = \Yii::$container->get(ManagerTask::class);
-        parent::init();
-    }
 
     /**
      * {@inheritdoc}
@@ -79,14 +73,16 @@ class TaskCreateModel extends ActiveRecord
         $category = new Category();
         $category->id = $this->category_id;
         $task->category = $category;
-        $address = Api::mapApi($this->location);
+        $addressCoordinates = YandexGeo::getLocationByAddress($this->location);
         $location = new Location();
-        if($address != '') {
-            $coordinates = explode(' ', $address);
-            $location->longitude = $coordinates[0];
-            $location->latitude = $coordinates[1];
+        if($addressCoordinates != '') {
+            $coordinates = explode(' ', $addressCoordinates);
+            if(count($coordinates) == 2) {
+                $location->longitude = $coordinates[0];
+                $location->latitude = $coordinates[1];
+            }
+            $task->address = YandexGeo::getLocationByAddress($location->longitude." ".$location->latitude,'true');
         }
-        $task->address = Api::mapApi($location->longitude." ".$location->latitude,'true');
         $task->location = $location;
         $task->budget = $this->budget;
         $task->deadline = $this->deadline;

@@ -26,31 +26,8 @@ $currentUserId = Yii::$app->user->getId();
 //TODO я бы убрал таблицу роль из бд, добавил бы поле boolean в user
 //TODO каким образом сделать фильтрацию по категориям из вьюхи
 //TODO должна ли миниатрюра быть ссылкой?
+//TODO отработать ситуации, если юзер удален, чтобы не ввело на его профиль
 ?>
-
-<script type="text/javascript">
-    ymaps.ready(init);
-    function init(){
-        var myMap = new ymaps.Map("map", {
-            center: [<?=$taskData['latitude'];?>, <?=$taskData['longitude'];?>],
-            zoom: 14
-        }),
-            myGeoObject = new ymaps.GeoObject({
-                geometry: {
-                    type: "Point",
-                    coordinates: [<?=$taskData['latitude'];?>, <?=$taskData['longitude'];?>]
-                },
-                properties: {
-                    // iconContent: 'Вот здесь',
-                }
-            }, {
-                preset: 'islands#blackStretchyIcon',
-                draggable: true
-            });
-            myMap.geoObjects
-            .add(myGeoObject);
-    }
-</script>
 
 <?php $this->beginBlock('responses'); ?>
 
@@ -248,4 +225,35 @@ $currentUserId = Yii::$app->user->getId();
     <button class="form-modal-close" type="button">Закрыть</button>
 </section>
 
+<?php if(!(is_null($taskData['latitude'])&&is_null($taskData['longitude']))): ?>
+    <script type="text/javascript">
+        ymaps.ready(init);
+        function init(){
+            var myMap = new ymaps.Map("map", {
+                    center: [<?=$taskData['latitude'];?>, <?=$taskData['longitude'];?>],
+                    zoom: 14
+                }),
+                myGeoObject = new ymaps.GeoObject({
+                    geometry: {
+                        type: "Point",
+                        coordinates: [<?=$taskData['latitude'];?>, <?=$taskData['longitude'];?>]
+                    },
+                    properties: {
+                        // iconContent: 'Вот здесь',
+                    }
+                }, {
+                    preset: 'islands#blackStretchyIcon',
+                    draggable: true
+                });
+            myMap.geoObjects
+                .add(myGeoObject);
+        }
+    </script>
+<?php endif; ?>
 
+
+
+<?php $this->beginBlock('yandexApi'); ?>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=<?=Yii::$app->params['apiKeyMap'];?>&lang=ru_RU"
+            type="text/javascript"> </script>
+<?php $this->endBlock(); ?>

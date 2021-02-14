@@ -1,18 +1,20 @@
 <?php
 
-namespace frontend\modules\api;
+namespace taskforce\share\application;
 
 use Yii;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 
-class Api
+class YandexGeo
 {
-    static public function mapApi(string $addr, $reverse = false): string
+    const BASE_URL = 'https://geocode-maps.yandex.ru/';
+
+    public static function getLocationByAddress(string $addr, $reverse = false): string
     {
         $client = new Client([
-            'base_uri' => 'https://geocode-maps.yandex.ru/',
+            'base_uri' => self::BASE_URL,
         ]);
         $api_key = Yii::$app->params['apiKeyMap'];
         $address = Yii::$app->request->get('address',$addr);

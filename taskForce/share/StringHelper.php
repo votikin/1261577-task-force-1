@@ -5,7 +5,7 @@ use DateTime;
 
 class StringHelper
 {
-    static public function declensionNum($number,$titles)
+    public static function declensionNum($number,$titles)
     {
         $cases = [2, 0, 1, 1, 1, 2];
         $format = $titles[ ($number%100 > 4 && $number %100 < 20) ? 2 : $cases[min($number%10, 5)] ];
@@ -13,7 +13,7 @@ class StringHelper
         return sprintf($format, $number);
     }
 
-    static public function getPastActivityTime($dateTime)
+    public static function getPastActivityTime($dateTime)
     {
         $time = new \DateTime($dateTime);
         $currentTime = new \DateTime();
@@ -38,7 +38,7 @@ class StringHelper
         }
     }
 
-    static public function getPastTime($dateTime)
+    public static function getPastTime($dateTime)
     {
         $time = new \DateTime($dateTime);
         $currentTime = new \DateTime();
@@ -63,7 +63,7 @@ class StringHelper
         }
     }
 
-    static public function getRegistrationPastTime($dateTime)
+    public static function getRegistrationPastTime($dateTime)
     {
         $time = new \DateTime($dateTime);
         $currentTime = new \DateTime();
@@ -88,7 +88,7 @@ class StringHelper
         }
     }
 
-    static function getAge(DateTime $dateTime)
+    public static function getAge(DateTime $dateTime)
     {
         $interval = $dateTime->diff(new DateTime());
         if($interval->y > 0) {

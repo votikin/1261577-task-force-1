@@ -22,8 +22,7 @@ AppAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://api-maps.yandex.ru/2.1/?apikey=<?=Yii::$app->params['apiKeyMap'];?>&lang=ru_RU"
-            type="text/javascript"> </script>
+    <?= $this->blocks['yandexApi'] ?? ''?>
     <?php $this->registerCsrfMetaTags() ?>
     <title><?=  Html::encode($this->title) ?></title>
 
@@ -142,6 +141,7 @@ AppAsset::register($this);
         <?php if (isset($this->blocks['woman'])): ?>
             <?= $this->blocks['woman']; ?>
         <?php endif; ?>
+
     </div>
 
 </footer>

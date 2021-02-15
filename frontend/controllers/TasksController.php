@@ -20,6 +20,7 @@ use frontend\models\TaskSearchModel;
 
 //TODO Поменять адрес задания, наверное, там должн быть city_id
 //TODO Сделать кнопку отмены задания.
+//TODO Выяснить, где прописывать преобразование обратное адреса, в контроллере или в домене
 
 class TasksController extends SecuredController
 {
@@ -74,7 +75,10 @@ class TasksController extends SecuredController
         $categories = $this->managerCategory->getAllCategories();
         $taskSearchModel = new TaskSearchModel();
         $taskSearchModel->load(Yii::$app->request->post());
-        if(Yii::$app->request->getIsPost()) {
+        if(Yii::$app->request->getIsGet()) {
+            $request = Yii::$app->request->get();
+            $tasks = $this->managerTask->getTasksByFilter($request);
+        } elseif (Yii::$app->request->getIsPost()) {
             $request = Yii::$app->request->post();
             $tasks = $this->managerTask->getTasksByFilter($request['TaskSearchModel']);
         } else {

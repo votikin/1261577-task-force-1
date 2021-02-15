@@ -5,6 +5,7 @@
  * @var $reviewsData
  */
 
+use \yii\bootstrap\Html;
 $this->title = 'Detail user';
 //TODO разобраться с количеством звёзд рейтинга
 //TODO адрес, возраст
@@ -38,7 +39,13 @@ $this->title = 'Detail user';
                 <h3 class="content-view__h3">Специализации</h3>
                 <div class="link-specialization">
                     <?php foreach ($userData['user']['categories'] as $category): ?>
-                        <a href="#" class="link-regular"><?= $category['name']; ?></a>
+                        <?= Html::a($category['name'],['tasks/'],[
+                            'class' => 'link-regular',
+                            'data-method' => 'GET',
+                            'data-params' => [
+                                'categories' => $category['id'],
+                            ]
+                        ]); ?>
                     <?php endforeach; ?>
                 </div>
                 <h3 class="content-view__h3">Контакты</h3>

@@ -19,6 +19,7 @@ return [
                 'logout' => 'users/logout',
                 'tasks/view/<id:\d+>' => 'tasks/view',
                 'users/view/<id:\d+>' => 'users/view',
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'api\contacts'],
             ],
         ],
         'cache' => [

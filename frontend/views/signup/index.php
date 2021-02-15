@@ -11,9 +11,7 @@ use frontend\models\SignUpModel;
 $this->title = 'Регистрация';
 $this->params['isRegisterPage'] = true;
 $cities = \yii\helpers\ArrayHelper::map($city,'id','name');
-
 ?>
-
 <section class="registration__user">
     <h1>Регистрация аккаунта</h1>
     <div class="registration-wrapper">

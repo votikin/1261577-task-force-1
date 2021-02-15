@@ -5,6 +5,9 @@
  * @var $taskData
  * @var $customerData
  * @var $isExecutor bool
+ * @var $availableActions
+ * @var $responseUserModel
+ * @var $completeTaskModel
  */
 
 use frontend\components\widgets\ResponsesButtons;
@@ -21,6 +24,9 @@ $currentUserId = Yii::$app->user->getId();
 
 //TODO отработать вложения, адрес
 //TODO я бы убрал таблицу роль из бд, добавил бы поле boolean в user
+//TODO каким образом сделать фильтрацию по категориям из вьюхи
+//TODO должна ли миниатрюра быть ссылкой?
+//TODO отработать ситуации, если юзер удален, чтобы не ввело на его профиль
 ?>
 
 <?php $this->beginBlock('responses'); ?>
@@ -62,7 +68,13 @@ $currentUserId = Yii::$app->user->getId();
                 <div class="content-view__headline">
                     <h1><?= $taskData['short']; ?></h1>
                     <span>Размещено в категории
-                                    <a href="#" class="link-regular"><?= $taskData['category']['name']; ?></a>
+                        <?= Html::a($taskData['category']['name'],['tasks/'],[
+                            'class' => 'link-regular',
+                            'data-method' => 'GET',
+                            'data-params' => [
+                                'categories' => $taskData['category']['id'],
+                            ]
+                            ]); ?>
                                     <?= $taskData['pastTime']; ?></span>
                 </div>
                 <b class="new-task__price new-task__price--<?= $taskData['category']['icon']; ?> content-view-price">
@@ -84,13 +96,10 @@ $currentUserId = Yii::$app->user->getId();
                 <h3 class="content-view__h3">Расположение</h3>
                 <div class="content-view__location-wrapper">
                     <div class="content-view__map">
-                        <a href="#"><img src="/img/map.jpg" width="361" height="292"
-                                         alt="Москва, Новый арбат, 23 к. 1"></a>
+                        <div id="map" style="width: 361px; height: 292px"></div>
                     </div>
                     <div class="content-view__address">
-                        <span class="address__town">Москва</span><br>
-                        <span>Новый арбат, 23 к. 1</span>
-                        <p>Вход под арку, код домофона 1122</p>
+                        <span class="address__town"><?=$taskData['address'];?></span>
                     </div>
                 </div>
             </div>
@@ -216,4 +225,35 @@ $currentUserId = Yii::$app->user->getId();
     <button class="form-modal-close" type="button">Закрыть</button>
 </section>
 
+<?php if(!(is_null($taskData['latitude'])&&is_null($taskData['longitude']))): ?>
+    <script type="text/javascript">
+        ymaps.ready(init);
+        function init(){
+            var myMap = new ymaps.Map("map", {
+                    center: [<?=$taskData['latitude'];?>, <?=$taskData['longitude'];?>],
+                    zoom: 14
+                }),
+                myGeoObject = new ymaps.GeoObject({
+                    geometry: {
+                        type: "Point",
+                        coordinates: [<?=$taskData['latitude'];?>, <?=$taskData['longitude'];?>]
+                    },
+                    properties: {
+                        // iconContent: 'Вот здесь',
+                    }
+                }, {
+                    preset: 'islands#blackStretchyIcon',
+                    draggable: true
+                });
+            myMap.geoObjects
+                .add(myGeoObject);
+        }
+    </script>
+<?php endif; ?>
 
+
+
+<?php $this->beginBlock('yandexApi'); ?>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=<?=Yii::$app->params['apiKeyMap'];?>&lang=ru_RU"
+            type="text/javascript"> </script>
+<?php $this->endBlock(); ?>

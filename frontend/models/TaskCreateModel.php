@@ -34,7 +34,7 @@ class TaskCreateModel extends ActiveRecord
      */
     public $files;
 
-    public $location;
+    public $formAddress;
     public $budget;
     public $deadline;
     public $cityId;
@@ -60,7 +60,7 @@ class TaskCreateModel extends ActiveRecord
             [['files'], 'file', 'skipOnEmpty' => true, 'maxFiles' => 4],
             ['budget', 'integer'],
             ['deadline', 'safe'],
-            ['location','string'],
+            ['formAddress','string'],
         ];
     }
 
@@ -74,7 +74,7 @@ class TaskCreateModel extends ActiveRecord
             'description' => 'ПОДРОБНОСТИ ЗАДАНИЯ',
             'category_id' => 'КАТЕГОРИЯ',
             'files' => 'ФАЙЛЫ',
-            'location' => 'ЛОКАЦИЯ',
+            'formAddress' => 'Адрес в городе '.$this->getUserCity(),
             'budget' => 'БЮДЖЕТ',
             'deadline' => 'СРОК ИСПОЛНЕНИЯ',
         ];
@@ -93,15 +93,13 @@ class TaskCreateModel extends ActiveRecord
         $task->author = $user;
         $task->images = $this->files;
         $location = new Location();
-        if (!(is_null($this->location))) {
-            $task->address = $this->location;
-            $addressCoordinates = YandexGeo::getLocationByAddress($this->location);
-            if($addressCoordinates != '') {
-                $coordinates = explode(' ', $addressCoordinates);
-                if(count($coordinates) == 2) {
-                    $location->longitude = $coordinates[0];
-                    $location->latitude = $coordinates[1];
-                }
+        if ($this->formAddress) {
+            $fullAddress = $this->getUserCity().", ".$this->formAddress;
+            $task->address = $fullAddress;
+            $coordinates = explode(' ', YandexGeo::getLocationByAddress($fullAddress));
+            if (isset($coordinates[1])) {
+                $location->longitude = $coordinates[0];
+                $location->latitude = $coordinates[1];
             }
         }
         $task->location = $location;
@@ -113,4 +111,13 @@ class TaskCreateModel extends ActiveRecord
 
         return $task;
     }
+
+    private function getUserCity()
+    {
+        $user = new User();
+        $user = $this->managerUser->getUserById(\Yii::$app->user->getId());
+
+        return $this->managerCity->getCityById($user->cityId)->name;
+    }
+
 }

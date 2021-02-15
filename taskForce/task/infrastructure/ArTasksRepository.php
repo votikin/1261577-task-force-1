@@ -113,13 +113,19 @@ class ArTasksRepository implements TasksRepository
         $newTask = new modelTask();
         $newTask->short = $task->shortName;
         $newTask->description = $task->description;
-        $newTask->category_id = $task->category->id;
+        if($task->category) {
+            $newTask->category_id = $task->category->id;
+        }
         $newTask->budget = $task->budget;
         $newTask->deadline = $task->deadline;
-        $newTask->user_id = $task->author->id;
+        if($task->author) {
+            $newTask->user_id = $task->author->id;
+        }
         $newTask->status_id = TaskStatus::findOne(['name' => TaskStatus::NAME_STATUS_NEW])->id;
-        $newTask->latitude = $task->location->latitude;
-        $newTask->longitude = $task->location->longitude;
+        if($task->location) {
+            $newTask->latitude = $task->location->latitude;
+            $newTask->longitude = $task->location->longitude;
+        }
         $newTask->address = $task->address;
 
         if(!$newTask->save()){

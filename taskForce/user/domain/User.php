@@ -63,35 +63,6 @@ class User
      */
     public $cityId;
 
-    /**
-     * User constructor.
-     * @param int|null $id
-     * @param string|null $avatar
-     * @param string|null $name
-     * @param DateTime|null $dateCreate
-     * @param Contact|null $contacts
-     * @param DateTime|null $lastActivity
-     * @param float|null $rating
-     * @param CategoriesList|null $categories
-     * @param Detail|null $detail
-     * @param int|null $cityId
-     */
-    public function __construct(int $id = null, string $avatar = null, string $name = null, DateTime $dateCreate = null,
-                                Contact $contacts = null, DateTime $lastActivity = null, float $rating = null,
-                                CategoriesList $categories = null, Detail $detail = null, int $cityId = null)
-    {
-        $this->id = $id;
-        $this->avatar = $avatar;
-        $this->name = $name;
-        $this->dateCreate = $dateCreate;
-        $this->contacts = $contacts;
-        $this->lastActivity = $lastActivity;
-        $this->rating = $rating;
-        $this->categories = $categories;
-        $this->detail = $detail;
-        $this->cityId = $cityId;
-    }
-
     public function toArray()
     {
         return [

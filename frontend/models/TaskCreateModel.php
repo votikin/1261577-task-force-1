@@ -4,7 +4,6 @@ namespace frontend\models;
 
 use taskForce\city\application\ManagerCity;
 use taskForce\share\application\YandexGeo;
-use taskForce\task\application\ManagerTask;
 use taskForce\task\domain\Location;
 use taskForce\user\application\ManagerUser;
 use taskForce\user\domain\User;
@@ -94,7 +93,7 @@ class TaskCreateModel extends ActiveRecord
         $task->images = $this->files;
         $location = new Location();
         if ($this->formAddress) {
-            $fullAddress = $this->getUserCity().", ".$this->formAddress;
+            $fullAddress = $this->getUserCity() . ", " . $this->formAddress;
             $task->address = $fullAddress;
             $coordinates = explode(' ', YandexGeo::getLocationByAddress($fullAddress));
             if (isset($coordinates[1])) {

@@ -168,4 +168,14 @@ class ManagerTask
     {
         $this->task->setTaskStatus($status, $task_id);
     }
+
+    /**
+     * @param int $user_id
+     *
+     * @return TasksList
+     */
+    public function getAllTasksByUserId(int $user_id): TasksList
+    {
+        return $this->task->getAllUserTasks($user_id);
+    }
 }

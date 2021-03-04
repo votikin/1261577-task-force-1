@@ -3,6 +3,8 @@
 namespace taskForce\task\infrastructure;
 
 use frontend\models\Task as modelTask;
+use frontend\models\User as modelUser;
+use frontend\models\Role as modelRole;
 use frontend\models\TaskImage;
 use frontend\models\TaskStatus;
 use taskForce\task\action\CancelAction;
@@ -220,5 +222,21 @@ class ArTasksRepository implements TasksRepository
         if (!$task->save()) {
             throw new NotSaveException();
         }
+    }
+
+    public function getAllUserTasks(int $user_id): TasksList
+    {
+        $user = modelUser::findOne(['id' => $user_id]);
+        if($user->role_id = modelRole::CUSTOMER_ROLE) {
+            $tasks = modelTask::find()->where(['user_id' => $user_id])->all();
+        } else {
+            $tasks = modelTask::find()->where(['executor_id' => $user_id])->all();
+        }
+        $tasksList = new TasksList();
+        foreach ($tasks as $task) {
+            $tasksList[] = $this->builder->build($task);
+        }
+
+        return $tasksList;
     }
 }

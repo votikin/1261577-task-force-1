@@ -223,20 +223,4 @@ class ArTasksRepository implements TasksRepository
             throw new NotSaveException();
         }
     }
-
-    public function getAllUserTasks(int $user_id): TasksList
-    {
-        $user = modelUser::findOne(['id' => $user_id]);
-        if($user->role_id = modelRole::CUSTOMER_ROLE) {
-            $tasks = modelTask::find()->where(['user_id' => $user_id])->all();
-        } else {
-            $tasks = modelTask::find()->where(['executor_id' => $user_id])->all();
-        }
-        $tasksList = new TasksList();
-        foreach ($tasks as $task) {
-            $tasksList[] = $this->builder->build($task);
-        }
-
-        return $tasksList;
-    }
 }

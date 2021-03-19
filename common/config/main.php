@@ -11,6 +11,9 @@ return [
             'showScriptName' => false,
             'enableStrictParsing' => false,
             'rules' => [
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'api/message'],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'api/task'],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'api/rule'],
 //                'defaultRoute' => 'tasks/index',
                 'tasks/' => 'tasks/index',
                 'users/' => 'users/index',
@@ -19,8 +22,6 @@ return [
                 'logout' => 'users/logout',
                 'tasks/view/<id:\d+>' => 'tasks/view',
                 'users/view/<id:\d+>' => 'users/view',
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'api/messages'],
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'api/tasks'],
             ],
         ],
         'cache' => [

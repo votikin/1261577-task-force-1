@@ -3,11 +3,17 @@
 namespace frontend\modules\api\controllers;
 
 use frontend\models\Discussion;
+use taskForce\user\application\ManagerUser;
 use yii\filters\AccessControl;
 use yii\rest\ActiveController;
 
 class MessageController extends ActiveController
 {
+    /**
+     * @var ManagerUser
+     */
+    private $managerUser;
+
     public $modelClass = Discussion::class;
 
     public function behaviors()
@@ -33,6 +39,12 @@ class MessageController extends ActiveController
         unset($act['create']);
 
         return $act;
+    }
+
+    public function init()
+    {
+        parent::init();
+        $this->managerUser = \Yii::$container->get(ManagerUser::class);
     }
 
     public function actionIndex(int $task_id)
@@ -63,6 +75,11 @@ class MessageController extends ActiveController
             }
         }
         $model->author_id = \Yii::$app->user->getId();
+        if($this->managerUser->isExecutor(\Yii::$app->user->getId())) {
+            $model->is_executor_view = 1;
+        } else {
+            $model->is_customer_view = 1;
+        }
         $model->save();
         \Yii::$app->getResponse()->setStatusCode('201');
 

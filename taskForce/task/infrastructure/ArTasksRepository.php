@@ -3,8 +3,6 @@
 namespace taskForce\task\infrastructure;
 
 use frontend\models\Task as modelTask;
-use frontend\models\User as modelUser;
-use frontend\models\Role as modelRole;
 use frontend\models\TaskImage;
 use frontend\models\TaskStatus;
 use taskForce\task\action\CancelAction;

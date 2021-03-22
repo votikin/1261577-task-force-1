@@ -2,6 +2,7 @@
 
 namespace frontend\modules\api\controllers;
 
+use frontend\models\Discussion;
 use frontend\models\Task;
 use yii\filters\AccessControl;
 use yii\rest\ActiveController;
@@ -43,6 +44,9 @@ class TaskController extends ActiveController
             $temp['published_at'] = $task->created_at;
             $temp['id'] = $task->id;
             $temp['author_id'] = $task->user->name;
+            $temp['new_messages'] = Discussion::find()->where(['is_executor_view' => '0','task_id' => $task->id])
+                ->orWhere(['is_customer_view' => '0','task_id' => $task->id])
+                ->count();
             $result[] = $temp;
         }
 

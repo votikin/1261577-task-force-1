@@ -7,6 +7,7 @@ use frontend\models\ResponseUserModel;
 use frontend\models\TaskStatus;
 use taskForce\category\application\ManagerCategory;
 use taskForce\category\domain\CategoriesList;
+use taskForce\discussion\application\ManagerDiscussion;
 use taskForce\response\application\ManagerResponse;
 use taskForce\response\domain\ResponsesList;
 use taskForce\review\application\ManagerReview;
@@ -49,6 +50,11 @@ class TasksController extends SecuredController
      */
     private $managerReview;
 
+    /**
+     * @var ManagerDiscussion
+     */
+    private $managerDiscussion;
+
     public function init()
     {
         $this->managerUser = \Yii::$container->get(ManagerUser::class);
@@ -56,6 +62,7 @@ class TasksController extends SecuredController
         $this->managerCategory = \Yii::$container->get(ManagerCategory::class);
         $this->managerResponse = \Yii::$container->get(ManagerResponse::class);
         $this->managerReview = \Yii::$container->get(ManagerReview::class);
+        $this->managerDiscussion = \Yii::$container->get(ManagerDiscussion::class);
         parent::init();
     }
 
@@ -125,10 +132,12 @@ class TasksController extends SecuredController
 
         if(!$this->managerUser->isExecutor($userId)) {
             $responses = $this->managerResponse->getResponsesByTaskId($id);
+            $this->managerDiscussion->setIsViewState($id,false);
         } else {
             $responses = $this->managerResponse->getUserResponseToTask($userId, $task->id);
             if(count($responses) !== 0) {
                 $isExecutor = true;
+                $this->managerDiscussion->setIsViewState($id,true);
             }
         }
         $availableActions = $this->managerTask->getAvailableActions($id);

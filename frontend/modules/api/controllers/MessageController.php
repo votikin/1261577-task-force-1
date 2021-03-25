@@ -3,6 +3,7 @@
 namespace frontend\modules\api\controllers;
 
 use frontend\models\Discussion;
+use taskForce\discussion\application\ManagerDiscussion;
 use taskForce\user\application\ManagerUser;
 use yii\filters\AccessControl;
 use yii\rest\ActiveController;
@@ -13,6 +14,11 @@ class MessageController extends ActiveController
      * @var ManagerUser
      */
     private $managerUser;
+
+    /**
+     * @var ManagerDiscussion
+     */
+    private $managerDiscussion;
 
     public $modelClass = Discussion::class;
 
@@ -45,17 +51,17 @@ class MessageController extends ActiveController
     {
         parent::init();
         $this->managerUser = \Yii::$container->get(ManagerUser::class);
+        $this->managerDiscussion = \Yii::$container->get(ManagerDiscussion::class);
     }
 
     public function actionIndex(int $task_id)
     {
         $response = [];
-        $discuss = Discussion::find()->where(['task_id' => $task_id])->asArray()->all();
+        $discuss = $this->managerDiscussion->getDiscussionsByTaskId($task_id);
         foreach ($discuss as $item) {
-            $temp['message'] = $item['message'];
-            $temp['published_at'] = $item['created_at'];
-            $temp['is_mine'] = ($item['author_id'] == \Yii::$app->user->getId());
-            $temp['id'] = \Yii::$app->user->getId();
+            $temp['message'] = $item->message;
+            $temp['published_at'] = $item->created;
+            $temp['is_mine'] = ($item->authorId == \Yii::$app->user->getId());
             $response[] = $temp;
         }
 
@@ -64,26 +70,28 @@ class MessageController extends ActiveController
 
     public function actionCreate()
     {
-        $model = new Discussion();
+        $newDiscussion = new \taskForce\discussion\domain\Discussion();
         $post  = file_get_contents('php://input');
         $res = json_decode("$post");
-        $model->message = $res->message;
+        $newDiscussion->message = $res->message;
         $params = \Yii::$app->request->getQueryParams();
         foreach ($params as $param => $value) {
             if($param == 'task_id') {
-                $model->task_id = $value;
+                $newDiscussion->taskId = $value;
             }
         }
-        $model->author_id = \Yii::$app->user->getId();
+        $newDiscussion->authorId = \Yii::$app->user->getId();
         if($this->managerUser->isExecutor(\Yii::$app->user->getId())) {
-            $model->is_executor_view = 1;
+            $newDiscussion->isExecutorView = 1;
+            $newDiscussion->isCustomerView = 0;
         } else {
-            $model->is_customer_view = 1;
+            $newDiscussion->isCustomerView = 1;
+            $newDiscussion->isExecutorView = 0;
         }
-        $model->save();
+        $this->managerDiscussion->addNewDiscussion($newDiscussion);
         \Yii::$app->getResponse()->setStatusCode('201');
 
-        return $model;
+        return $newDiscussion;
     }
 }
 

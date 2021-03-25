@@ -2,9 +2,11 @@
 
 namespace taskForce\task\infrastructure;
 
+use frontend\models\Role;
 use frontend\models\Task as modelTask;
 use frontend\models\TaskImage;
 use frontend\models\TaskStatus;
+use frontend\models\User;
 use taskForce\task\action\CancelAction;
 use taskForce\task\action\CompleteAction;
 use taskForce\task\action\ExecuteAction;
@@ -68,7 +70,6 @@ class ArTasksRepository implements TasksRepository
         }
 
         return $tasksList;
-
     }
 
     /**
@@ -220,5 +221,26 @@ class ArTasksRepository implements TasksRepository
         if (!$task->save()) {
             throw new NotSaveException();
         }
+    }
+
+    public function getUsersTasksByStatus(string $status, int $user_id): TasksList
+    {
+        $statusFind = TaskStatus::findOne(['translation' => $status]);
+        if($statusFind == null) {
+            $statusFind = TaskStatus::findOne(['translation' => 'new']);
+        }
+        $user = User::findOne(['id' => $user_id]);
+        $role = Role::findOne(['id' => $user->role_id]);
+        if($role->name == Role::CUSTOMER_ROLE) {
+            $tasks = modelTask::find()->where(['user_id' => $user_id, 'status_id' => $statusFind->id])->all();
+        } else {
+            $tasks = modelTask::find()->where(['executor_id' => $user_id, 'status_id' => $statusFind->id])->all();
+        }
+        $tasksList = new TasksList();
+        foreach ($tasks as $task) {
+            $tasksList[] = $this->builder->build($task);
+        }
+
+        return $tasksList;
     }
 }

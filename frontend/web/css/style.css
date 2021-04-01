@@ -1715,6 +1715,12 @@ footer {
 .new-status {
   background-color: #ff7f50; }
 
+.cancel-status {
+  background-color: #e306ff; }
+
+.fail-status {
+  background-color: #ff1029; }
+
 .my-list__bottom {
   display: -webkit-box;
   display: -ms-flexbox;

@@ -47,11 +47,21 @@ class ArDiscussionsRepository implements DiscussionsRepository
         }
     }
 
-    public function getCountNewMessageByTaskId(int $task_id): int
+    public function getCountNewMessageByTaskId(int $task_id, bool $is_executor = true, bool $allRole = true): int
     {
-        return modelDiscussion::find()->where(['is_executor_view' => '0','task_id' => $task_id])
-            ->orWhere(['is_customer_view' => '0','task_id' => $task_id])
-            ->count();
+        $count = modelDiscussion::find();
+        if($allRole == false) {
+            if($is_executor == false) {
+                $count = $count->where(['is_customer_view' => '0','task_id' => $task_id]);
+            } else {
+                $count = $count->where(['is_executor_view' => '0','task_id' => $task_id]);
+            }
+        } else {
+            $count = $count->where(['is_executor_view' => '0','task_id' => $task_id])
+                ->orWhere(['is_customer_view' => '0','task_id' => $task_id]);
+        }
+
+        return $count->count();
     }
 
     public function getDiscussionsByTaskId(int $task_id): DiscussionsList

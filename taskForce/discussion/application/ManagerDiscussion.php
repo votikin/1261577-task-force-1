@@ -27,9 +27,9 @@ class ManagerDiscussion
         $this->discussions->setIsViewState($task_id,$isExecutor);
     }
 
-    public function getCountNewMessagesByTaskId(int $task_id): int
+    public function getCountNewMessagesByTaskId(int $task_id, bool $is_executor = true, bool $allRole = true): int
     {
-        return $this->discussions->getCountNewMessageByTaskId($task_id);
+        return $this->discussions->getCountNewMessageByTaskId($task_id, $is_executor, $allRole);
     }
 
     public function getDiscussionsByTaskId(int $task_id): DiscussionsList

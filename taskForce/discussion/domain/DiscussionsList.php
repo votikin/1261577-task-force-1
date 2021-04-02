@@ -1,6 +1,6 @@
 <?php
 
-namespace  taskForce\discussion\domain;
+namespace taskForce\discussion\domain;
 
 use taskForce\share\BaseList;
 

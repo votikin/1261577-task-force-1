@@ -26,27 +26,24 @@ class ArDiscussionsRepository implements DiscussionsRepository
         $this->builder = $builder;
     }
 
+    /**
+     * @param int  $task_id
+     * @param bool $isExecutor
+     */
     public function setIsViewState(int $task_id, bool $isExecutor)
     {
-        if($isExecutor == true) {
-            $discussions = modelDiscussion::find()->where(['task_id' => $task_id, 'is_executor_view' => '0'])->all();
-            foreach ($discussions as $discussion) {
-                $discussion->is_executor_view = 1;
-                if (!$discussion->save()) {
-                    throw new NotSaveException();
-                }
-            }
+        if ($isExecutor == true) {
+            modelDiscussion::updateAll(['is_executor_view' => 1],['task_id' => $task_id, 'is_executor_view' => '0']);
         } else {
-            $discussions = modelDiscussion::find()->where(['task_id' => $task_id, 'is_customer_view' => '0'])->all();
-            foreach ($discussions as $discussion) {
-                $discussion->is_customer_view = 1;
-                if (!$discussion->save()) {
-                    throw new NotSaveException();
-                }
-            }
+            modelDiscussion::updateAll(['is_customer_view' => 1],['task_id' => $task_id, 'is_customer_view' => '0']);
         }
     }
 
+    /**
+     * @param int $task_id
+     *
+     * @return int
+     */
     public function getCountNewMessageByTaskId(int $task_id): int
     {
         return modelDiscussion::find()->where(['is_executor_view' => '0','task_id' => $task_id])
@@ -54,6 +51,11 @@ class ArDiscussionsRepository implements DiscussionsRepository
             ->count();
     }
 
+    /**
+     * @param int $task_id
+     *
+     * @return DiscussionsList
+     */
     public function getDiscussionsByTaskId(int $task_id): DiscussionsList
     {
         $discussions = modelDiscussion::find()->where(['task_id' => $task_id])->all();
@@ -65,6 +67,11 @@ class ArDiscussionsRepository implements DiscussionsRepository
         return $discussionsList;
     }
 
+    /**
+     * @param Discussion $discussion
+     *
+     * @throws NotSaveException
+     */
     public function addNewDiscussion(Discussion $discussion)
     {
         $newDisc = new modelDiscussion();
@@ -73,7 +80,7 @@ class ArDiscussionsRepository implements DiscussionsRepository
         $newDisc->author_id = $discussion->authorId;
         $newDisc->is_executor_view = $discussion->isExecutorView;
         $newDisc->is_customer_view = $discussion->isCustomerView;
-        if(!$newDisc->save()){
+        if (!$newDisc->save()){
             throw new NotSaveException();
         }
     }

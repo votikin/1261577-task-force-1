@@ -128,7 +128,7 @@ class ArTasksRepository implements TasksRepository
         }
         $newTask->address = $task->address;
 
-        if(!$newTask->save()){
+        if(!$newTask->save()) {
             throw new NotSaveException();
         }
 

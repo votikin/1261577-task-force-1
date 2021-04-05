@@ -11,3 +11,4 @@ Yii::$container->setSingleton('taskForce\task\domain\TasksRepository','taskForce
 Yii::$container->setSingleton('taskForce\response\domain\ResponsesRepository','taskForce\response\infrastructure\ArResponsesRepository');
 Yii::$container->setSingleton('taskForce\review\domain\ReviewsRepository','taskForce\review\infrastructure\ArReviewsRepository');
 Yii::$container->setSingleton('taskForce\city\domain\CitiesRepository','taskForce\city\infrastructure\ArCitiesRepository');
+Yii::$container->setSingleton('taskForce\discussion\domain\DiscussionsRepository','taskForce\discussion\infrastructure\ArDiscussionsRepository');

@@ -10,13 +10,13 @@ use Yii;
  * @property int $id
  * @property string $message
  * @property string $created_at
- * @property int $user_id
- * @property int $executor_id
  * @property int $task_id
+ * @property int|null $author_id
+ * @property int|null $is_executor_view
+ * @property int|null $is_customer_view
  *
- * @property User $executor
+ * @property User $author
  * @property Task $task
- * @property User $user
  */
 class Discussion extends \yii\db\ActiveRecord
 {
@@ -34,13 +34,12 @@ class Discussion extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['message', 'user_id', 'executor_id', 'task_id'], 'required'],
+            [['message', 'task_id'], 'required'],
             [['message'], 'string'],
             [['created_at'], 'safe'],
-            [['user_id', 'executor_id', 'task_id'], 'integer'],
-            [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['executor_id' => 'id']],
+            [['task_id', 'author_id', 'is_executor_view', 'is_customer_view'], 'integer'],
+            [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['author_id' => 'id']],
             [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -53,33 +52,30 @@ class Discussion extends \yii\db\ActiveRecord
             'id' => 'ID',
             'message' => 'Message',
             'created_at' => 'Created At',
-            'user_id' => 'User ID',
-            'executor_id' => 'Executor ID',
             'task_id' => 'Task ID',
+            'author_id' => 'Author ID',
+            'is_executor_view' => 'Is Executor View',
+            'is_customer_view' => 'Is Customer View',
         ];
     }
 
     /**
+     * Gets query for [[Author]].
+     *
      * @return \yii\db\ActiveQuery
      */
-    public function getExecutor()
+    public function getAuthor()
     {
-        return $this->hasOne(User::class, ['id' => 'executor_id']);
+        return $this->hasOne(User::class, ['id' => 'author_id']);
     }
 
     /**
+     * Gets query for [[Task]].
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getTask()
     {
         return $this->hasOne(Task::class, ['id' => 'task_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUser()
-    {
-        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }

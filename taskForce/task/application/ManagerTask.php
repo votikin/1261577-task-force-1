@@ -168,4 +168,5 @@ class ManagerTask
     {
         $this->task->setTaskStatus($status, $task_id);
     }
+
 }

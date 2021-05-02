@@ -18,6 +18,7 @@ return [
                 'users/' => 'users/index',
                 'signup' => 'signup/index',
                 'create' => 'create/index',
+                'account' => 'account/index',
                 'logout' => 'users/logout',
 //                'my-list/new' => 'my-list/index',
                 'my-list/<status:\w+>' => 'my-list/index',

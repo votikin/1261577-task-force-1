@@ -5,7 +5,7 @@
 use \yii\helpers\Url;
 use \yii\bootstrap\Html;
 
-$this->title = 'Мои задания';;
+$this->title = 'Мои задания';
 ?>
 
 <section class="menu-toggle">
